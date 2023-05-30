@@ -65,3 +65,7 @@
     - Primitive Data Type 소개: byte, short, int, long, char, float, double, boolearn
 - 프로젝트 실습
   - 3. 변수를 사용하여 데이터를 저장하기
+
+### 5일(5/30, 화)
+
+- 자바 프로그래밍
