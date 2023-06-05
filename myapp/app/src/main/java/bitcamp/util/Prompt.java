@@ -1,4 +1,4 @@
-package bitcamp.myapp;
+package bitcamp.util;
 
 // import java.io.InputStream;
 import java.util.Scanner;
@@ -9,8 +9,12 @@ public class Prompt {
   // Scanner scanner = new java.util.Scanner(keyboard);
   static Scanner scanner = new java.util.Scanner(System.in);
 
-  static String inputString(String title) {
+  public static String inputString(String title) {
     System.out.print(title);
     return scanner.nextLine();
+  }
+
+  public static void close() {
+    scanner.close();
   }
 }

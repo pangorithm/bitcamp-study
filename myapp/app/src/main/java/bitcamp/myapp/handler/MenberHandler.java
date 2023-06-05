@@ -1,7 +1,9 @@
-package bitcamp.myapp;
+package bitcamp.myapp.handler;
+
+import bitcamp.util.Prompt;
 
 public class MenberHandler {
-  static final int MAX_SIZE = 100;
+  public static final int MAX_SIZE = 100;
 
   static int[] no = new int[MAX_SIZE];
   static String[] name = new String[MAX_SIZE];
@@ -10,12 +12,12 @@ public class MenberHandler {
   static char[] gender = new char[MAX_SIZE];
 
   static int userId = 1;
-  static int length = 0;
+  public static int length = 0;
 
   static final char MALE = 'M';
   static final char FEMALE = 'W';
 
-  static void inputMember() {
+  public static void inputMember() {
     name[length] = Prompt.inputString("이름? ");
 
     email[length] = Prompt.inputString("email? ");
@@ -43,7 +45,7 @@ public class MenberHandler {
     length++;
   }
 
-  static void printMembers() {
+  public static void printMembers() {
     // 회원정보 출력
     System.out.println("--------------------------------------------");
     System.out.println("번호, 이름, 이메일, 성별");
@@ -51,5 +53,9 @@ public class MenberHandler {
     for (int i = 0; i < length; i++) {
       System.out.printf("%d, %s, %s, %c\n", no[i], name[i], email[i], gender[i]);
     }
+  }
+
+  public static boolean available() {
+    return length < MAX_SIZE;
   }
 }

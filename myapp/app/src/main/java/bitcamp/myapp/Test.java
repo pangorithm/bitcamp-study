@@ -10,11 +10,11 @@ public class Test {
     // => 연산자 우선 순위를 고려하지 않고 앞에서부터 뒤로 순차적으로 계산한다.
 
     // int result; // 로컬 변수는 자동으로 초기화 되지 않는다.
+    Calculator.init(2);
     Calculator.multiple(3);
     Calculator.plus(7);
     Calculator.minus(2);
     Calculator.divide(2);
-    Calculator.init(2);
     System.out.println(Calculator.result);
   }
 

@@ -1,5 +1,8 @@
 package bitcamp.myapp;
 
+import bitcamp.myapp.handler.MenberHandler;
+import bitcamp.util.Prompt;
+
 // 코드 본문에서 사용할 클래스가 어떤 패키지를 클래스인지 지정한다.
 
 public class App {
@@ -8,7 +11,7 @@ public class App {
 
     printTitle();
 
-    while (MenberHandler.length < MenberHandler.MAX_SIZE) {
+    while (MenberHandler.available()) {
 
       MenberHandler.inputMember();
 
@@ -19,7 +22,7 @@ public class App {
 
     MenberHandler.printMembers();
 
-    Prompt.scanner.close();
+    Prompt.close();
   }
 
   static void printTitle() {
