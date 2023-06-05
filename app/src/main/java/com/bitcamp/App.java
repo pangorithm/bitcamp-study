@@ -4,11 +4,8 @@
 package com.bitcamp;
 
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-    }
+  public static void main(String[] args) {
+    System.out.println("스캐줄 관리 애플리케이션");
+    System.out.printf("%d %f %c %s %b \n", 1234, 123.45, 'c', "string", true);
+  }
 }
