@@ -20,6 +20,8 @@ public class App {
 
   static int userId = 1;
   static int length = 0;
+  static final char MALE = 'M';
+  static final char FEMALE = 'W';
 
   public static void main(String[] args) {
 
@@ -45,30 +47,22 @@ public class App {
   }
 
   static void inputMember() {
-    System.out.print("이름? ");
-    name[length] = scanner.next();
+    name[length] = prompt("이름? ");
 
-    System.out.print("email? ");
-    email[length] = scanner.next();
+    email[length] = prompt("email? ");
 
-    System.out.print("비밀번호? ");
-    password[length] = scanner.next();
+    password[length] = prompt("비밀번호? ");
 
     loop: while (true) {
-      System.out.println("성별: ");
-      System.out.println("  1. 남자");
-      System.out.println("  2. 여자");
-      System.out.print(">");
-      String menuNo = scanner.next();
-      scanner.nextLine(); // 입력 값(token)을 읽고 난 후에 남아 있는 줄바꿈 코드를 제거한다.
+      String menuNo = prompt("성별: \n" + "  1. 남자\n" + "  2. 여자\n" + "> ");
 
       switch (menuNo) {
         case "1":
-          gender[length] = 'M';
+          gender[length] = MALE;
           // break; // 반복문을 나가는 것이 아니라 switch문을 나간다
           break loop; // loop라는 라벨이 붙은 반복문을 나가라!
         case "2":
-          gender[length] = 'W';
+          gender[length] = FEMALE;
           break loop;
         default:
           System.out.println("무효한 번호입니다.");
@@ -81,8 +75,7 @@ public class App {
   }
 
   static boolean promptContinue() {
-    System.out.print("계속 하시겠습니까?(Y/n) ");
-    String response = scanner.nextLine();
+    String response = prompt("계속 하시겠습니까?(Y/n) ");
     if (!response.equals("") && !response.equalsIgnoreCase("Y") && !response.equalsIgnoreCase("yes")) {
       return false;
     }
@@ -97,5 +90,10 @@ public class App {
     for (int i = 0; i < length; i++) {
       System.out.printf("%d, %s, %s, %c\n", no[i], name[i], email[i], gender[i]);
     }
+  }
+
+  static String prompt(String title) {
+    System.out.print(title);
+    return scanner.nextLine();
   }
 }
