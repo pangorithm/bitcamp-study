@@ -6,6 +6,14 @@ package com.bitcamp;
 public class App {
   public static void main(String[] args) {
     System.out.println("스캐줄 관리 애플리케이션");
-    System.out.printf("%d %f %c %s %b \n", 1234, 123.45, 'c', "string", true);
+    int intVal = Integer.MAX_VALUE;
+    long longVal = Long.MAX_VALUE;
+    float floatVal = Float.MAX_VALUE;
+    double doubleVal = Double.MAX_VALUE;
+    char ch = 'c';
+    String str = "string";
+    boolean bool = true;
+    System.out.printf("%d \n%d \n%f \n%f \n%c \n%s \n%b \n",
+        intVal, longVal, floatVal, doubleVal, ch, str, bool);
   }
 }
