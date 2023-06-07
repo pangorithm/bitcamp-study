@@ -54,14 +54,21 @@ public class MenberHandler {
   }
 
   public static void updateMember() {
-
-    inputInfo(findMenberIndex());
+    int index = findMenberIndex();
+    if (index == MAX_SIZE) {
+      return;
+    }
+    inputInfo(index);
 
   }
 
   public static void deleteMember() {
-    for (int i = findMenberIndex(); i < MAX_SIZE - 1; i++) {
-      if (no[i] == 0 || i > MAX_SIZE) {
+    int index = findMenberIndex();
+    if (index == MAX_SIZE) {
+      return;
+    }
+    for (int i = index; i < MAX_SIZE - 1; i++) {
+      if (no[i] == 0) {
         break;
       }
       no[i] = no[i + 1];
@@ -129,6 +136,6 @@ public class MenberHandler {
       }
     }
     System.out.println("해당 번호의 회원이 없습니다!");
-    return -1;
+    return MAX_SIZE;
   }
 }
