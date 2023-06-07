@@ -67,21 +67,20 @@ public class MenberHandler {
     if (index == MAX_SIZE) {
       return;
     }
-    for (int i = index; i < MAX_SIZE - 1; i++) {
-      if (no[i] == 0) {
-        break;
-      }
+
+    for (int i = index; i < length - 1; i++) {
       no[i] = no[i + 1];
       name[i] = name[i + 1];
       email[i] = email[i + 1];
       password[i] = password[i + 1];
       gender[i] = gender[i + 1];
     }
-    no[MAX_SIZE - 1] = 0;
-    name[MAX_SIZE - 1] = "";
-    email[MAX_SIZE - 1] = "";
-    password[MAX_SIZE - 1] = "";
-    gender[MAX_SIZE - 1] = (char) 0;
+
+    no[length - 1] = 0;
+    name[length - 1] = null;
+    email[length - 1] = null;
+    password[length - 1] = null;
+    gender[length - 1] = (char) 0;
 
     length--;
 
