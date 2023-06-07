@@ -1,12 +1,8 @@
 package com.bitcamp.myapp.handler;
 
-import java.util.Scanner;
-
 import com.bitcamp.util.Prompt;
 
 public class ScheduleHandler {
-
-  static Scanner scanner = new Scanner(System.in);
 
   static final int MAX_SIZE = 100;
 
@@ -22,27 +18,21 @@ public class ScheduleHandler {
     do {
       scheduleId[length] = ++length;
 
-      System.out.println("일정 제목을 입력하세요");
-      scheduleTitle[length] = scanner.nextLine();
+      scheduleTitle[length] = Prompt.inputString("일정 제목을 입력하세요\n");
 
       do {
-        System.out.println("일정 시작 날짜와 시간을 입력하세요");
-        System.out.println("ex)2023-06-05 16:30");
-        startTime[length] = scanner.nextLine();
+        startTime[length] = Prompt.inputString("일정 시작 날짜와 시간을 입력하세요\n ex)2023-06-05 16:30\n");
       } while (!checkDate(startTime[length]));
 
       do {
-        System.out.println("일정 종료 날짜와 시간을 입력하세요");
-        System.out.println("ex)2023-06-06 20:00");
-        endTime[length] = scanner.nextLine();
+        endTime[length] = Prompt.inputString("일정 종료 날짜와 시간을 입력하세요\n ex)2023-06-06 20:00\n");
       } while (!checkDate(endTime[length]));
 
-      System.out.println("일정을 계속 입력 하시겠습니까?(y/N)");
-      str = scanner.nextLine();
+      str = Prompt.inputString("일정을 계속 입력 하시겠습니까?(y/N)\n >");
 
     } while (Prompt.promptContinue(str));
 
-    scanner.close();
+    Prompt.close();
   }
 
   public static void printSchedules() {

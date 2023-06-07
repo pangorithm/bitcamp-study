@@ -3,12 +3,51 @@
  */
 package com.bitcamp.myapp;
 
+import com.bitcamp.myapp.handler.ScheduleHandler;
+import com.bitcamp.util.Prompt;
+
 public class App {
-  public String getGreeting() {
-    return "Hello World!";
-  }
 
   public static void main(String[] args) {
-    System.out.println(new App().getGreeting());
+    printTitle();
+
+    printMenu();
+
+    while (true) {
+      String menuNo = Prompt.inputString("메인> ");
+      if (menuNo.equals("6")) {
+        break;
+      } else if (menuNo.equals("menu")) {
+        printMenu();
+      } else if (menuNo.equals("1")) {
+        ScheduleHandler.inputSchedule();
+      } else if (menuNo.equals("2")) {
+        ScheduleHandler.printSchedules();
+      } else if (menuNo.equals("3")) {
+        // MemberHandler.viewMember();
+      } else if (menuNo.equals("4")) {
+        // MemberHandler.updateMember();
+      } else if (menuNo.equals("5")) {
+        // MemberHandler.deleteMember();
+      } else {
+        System.out.println(menuNo);
+      }
+    }
+
   }
+
+  static void printMenu() {
+    System.out.println("1. 스캐줄 등록");
+    System.out.println("2. 스캐줄 목록");
+    System.out.println("3. 스캐줄 조회");
+    System.out.println("4. 스캐줄 변경");
+    System.out.println("5. 스캐줄 삭제");
+    System.out.println("6. 종료");
+  }
+
+  static void printTitle() {
+    System.out.println("스캐줄 관리 애플리케이션");
+    System.out.println("----------------------------------");
+  }
+
 }
