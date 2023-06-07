@@ -11,23 +11,35 @@ public class App {
 
     printTitle();
 
-    while (MenberHandler.available()) {
+    printMenu();
 
-      MenberHandler.inputMember();
-
-      if (!promptContinue()) {
+    while (true) {
+      String meneNo = Prompt.inputString("메인> ");
+      if (meneNo.equals("6")) {
         break;
+      } else if (meneNo.equals("menu")) {
+        printMenu();
+      } else if (meneNo.equals("1")) {
+        MenberHandler.inputMember();
+      } else if (meneNo.equals("2")) {
+        MenberHandler.printMembers();
+      } else if (meneNo.equals("3")) {
+        MenberHandler.viewMembers();
+      } else if (meneNo.equals("4")) {
+        MenberHandler.updateMembers();
+      } else {
+        System.out.println(meneNo);
       }
-    }
 
-    MenberHandler.printMembers();
+    }
 
     Prompt.close();
   }
 
   static void printTitle() {
     System.out.println("나의 목록 관리 시스템");
-    System.out.println("--------------------------------------------");
+    System.out.println("------------------------------------");
+
   }
 
   static boolean promptContinue() {
@@ -37,6 +49,15 @@ public class App {
     } else {
       return true;
     }
+  }
+
+  static void printMenu() {
+    System.out.println("1. 회원등록");
+    System.out.println("2. 회원목록");
+    System.out.println("3. 회원조회");
+    System.out.println("4. 회원변경");
+    System.out.println("5. 회원삭제");
+    System.out.println("6. 종료");
   }
 
 }
