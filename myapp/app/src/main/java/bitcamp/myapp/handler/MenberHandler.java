@@ -22,28 +22,8 @@ public class MenberHandler {
       System.out.println("더이상 입력할 수 없습니다.");
       return;
     }
-    name[length] = Prompt.inputString("이름? ");
 
-    email[length] = Prompt.inputString("email? ");
-
-    password[length] = Prompt.inputString("비밀번호? ");
-
-    loop: while (true) {
-      String menuNo = Prompt.inputString("성별: \n" + "  1. 남자\n" + "  2. 여자\n" + "> ");
-
-      switch (menuNo) {
-        case "1":
-          gender[length] = MALE;
-          // break; // 반복문을 나가는 것이 아니라 switch문을 나간다
-          break loop; // loop라는 라벨이 붙은 반복문을 나가라!
-        case "2":
-          gender[length] = FEMALE;
-          break loop;
-        default:
-          System.out.println("무효한 번호입니다.");
-      }
-
-    }
+    inputInfo(length);
 
     no[length] = userId++;
     length++;
@@ -75,30 +55,11 @@ public class MenberHandler {
 
   public static void updateMembers() {
     String memberNo = Prompt.inputString("번호? ");
-    int memberNoInt = Integer.parseInt(memberNo);
 
     for (int i = 0; i < length; i++) {
-      if (no[i] == memberNoInt) {
-        name[memberNoInt] = Prompt.inputString("이름? ");
+      if (no[i] == Integer.parseInt(memberNo)) {
 
-        email[memberNoInt] = Prompt.inputString("email? ");
-
-        password[memberNoInt] = Prompt.inputString("비밀번호? ");
-        loop: while (true) {
-          String menuNo = Prompt.inputString("성별: \n" + "  1. 남자\n" + "  2. 여자\n" + "> ");
-
-          switch (menuNo) {
-            case "1":
-              gender[length] = MALE;
-              // break; // 반복문을 나가는 것이 아니라 switch문을 나간다
-              break loop; // loop라는 라벨이 붙은 반복문을 나가라!
-            case "2":
-              gender[length] = FEMALE;
-              break loop;
-            default:
-              System.out.println("무효한 번호입니다.");
-          }
-        }
+        inputInfo(i);
         return;
       }
     }
@@ -107,6 +68,30 @@ public class MenberHandler {
 
   private static boolean available() {
     return length < MAX_SIZE;
+  }
+
+  private static void inputInfo(int index) {
+    name[index] = Prompt.inputString("이름? ");
+
+    email[index] = Prompt.inputString("email? ");
+
+    password[index] = Prompt.inputString("비밀번호? ");
+
+    loop: while (true) {
+      String menuNo = Prompt.inputString("성별: \n" + "  1. 남자\n" + "  2. 여자\n" + "> ");
+
+      switch (menuNo) {
+        case "1":
+          gender[index] = MALE;
+          // break; // 반복문을 나가는 것이 아니라 switch문을 나간다
+          break loop; // loop라는 라벨이 붙은 반복문을 나가라!
+        case "2":
+          gender[index] = FEMALE;
+          break loop;
+        default:
+          System.out.println("무효한 번호입니다.");
+      }
+    }
   }
 
   public static String toGenderString(char gender) {
