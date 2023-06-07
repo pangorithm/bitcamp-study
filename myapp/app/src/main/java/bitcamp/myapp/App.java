@@ -24,9 +24,11 @@ public class App {
       } else if (meneNo.equals("2")) {
         MenberHandler.printMembers();
       } else if (meneNo.equals("3")) {
-        MenberHandler.viewMembers();
+        MenberHandler.viewMember();
       } else if (meneNo.equals("4")) {
-        MenberHandler.updateMembers();
+        MenberHandler.updateMember();
+      } else if (meneNo.equals("5")) {
+        MenberHandler.deleteMember();
       } else {
         System.out.println(meneNo);
       }

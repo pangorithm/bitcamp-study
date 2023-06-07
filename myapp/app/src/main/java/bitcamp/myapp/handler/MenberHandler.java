@@ -40,7 +40,7 @@ public class MenberHandler {
     }
   }
 
-  public static void viewMembers() {
+  public static void viewMember() {
     String memberNo = Prompt.inputString("번호? ");
     for (int i = 0; i < length; i++) {
       if (no[i] == Integer.parseInt(memberNo)) {
@@ -53,17 +53,31 @@ public class MenberHandler {
     System.out.println("해당 번호의 회원이 없습니다!");
   }
 
-  public static void updateMembers() {
-    String memberNo = Prompt.inputString("번호? ");
+  public static void updateMember() {
 
-    for (int i = 0; i < length; i++) {
-      if (no[i] == Integer.parseInt(memberNo)) {
+    inputInfo(findMenberIndex());
 
-        inputInfo(i);
-        return;
+  }
+
+  public static void deleteMember() {
+    for (int i = findMenberIndex(); i < MAX_SIZE - 1; i++) {
+      if (no[i] == 0 || i > MAX_SIZE) {
+        break;
       }
+      no[i] = no[i + 1];
+      name[i] = name[i + 1];
+      email[i] = email[i + 1];
+      password[i] = password[i + 1];
+      gender[i] = gender[i + 1];
     }
-    System.out.println("해당 번호의 회원이 없습니다!");
+    no[MAX_SIZE - 1] = 0;
+    name[MAX_SIZE - 1] = "";
+    email[MAX_SIZE - 1] = "";
+    password[MAX_SIZE - 1] = "";
+    gender[MAX_SIZE - 1] = (char) 0;
+
+    length--;
+
   }
 
   private static boolean available() {
@@ -77,17 +91,26 @@ public class MenberHandler {
 
     password[index] = Prompt.inputString("비밀번호? ");
 
+    gender[index] = inputGender(gender[index]);
+  }
+
+  private static char inputGender(char gender) {
+    String label;
+    if (gender == (char) 0) {
+      label = "성별? \n";
+    } else {
+      label = String.format("성별(%s)?\n", toGenderString(gender));
+    }
+
     loop: while (true) {
-      String menuNo = Prompt.inputString("성별: \n" + "  1. 남자\n" + "  2. 여자\n" + "> ");
+      String menuNo = Prompt.inputString(label + "  1. 남자\n" + "  2. 여자\n" + "> ");
 
       switch (menuNo) {
         case "1":
-          gender[index] = MALE;
-          // break; // 반복문을 나가는 것이 아니라 switch문을 나간다
-          break loop; // loop라는 라벨이 붙은 반복문을 나가라!
+          return MALE;
+        // break; // 반복문을 나가는 것이 아니라 switch문을 나간다
         case "2":
-          gender[index] = FEMALE;
-          break loop;
+          return FEMALE;
         default:
           System.out.println("무효한 번호입니다.");
       }
@@ -97,19 +120,15 @@ public class MenberHandler {
   public static String toGenderString(char gender) {
     return (gender == 'M') ? "Male|남자|男" : "Female|여자|女";
   }
-  // public static String toGenderString(char gender, String lang) {
-  // String[] male = { "male", "남자", "男" };
-  // String[] female = { "Female", "여자", "女" };
-  // int index = 0;
-  // switch (lang) {
-  // case "ko":
-  // index = 1;
-  // break;
-  // case "cn":
-  // index = 2;
-  // break;
-  // default:
-  // break;
-  // }
-  // }
+
+  private static int findMenberIndex() {
+    String memberNo = Prompt.inputString("번호? ");
+    for (int i = 0; i < length; i++) {
+      if (no[i] == Integer.parseInt(memberNo)) {
+        return i;
+      }
+    }
+    System.out.println("해당 번호의 회원이 없습니다!");
+    return -1;
+  }
 }
