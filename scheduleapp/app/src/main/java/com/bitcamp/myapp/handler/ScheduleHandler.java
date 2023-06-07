@@ -1,4 +1,4 @@
-package com.bitcamp.scheduleapp.handler;
+package com.bitcamp.myapp.handler;
 
 import java.util.Scanner;
 
