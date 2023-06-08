@@ -33,7 +33,7 @@ public class ScheduleHandler {
 
   public static void searchSchedules() {
     System.out.println("어떤 조건으로 검색하시겠습니까?");
-    System.out.println("1. 스캐줄 제목");
+    System.out.println("1. 스케줄 제목");
     System.out.println("2. 날짜 범위");
     String optNo = Prompt.inputString("> ");
 
@@ -46,8 +46,8 @@ public class ScheduleHandler {
         }
       }
     } else if (optNo.equals("2")) {
-      Double searchRangeStart = parseDateDouble(Prompt.inputString("검색 시작 시간 ex)2023-06-05 16:30\n> "));
-      Double searchRangeEnd = parseDateDouble(Prompt.inputString("검색 종료 시간 ex)2023-06-06 20:00\n> "));
+      long searchRangeStart = parseDateLong(Prompt.inputString("검색 시작 시간 ex)2023-06-05 16:30\n> "));
+      long searchRangeEnd = parseDateLong(Prompt.inputString("검색 종료 시간 ex)2023-06-06 20:00\n> "));
       for (int i = 0; i < length; i++) {
         Schedule sch = schedules[i];
         if (sch.endTime > searchRangeStart && sch.startTime < searchRangeEnd) {
@@ -55,7 +55,7 @@ public class ScheduleHandler {
         }
       }
     } else {
-      System.out.println("올바르지 않은 번호입니다.");
+      System.out.println("올바르지 않은 형식입니다.");
     }
   }
 
@@ -77,7 +77,7 @@ public class ScheduleHandler {
 
     int deletedIndex = indexOf(memberNo);
     if (deletedIndex == -1) {
-      System.out.println("해당 번호의 회원이 없습니다!");
+      System.out.println("해당 번호의 스케줄이 없습니다!");
       return;
     }
 
@@ -92,18 +92,18 @@ public class ScheduleHandler {
 
   private static void inputScheduleInfo(int index) {
     Schedule sch = schedules[index] == null ? new Schedule() : schedules[index];
-    sch.scheduleTitle = Prompt.inputString("일정 제목을 입력하세요\n> ");
+    sch.scheduleTitle = Prompt.inputString("스케줄 제목을 입력하세요\n> ");
 
     do {
-      System.out.println("일정 시작 날짜와 시간을 입력하세요");
-      System.out.println("ex)2023-06-05 16:30");
-      sch.startTime = parseDateDouble(Prompt.inputString("> "));
+      System.out.println("스케줄 시작 날짜와 시간을 입력하세요");
+      System.out.println("ex)2023-06-05 08:30");
+      sch.startTime = parseDateLong(Prompt.inputString("> "));
     } while (!checkDate(sch.startTime));
 
     do {
-      System.out.println("일정 종료 날짜와 시간을 입력하세요");
+      System.out.println("스케줄 종료 날짜와 시간을 입력하세요");
       System.out.println("ex)2023-06-06 20:00");
-      sch.endTime = parseDateDouble(Prompt.inputString("> "));
+      sch.endTime = parseDateLong(Prompt.inputString("> "));
     } while (!checkDate(sch.endTime));
 
     schedules[index] = sch;
@@ -123,13 +123,13 @@ public class ScheduleHandler {
     System.out.println("");
   }
 
-  static double parseDateDouble(String date) {
+  static long parseDateLong(String date) {
     String str = date.replaceAll("[^0-9]", "");
-    double dateDouble = Double.parseDouble(str);
-    return dateDouble;
+    long dateLong = Long.parseLong(str);
+    return dateLong;
   }
 
-  static String dateToString(double date) {
+  static String dateToString(long date) {
     String dateString = "";
 
     int min = (int) (date % 100);
@@ -147,7 +147,7 @@ public class ScheduleHandler {
     return dateString;
   }
 
-  static boolean checkDate(Double date) {
+  static boolean checkDate(long date) {
 
     int min = (int) (date % 100);
     date /= 100;

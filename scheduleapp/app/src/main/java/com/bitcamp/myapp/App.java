@@ -38,16 +38,16 @@ public class App {
   }
 
   static void printMenu() {
-    System.out.println("1. 스캐줄 등록");
-    System.out.println("2. 스캐줄 목록");
-    System.out.println("3. 스캐줄 검색");
-    System.out.println("4. 스캐줄 변경");
-    System.out.println("5. 스캐줄 삭제");
+    System.out.println("1. 스케줄 등록");
+    System.out.println("2. 스케줄 목록");
+    System.out.println("3. 스케줄 검색");
+    System.out.println("4. 스케줄 변경");
+    System.out.println("5. 스케줄 삭제");
     System.out.println("6. 종료");
   }
 
   static void printTitle() {
-    System.out.println("스캐줄 관리 애플리케이션");
+    System.out.println("스케줄 관리 애플리케이션");
     System.out.println("----------------------------------");
   }
 
