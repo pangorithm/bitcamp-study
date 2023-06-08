@@ -27,7 +27,7 @@ public class App {
       } else if (menuNo.equals("3")) {
         ScheduleHandler.searchSchedules();
       } else if (menuNo.equals("4")) {
-        // ScheduleHandler.updateMember();
+        ScheduleHandler.updateSchedule();
       } else if (menuNo.equals("5")) {
         // ScheduleHandler.deleteMember();
       } else {

@@ -18,19 +18,7 @@ public class ScheduleHandler {
     do {
       scheduleId[length] = scheduleId[length > 0 ? (length - 1) : 0] + 1;
 
-      scheduleTitle[length] = Prompt.inputString("일정 제목을 입력하세요\n");
-
-      do {
-        System.out.println("일정 시작 날짜와 시간을 입력하세요");
-        System.out.println("ex)2023-06-05 16:30");
-        startTime[length] = parseDateDouble(Prompt.inputString("> "));
-      } while (!checkDate(startTime[length]));
-
-      do {
-        System.out.println("일정 종료 날짜와 시간을 입력하세요");
-        System.out.println("ex)2023-06-06 20:00");
-        endTime[length] = parseDateDouble(Prompt.inputString("> "));
-      } while (!checkDate(endTime[length]));
+      inputScheduleInfo(length);
 
       length++;
       str = Prompt.inputString("일정을 계속 입력 하시겠습니까?(y/N) \n> ");
@@ -68,6 +56,32 @@ public class ScheduleHandler {
     } else {
       System.out.println("올바르지 않은 번호입니다.");
     }
+  }
+
+  public static void updateSchedule() {
+    String inputNo = Prompt.inputString("번호? ");
+    int i = indexOf(Integer.parseInt(inputNo));
+    if (i > -1) {
+      inputScheduleInfo(i);
+    } else {
+      System.out.println("일치하는 번호가 존재하지 않습니다.");
+    }
+  }
+
+  private static void inputScheduleInfo(int index) {
+    scheduleTitle[index] = Prompt.inputString("일정 제목을 입력하세요\n");
+
+    do {
+      System.out.println("일정 시작 날짜와 시간을 입력하세요");
+      System.out.println("ex)2023-06-05 16:30");
+      startTime[index] = parseDateDouble(Prompt.inputString("> "));
+    } while (!checkDate(startTime[index]));
+
+    do {
+      System.out.println("일정 종료 날짜와 시간을 입력하세요");
+      System.out.println("ex)2023-06-06 20:00");
+      endTime[index] = parseDateDouble(Prompt.inputString("> "));
+    } while (!checkDate(endTime[index]));
   }
 
   private static void printScheduleInfo(int index) {
@@ -135,4 +149,12 @@ public class ScheduleHandler {
     }
   }
 
+  private static int indexOf(int inputNo) {
+    for (int i = 0; i < length; i++) {
+      if (scheduleId[i] == inputNo) {
+        return i;
+      }
+    }
+    return -1;
+  }
 }
