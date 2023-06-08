@@ -12,9 +12,10 @@ public class App {
     printTitle();
 
     printMenu();
+    String menuNo;
 
     while (true) {
-      String menuNo = Prompt.inputString("메인> ");
+      menuNo = Prompt.inputString("메인> ");
       if (menuNo.equals("6")) {
         break;
       } else if (menuNo.equals("menu")) {
@@ -33,13 +34,13 @@ public class App {
         System.out.println(menuNo);
       }
     }
-
+    Prompt.close();
   }
 
   static void printMenu() {
     System.out.println("1. 스캐줄 등록");
     System.out.println("2. 스캐줄 목록");
-    System.out.println("3. 스캐줄 조회");
+    System.out.println("3. 스캐줄 검색");
     System.out.println("4. 스캐줄 변경");
     System.out.println("5. 스캐줄 삭제");
     System.out.println("6. 종료");

@@ -1,7 +1,5 @@
 package com.bitcamp.myapp.handler;
 
-import java.security.Principal;
-
 import com.bitcamp.util.Prompt;
 
 public class ScheduleHandler {
@@ -9,8 +7,8 @@ public class ScheduleHandler {
   static final int MAX_SIZE = 100;
 
   static String[] scheduleTitle = new String[MAX_SIZE];
-  static String[] startTime = new String[MAX_SIZE];
-  static String[] endTime = new String[MAX_SIZE];
+  static Double[] startTime = new Double[MAX_SIZE];
+  static Double[] endTime = new Double[MAX_SIZE];
   static int[] scheduleId = new int[MAX_SIZE];
 
   static int length = 0;
@@ -18,27 +16,26 @@ public class ScheduleHandler {
 
   public static void inputSchedule() {
     do {
-      scheduleId[length] = ++length;
+      scheduleId[length] = scheduleId[length > 0 ? (length - 1) : 0] + 1;
 
       scheduleTitle[length] = Prompt.inputString("일정 제목을 입력하세요\n");
 
       do {
         System.out.println("일정 시작 날짜와 시간을 입력하세요");
         System.out.println("ex)2023-06-05 16:30");
-        startTime[length] = Prompt.inputString("> ");
+        startTime[length] = parseDateDouble(Prompt.inputString("> "));
       } while (!checkDate(startTime[length]));
 
       do {
         System.out.println("일정 종료 날짜와 시간을 입력하세요");
         System.out.println("ex)2023-06-06 20:00");
-        endTime[length] = Prompt.inputString("> ");
+        endTime[length] = parseDateDouble(Prompt.inputString("> "));
       } while (!checkDate(endTime[length]));
 
-      str = Prompt.inputString("일정을 계속 입력 하시겠습니까?(y/N)\n >");
+      length++;
+      str = Prompt.inputString("일정을 계속 입력 하시겠습니까?(y/N) \n> ");
 
     } while (Prompt.promptContinue(str));
-
-    Prompt.close();
   }
 
   public static void printSchedules() {
@@ -58,16 +55,14 @@ public class ScheduleHandler {
       for (int i = 0; i < length; i++) {
         if (scheduleTitle[i].contains(searchTitle)) {
           printScheduleInfo(i);
-          System.out.println("");
         }
       }
-
     } else if (optNo.equals("2")) {
-      String searchRangeStart = Prompt.inputString("검색 시작 시간 ex)2023-06-05 16:30");
+      Double searchRangeStart = parseDateDouble(Prompt.inputString("검색 시작 시간 ex)2023-06-05 16:30"));
+      Double searchRangeEnd = parseDateDouble(Prompt.inputString("검색 종료 시간 ex)2023-06-06 20:00"));
       for (int i = 0; i < length; i++) {
-        if (scheduleTitle[i].contains()) {
+        if (endTime[i] > searchRangeStart && startTime[i] < searchRangeEnd) {
           printScheduleInfo(i);
-          System.out.println("");
         }
       }
     } else {
@@ -75,29 +70,53 @@ public class ScheduleHandler {
     }
   }
 
-  static void printScheduleInfo(int index) {
+  private static void printScheduleInfo(int index) {
+    System.out.print("번호: ");
     System.out.println(scheduleId[index]);
+    System.out.print("제목: ");
     System.out.println(scheduleTitle[index]);
-    System.out.println(startTime[index]);
-    System.out.println(endTime[index]);
+    System.out.print("시작: ");
+    System.out.println(dateToString(startTime[index]));
+    System.out.print("종료: ");
+    System.out.println(dateToString(endTime[index]));
+    System.out.println("");
   }
 
-  static int parseDateInt(String date) {
-    return;
-  }
-
-  static boolean checkDate(String date) {
+  static double parseDateDouble(String date) {
     String str = date.replaceAll("[^0-9]", "");
-    if (str.length() < 12) {
-      System.out.println("올바르지 않은 날짜 형식입니다.");
-      return false;
-    }
+    double dateDouble = Double.parseDouble(str);
+    return dateDouble;
+  }
 
-    int year = Integer.parseInt(str.substring(0, 4));
-    int month = Integer.parseInt(str.substring(4, 6));
-    int day = Integer.parseInt(str.substring(6, 8));
-    int hour = Integer.parseInt(str.substring(8, 10));
-    int min = Integer.parseInt(str.substring(10));
+  static String dateToString(double date) {
+    String dateString = "";
+
+    int min = (int) (date % 100);
+    date /= 100;
+    int hour = (int) (date % 100);
+    date /= 100;
+    int day = (int) (date % 100);
+    date /= 100;
+    int month = (int) (date % 100);
+    date /= 100;
+    int year = (int) (date % 10000);
+
+    dateString = year + "년" + month + "월" + day + "일 " + hour + ":" + min;
+
+    return dateString;
+  }
+
+  static boolean checkDate(Double date) {
+
+    int min = (int) (date % 100);
+    date /= 100;
+    int hour = (int) (date % 100);
+    date /= 100;
+    int day = (int) (date % 100);
+    date /= 100;
+    int month = (int) (date % 100);
+    date /= 100;
+    int year = (int) (date % 10000);
 
     if (month < 1 || month > 12) {
       System.out.println("올바르지 않은 날짜 형식입니다.");
