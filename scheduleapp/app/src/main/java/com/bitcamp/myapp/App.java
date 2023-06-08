@@ -24,11 +24,11 @@ public class App {
       } else if (menuNo.equals("2")) {
         ScheduleHandler.printSchedules();
       } else if (menuNo.equals("3")) {
-        // MemberHandler.viewMember();
+        ScheduleHandler.searchSchedules();
       } else if (menuNo.equals("4")) {
-        // MemberHandler.updateMember();
+        // ScheduleHandler.updateMember();
       } else if (menuNo.equals("5")) {
-        // MemberHandler.deleteMember();
+        // ScheduleHandler.deleteMember();
       } else {
         System.out.println(menuNo);
       }

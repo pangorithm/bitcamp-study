@@ -1,5 +1,7 @@
 package com.bitcamp.myapp.handler;
 
+import java.security.Principal;
+
 import com.bitcamp.util.Prompt;
 
 public class ScheduleHandler {
@@ -21,11 +23,15 @@ public class ScheduleHandler {
       scheduleTitle[length] = Prompt.inputString("일정 제목을 입력하세요\n");
 
       do {
-        startTime[length] = Prompt.inputString("일정 시작 날짜와 시간을 입력하세요\n ex)2023-06-05 16:30\n");
+        System.out.println("일정 시작 날짜와 시간을 입력하세요");
+        System.out.println("ex)2023-06-05 16:30");
+        startTime[length] = Prompt.inputString("> ");
       } while (!checkDate(startTime[length]));
 
       do {
-        endTime[length] = Prompt.inputString("일정 종료 날짜와 시간을 입력하세요\n ex)2023-06-06 20:00\n");
+        System.out.println("일정 종료 날짜와 시간을 입력하세요");
+        System.out.println("ex)2023-06-06 20:00");
+        endTime[length] = Prompt.inputString("> ");
       } while (!checkDate(endTime[length]));
 
       str = Prompt.inputString("일정을 계속 입력 하시겠습니까?(y/N)\n >");
@@ -37,11 +43,47 @@ public class ScheduleHandler {
 
   public static void printSchedules() {
     for (int i = 0; i < length; i++) {
-      System.out.println(scheduleId[i]);
-      System.out.println(scheduleTitle[i]);
-      System.out.println(startTime[i]);
-      System.out.println(endTime[i]);
+      printScheduleInfo(i);
     }
+  }
+
+  public static void searchSchedules() {
+    System.out.println("어떤 조건으로 검색하시겠습니까?");
+    System.out.println("1. 스캐줄 제목");
+    System.out.println("2. 날짜 범위");
+    String optNo = Prompt.inputString("> ");
+
+    if (optNo.equals("1")) {
+      String searchTitle = Prompt.inputString("제목 : ");
+      for (int i = 0; i < length; i++) {
+        if (scheduleTitle[i].contains(searchTitle)) {
+          printScheduleInfo(i);
+          System.out.println("");
+        }
+      }
+
+    } else if (optNo.equals("2")) {
+      String searchRangeStart = Prompt.inputString("검색 시작 시간 ex)2023-06-05 16:30");
+      for (int i = 0; i < length; i++) {
+        if (scheduleTitle[i].contains()) {
+          printScheduleInfo(i);
+          System.out.println("");
+        }
+      }
+    } else {
+      System.out.println("올바르지 않은 번호입니다.");
+    }
+  }
+
+  static void printScheduleInfo(int index) {
+    System.out.println(scheduleId[index]);
+    System.out.println(scheduleTitle[index]);
+    System.out.println(startTime[index]);
+    System.out.println(endTime[index]);
+  }
+
+  static int parseDateInt(String date) {
+    return;
   }
 
   static boolean checkDate(String date) {
