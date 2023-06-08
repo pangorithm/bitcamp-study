@@ -6,20 +6,20 @@ public class ScheduleHandler {
 
   static final int MAX_SIZE = 100;
 
+  static int[] no = new int[MAX_SIZE];
   static String[] scheduleTitle = new String[MAX_SIZE];
   static Double[] startTime = new Double[MAX_SIZE];
   static Double[] endTime = new Double[MAX_SIZE];
-  static int[] scheduleId = new int[MAX_SIZE];
 
   static int length = 0;
+  static int scheduleId = 1;
   static String str;
 
   public static void inputSchedule() {
     do {
-      scheduleId[length] = scheduleId[length > 0 ? (length - 1) : 0] + 1;
-
       inputScheduleInfo(length);
 
+      no[length] = scheduleId++;
       length++;
       str = Prompt.inputString("일정을 계속 입력 하시겠습니까?(y/N) \n> ");
 
@@ -59,8 +59,8 @@ public class ScheduleHandler {
   }
 
   public static void updateSchedule() {
-    String inputNo = Prompt.inputString("번호? ");
-    int i = indexOf(Integer.parseInt(inputNo));
+    int inputNo = Prompt.inputInt("번호? ");
+    int i = indexOf((inputNo));
     if (i > -1) {
       inputScheduleInfo(i);
     } else {
@@ -68,8 +68,32 @@ public class ScheduleHandler {
     }
   }
 
+  public static void deleteSchdule() {
+    int memberNo = Prompt.inputInt("번호? ");
+
+    int deletedIndex = indexOf(memberNo);
+    if (deletedIndex == -1) {
+      System.out.println("해당 번호의 회원이 없습니다!");
+      return;
+    }
+
+    for (int i = deletedIndex; i < length - 1; i++) {
+      no[i] = no[i + 1];
+      scheduleTitle[i] = scheduleTitle[i + 1];
+      startTime[i] = startTime[i + 1];
+      endTime[i] = endTime[i + 1];
+    }
+
+    no[length - 1] = 0;
+    scheduleTitle[length - 1] = null;
+    startTime[length - 1] = null;
+    endTime[length - 1] = null;
+
+    length--;
+  }
+
   private static void inputScheduleInfo(int index) {
-    scheduleTitle[index] = Prompt.inputString("일정 제목을 입력하세요\n");
+    scheduleTitle[index] = Prompt.inputString("일정 제목을 입력하세요\n> ");
 
     do {
       System.out.println("일정 시작 날짜와 시간을 입력하세요");
@@ -86,7 +110,7 @@ public class ScheduleHandler {
 
   private static void printScheduleInfo(int index) {
     System.out.print("번호: ");
-    System.out.println(scheduleId[index]);
+    System.out.println(no[index]);
     System.out.print("제목: ");
     System.out.println(scheduleTitle[index]);
     System.out.print("시작: ");
@@ -151,7 +175,7 @@ public class ScheduleHandler {
 
   private static int indexOf(int inputNo) {
     for (int i = 0; i < length; i++) {
-      if (scheduleId[i] == inputNo) {
+      if (no[i] == inputNo) {
         return i;
       }
     }

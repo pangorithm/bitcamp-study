@@ -29,7 +29,7 @@ public class App {
       } else if (menuNo.equals("4")) {
         ScheduleHandler.updateSchedule();
       } else if (menuNo.equals("5")) {
-        // ScheduleHandler.deleteMember();
+        ScheduleHandler.deleteSchdule();
       } else {
         System.out.println(menuNo);
       }
