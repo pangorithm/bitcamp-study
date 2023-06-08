@@ -58,8 +58,8 @@ public class ScheduleHandler {
         }
       }
     } else if (optNo.equals("2")) {
-      Double searchRangeStart = parseDateDouble(Prompt.inputString("검색 시작 시간 ex)2023-06-05 16:30"));
-      Double searchRangeEnd = parseDateDouble(Prompt.inputString("검색 종료 시간 ex)2023-06-06 20:00"));
+      Double searchRangeStart = parseDateDouble(Prompt.inputString("검색 시작 시간 ex)2023-06-05 16:30\n> "));
+      Double searchRangeEnd = parseDateDouble(Prompt.inputString("검색 종료 시간 ex)2023-06-06 20:00\n> "));
       for (int i = 0; i < length; i++) {
         if (endTime[i] > searchRangeStart && startTime[i] < searchRangeEnd) {
           printScheduleInfo(i);
