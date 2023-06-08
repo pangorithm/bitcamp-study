@@ -62,6 +62,9 @@ public class ScheduleHandler {
     int inputNo = Prompt.inputInt("번호? ");
     int i = indexOf((inputNo));
     if (i > -1) {
+      System.out.println("수정 전--------------");
+      printScheduleInfo(i);
+      System.out.println("---------------------");
       inputScheduleInfo(i);
     } else {
       System.out.println("일치하는 번호가 존재하지 않습니다.");

@@ -4,7 +4,7 @@ import bitcamp.myapp.handler.MemberHandler;
 import bitcamp.util.Prompt;
 
 public class App {
-  
+
   public static void main(String[] args) {
 
     printTitle();
