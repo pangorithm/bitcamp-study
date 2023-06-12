@@ -1,9 +1,5 @@
 # 네이버 클라우드 7기(2023-04-24 ~ 2023-10-27)
 
-## 구글 미트 접속
-
-https://meet.google.com/sya-jckw-ivq
-
 ## 학습 내용
 
 ### 1일(5/22,월)
@@ -161,6 +157,18 @@ https://meet.google.com/sya-jckw-ivq
       - 이름, url
     - to: jinyoung.eom@gmail.com
 
-## 구글 미트 접속
+### 13일(6/9,금)
 
-https://meet.google.com/sya-jckw-ivq
+- 자바 프로그래밍
+  - 클래스 사용법(계속)
+    - 스태틱 필드와 스태틱 메서드 사용법
+    - 인스턴스 필드와 인스턴스 메서드 사용법
+    - 패키지 사용법: import, public 접근 제어
+    - GRASP 패턴: Information Expert 패턴 소개
+    - GoF의 Design Patters: Factory Method 패턴 소개
+    - 생성자 사용법
+    - private/public, setter/getter 사용법
+
+## 14일(6/12,월)
+
+-
