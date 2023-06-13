@@ -51,9 +51,12 @@ public class BoardHandler {
     for (int i = 0; i < length; i++) {
       Board board = members[i];
       if (board.getNo() == Integer.parseInt(memberNo)) {
+        board.setViewCount(board.getViewCount() + 1);
         System.out.printf("제목: %s\n", board.getTitle());
-        System.out.printf("이메일: %s\n", board.getContent());
-        System.out.printf("성별: %s\n", board.getWriter());
+        System.out.printf("작성자: %s\n", board.getWriter());
+        System.out.printf("내용: %s\n", board.getContent());
+        System.out.printf("조회수: %d\n", board.getViewCount());
+        System.out.printf("작성일: %tY-%1$tm-%1$td\n", board.getCreatedDate());
         return;
       }
     }
@@ -65,14 +68,17 @@ public class BoardHandler {
     for (int i = 0; i < length; i++) {
       Board board = members[i];
       if (board.getNo() == Integer.parseInt(memberNo)) {
-        System.out.printf("제목(%s)? ", board.getTitle());
-        board.setTitle(Prompt.inputString(""));
-        System.out.printf("이메일(%s)? ", board.getContent());
-        board.setContent(Prompt.inputString(""));
-        System.out.printf("새암호? ");
-        board.setPassword(Prompt.inputString(""));
-        board.setWriter(board.getWriter());
-        return;
+        String checkpw = Prompt.inputString("암호? ");
+        if (checkpw.equals(board.getPassword())) {
+          System.out.printf("제목(%s)? \n> ", board.getTitle());
+          board.setTitle(Prompt.inputString(""));
+          System.out.printf("내용(%s)? \n> ", board.getContent());
+          board.setContent(Prompt.inputString(""));
+          board.setCreatedDate(System.currentTimeMillis());
+          return;
+        } else {
+          System.out.println("암호가 올바르지 않습니다");
+        }
       }
     }
     System.out.println("해당 번호의 게시글이 없습니다!");
@@ -84,6 +90,11 @@ public class BoardHandler {
     int deletedIndex = indexOf(memberNo);
     if (deletedIndex == -1) {
       System.out.println("해당 번호의 게시글이 없습니다!");
+      return;
+    }
+    String checkpw = Prompt.inputString("암호? ");
+    if (!checkpw.equals(members[deletedIndex].getPassword())) {
+      System.out.println("암호가 올바르지 않습니다");
       return;
     }
 
