@@ -10,14 +10,13 @@ public class Prompt {
     return str.equalsIgnoreCase("y");
   }
 
-  public static String inputString(String title) {
-    System.out.print(title);
+  public static String inputString(String title, Object... args) {
+    System.out.printf(title, args);
     return scanner.nextLine();
   }
 
-  public static int inputInt(String title) {
-    System.out.print(title);
-    return Integer.parseInt(scanner.nextLine());
+  public static int inputInt(String title, Object... args) {
+    return Integer.parseInt(inputString(title, args));
   }
 
   public static void close() {

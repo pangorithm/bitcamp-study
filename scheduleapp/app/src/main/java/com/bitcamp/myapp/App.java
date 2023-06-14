@@ -3,6 +3,7 @@
  */
 package com.bitcamp.myapp;
 
+import com.bitcamp.myapp.handler.BoardHandler;
 import com.bitcamp.myapp.handler.ScheduleHandler;
 import com.bitcamp.util.Prompt;
 
@@ -16,7 +17,7 @@ public class App {
 
     while (true) {
       menuNo = Prompt.inputString("메인> ");
-      if (menuNo.equals("6")) {
+      if (menuNo.equals("99")) {
         break;
       } else if (menuNo.equals("menu")) {
         printMenu();
@@ -30,8 +31,18 @@ public class App {
         ScheduleHandler.updateSchedule();
       } else if (menuNo.equals("5")) {
         ScheduleHandler.deleteSchdule();
+      } else if (menuNo.equals("6")) {
+        BoardHandler.inputBoard();
+      } else if (menuNo.equals("7")) {
+        BoardHandler.printBoards();
+      } else if (menuNo.equals("8")) {
+        BoardHandler.viewBoard();
+      } else if (menuNo.equals("9")) {
+        BoardHandler.updateBoard();
+      } else if (menuNo.equals("10")) {
+        BoardHandler.deleteBoard();
       } else {
-        System.out.println(menuNo);
+        System.out.println("올바르지 않은 메뉴 번호입니다.");
       }
     }
     Prompt.close();
@@ -43,7 +54,14 @@ public class App {
     System.out.println("3. 스케줄 검색");
     System.out.println("4. 스케줄 변경");
     System.out.println("5. 스케줄 삭제");
-    System.out.println("6. 종료");
+
+    System.out.println("6. 게시글 등록");
+    System.out.println("7. 게시글 목록");
+    System.out.println("8. 게시글 검색");
+    System.out.println("9. 게시글 변경");
+    System.out.println("10. 게시글 삭제");
+
+    System.out.println("99. 종료");
   }
 
   static void printTitle() {
