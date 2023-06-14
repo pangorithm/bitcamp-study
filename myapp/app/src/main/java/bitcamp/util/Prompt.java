@@ -5,30 +5,29 @@ import java.util.Scanner;
 
 public class Prompt {
 
-  // InputStream keyboard = System.in;
-  // Scanner scanner = new java.util.Scanner(keyboard);
-  private static Scanner scanner;
+  private Scanner scanner;
 
-  // defualt constructor 정의
+  // default constructor 정의
   public Prompt() {
-    scanner = new Scanner(System.in);
+    this.scanner = new Scanner(System.in);
   }
 
-  // 다른 입력 도구를 이용한다면
+  // 다른 입력 도구와 연결한다면
   public Prompt(InputStream in) {
-    scanner = new Scanner(in);
+    this.scanner = new Scanner(in);
   }
 
-  public static String inputString(String title, Object... args) {
+  public String inputString(String title, Object... args) {
     System.out.printf(title, args);
-    return scanner.nextLine();
+    return this.scanner.nextLine();
   }
 
-  public static int inputInt(String title, Object... args) {
-    return Integer.parseInt(inputString(title, args));
+  public int inputInt(String title, Object... args) {
+    return Integer.parseInt(this.inputString(title, args));
   }
 
   public void close() {
     this.scanner.close();
   }
+
 }
