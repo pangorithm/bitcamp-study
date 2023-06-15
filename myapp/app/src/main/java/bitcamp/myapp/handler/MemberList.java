@@ -44,7 +44,6 @@ public class MemberList {
   }
 
   public boolean delete(int no) {
-
     int deletedIndex = indexOf(no);
     if (deletedIndex == -1) {
       System.out.println("해당 번호의 회원이 없습니다!");
