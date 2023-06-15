@@ -5,17 +5,18 @@ import bitcamp.util.Prompt;
 
 public class BoardHandler implements Handler {
 
-  private Prompt prompt;
-  private String title;
+
   private BoardList list = new BoardList();
+  private Prompt prompt;
+
+  private String title;
 
   public BoardHandler(Prompt prompt, String title) {
     this.prompt = prompt;
     this.title = title;
   }
 
-
-  public void excute() {
+  public void execute() {
     printMenu();
 
     while (true) {
@@ -40,7 +41,7 @@ public class BoardHandler implements Handler {
     }
   }
 
-  private void printMenu() {
+  private static void printMenu() {
     System.out.println("1. 등록");
     System.out.println("2. 목록");
     System.out.println("3. 조회");
@@ -49,16 +50,16 @@ public class BoardHandler implements Handler {
     System.out.println("0. 메인");
   }
 
-  // 인스턴스 멤버(필드나 메서드)를 사용하는 경우 인스턴스 메서드로 정의해야 한다.
   private void inputBoard() {
-
     Board board = new Board();
     board.setTitle(this.prompt.inputString("제목? "));
     board.setContent(this.prompt.inputString("내용? "));
     board.setWriter(this.prompt.inputString("작성자? "));
     board.setPassword(this.prompt.inputString("암호? "));
+
     if (!this.list.add(board)) {
       System.out.println("더이상 입력할 수 없습니다!");
+      return;
     }
   }
 
@@ -67,59 +68,54 @@ public class BoardHandler implements Handler {
     System.out.println("번호, 제목, 작성자, 조회수, 등록일");
     System.out.println("---------------------------------------");
 
-    for (Board board : list.list()) {
-
-      System.out.printf("%d, %s, %s, %d, %tY-%5$tm-%5$td\n", board.getNo(), board.getTitle(),
-          board.getWriter(), board.getViewCount(), board.getCreatedDate());
+    Board[] arr = this.list.list();
+    for (Board board : arr) {
+      System.out.printf("%d, %s, %s, %d, %tY-%5$tm-%5$td\n",
+          board.getNo(),
+          board.getTitle(),
+          board.getWriter(),
+          board.getViewCount(),
+          board.getCreatedDate());
     }
   }
 
   private void viewBoard() {
     int boardNo = this.prompt.inputInt("번호? ");
-    Board board = list.get(boardNo);
+
+    Board board = this.list.get(boardNo);
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다!");
       return;
     }
+
     System.out.printf("제목: %s\n", board.getTitle());
     System.out.printf("내용: %s\n", board.getContent());
     System.out.printf("작성자: %s\n", board.getWriter());
     System.out.printf("조회수: %s\n", board.getViewCount());
     System.out.printf("등록일: %tY-%1$tm-%1$td\n", board.getCreatedDate());
-    board.setViewCount(board.getViewCount() + 1);
   }
 
   private void updateBoard() {
     int boardNo = this.prompt.inputInt("번호? ");
-    Board board = list.get(boardNo);
+
+    Board board = this.list.get(boardNo);
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다!");
       return;
     }
+
     if (!this.prompt.inputString("암호? ").equals(board.getPassword())) {
       System.out.println("암호가 일치하지 않습니다!");
       return;
     }
+
     board.setTitle(this.prompt.inputString("제목(%s)? ", board.getTitle()));
     board.setContent(this.prompt.inputString("내용(%s)? ", board.getContent()));
-    return;
-
-
   }
-
 
   private void deleteBoard() {
-    int deletedIndex = this.prompt.inputInt("번호? ");
-    Board board = list.get(deletedIndex);
-    if (board == null) {
+    if (!this.list.delete(this.prompt.inputInt("번호? "))) {
       System.out.println("해당 번호의 게시글이 없습니다!");
-      return;
     }
-    if (!this.prompt.inputString("암호? ").equals(board.getPassword())) {
-      System.out.println("암호가 일치하지 않습니다!");
-      return;
-    }
-
   }
-
 }

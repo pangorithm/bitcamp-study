@@ -3,12 +3,9 @@ package bitcamp.myapp.handler;
 import bitcamp.myapp.vo.Member;
 
 public class MemberList {
-
   private static final int MAX_SIZE = 100;
 
   private Member[] members = new Member[MAX_SIZE];
-  // variable initializer(변수초기화 문장) => 생성자로 이동
-
   private int length;
 
   public boolean add(Member m) {
@@ -23,7 +20,7 @@ public class MemberList {
     // 리턴할 값을 담을 배열을 생성
     Member[] arr = new Member[this.length];
 
-    // 원본 배열에 입력된 인스턴스 주소를 꺼내
+    // 원본 배열에서 입력된 인스턴스 주소를 꺼내
     // 새 배열에 담는다.
     for (int i = 0; i < this.length; i++) {
       arr[i] = this.members[i];
@@ -46,14 +43,12 @@ public class MemberList {
   public boolean delete(int no) {
     int deletedIndex = indexOf(no);
     if (deletedIndex == -1) {
-      System.out.println("해당 번호의 회원이 없습니다!");
       return false;
     }
 
     for (int i = deletedIndex; i < this.length - 1; i++) {
       this.members[i] = this.members[i + 1];
     }
-
     this.members[--this.length] = null;
     return true;
   }

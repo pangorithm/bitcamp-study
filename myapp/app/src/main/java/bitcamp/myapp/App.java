@@ -19,7 +19,6 @@ public class App {
     Handler boardHandler = new BoardHandler(prompt, "게시글");
     Handler readingHandler = new BoardHandler(prompt, "독서록");
 
-
     printTitle();
 
     printMenu();
@@ -31,11 +30,11 @@ public class App {
       } else if (menuNo.equals("menu")) {
         printMenu();
       } else if (menuNo.equals("1")) {
-        memberHandler.excute();
+        memberHandler.execute();
       } else if (menuNo.equals("2")) {
-        boardHandler.excute();
+        boardHandler.execute();
       } else if (menuNo.equals("3")) {
-        readingHandler.excute();
+        readingHandler.execute();
       } else {
         System.out.println("메뉴 번호가 옳지 않습니다!");
       }
