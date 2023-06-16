@@ -11,7 +11,7 @@ public class App {
 
     // 기본 생성자를 이용해 Prompt 인스턴스를 준비한다.
     // => 기본 생성자는 Scanner를 키보드와 연결한다.
-    Prompt prompt = new Prompt();
+    Prompt prompt = new Prompt(); 
 
     // 모든 핸들러는 Handler 규칙에 따라 정의되었기 때문에
     // Handler 래퍼런스에 그 주소를 담을 수 있다.
@@ -22,7 +22,7 @@ public class App {
     printTitle();
 
     printMenu();
-
+ 
     while (true) {
       String menuNo = prompt.inputString("메인> ");
       if (menuNo.equals("0")) {

@@ -29,6 +29,13 @@ public class Member {
     this.no = userId++;
   }
 
+  // 같은 기능을 수행하는 생성자가 위에 있다.
+  // 다만 파라미터가 다를 뿐이다
+  // => "생성자 오버로딩(overloading)"
+  public Member(int no) {
+    this.no = no;
+  }
+
   // Object의 equals() 는 Member 인스턴스를 비교하는대ㅔ 적합하지 않다.
   // 왜? Object의 equals() 는 단순히 인스턴스 주소가 같은지 비교하기 때문이다
   // 우리가 원하는 것은 인스턴스 주소가 다르더라도
@@ -53,22 +60,24 @@ public class Member {
     if (this.getNo() != m.getNo()) {
       return false;
     }
+    //
+    // if (this.getName() != null && !this.getName().equals(m.getName())) {
+    // return false;
+    // }
+    //
+    // if (this.getEmail() != null && !this.getEmail().equals(m.getEmail())) {
+    // return false;
+    // }
+    //
+    // if (this.getPassword() != null && !this.getPassword().equals(m.getPassword())) {
+    // return false;
+    // }
+    //
+    // if (this.getGender() != (m.getGender())) {
+    // return false;
+    // }
 
-    if (this.getName() != null && !this.getName().equals(m.getName())) {
-      return false;
-    }
-
-    if (this.getEmail() != null && !this.getEmail().equals(m.getEmail())) {
-      return false;
-    }
-
-    if (this.getPassword() != null && !this.getPassword().equals(m.getPassword())) {
-      return false;
-    }
-
-    if (this.getGender() != (m.getGender())) {
-      return false;
-    }
+    return true;
   }
 
   // 겟터/셋터는 인스턴스 필드의 값을 설정하고 꺼내는 메서드다.
