@@ -11,11 +11,12 @@ public class BoardList {
     if (this.length == boards.length) {
       increase();
     }
+
     this.boards[this.length++] = board;
   }
 
   private void increase() {
-    // 기존 배열보다 50% 큰 배열을 새로 만든다.
+    // 기존 배열 보다 50% 큰 배열을 새로 만든다.
     Board[] arr = new Board[boards.length + (boards.length >> 1)];
 
     // 기존 배열의 값을 새 배열로 복사한다.
@@ -23,9 +24,10 @@ public class BoardList {
       arr[i] = boards[i];
     }
 
-    // boards 레퍼런스가 새 배열을 기리키도록 한다.
+    // boards 레퍼런스가 새 배열을 가리키도록 한다.
     boards = arr;
-    // System.out.println("배열 늘렸음!");
+
+    //    System.out.println("배열 확장: " + boards.length);
   }
 
   public Board[] list() {
@@ -69,7 +71,11 @@ public class BoardList {
     }
     return -1;
   }
-
 }
+
+
+
+
+
 
 
