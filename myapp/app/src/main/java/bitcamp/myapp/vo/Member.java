@@ -29,35 +29,86 @@ public class Member {
     this.no = userId++;
   }
 
+  // Object의 equals() 는 Member 인스턴스를 비교하는대ㅔ 적합하지 않다.
+  // 왜? Object의 equals() 는 단순히 인스턴스 주소가 같은지 비교하기 때문이다
+  // 우리가 원하는 것은 인스턴스 주소가 다르더라도
+  // 두 인스턴스 안에 저장된 변수들의 값이 같다면
+  // 두 인스턴스는 같은 것으로 처리하는 것이다
+  // 그렇게 하기 위해 수퍼클래스의 equals()를 재정의 하는 것이다
+  // => 이것을 "오버라이딩(overriding)"이라 부른다.
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+
+    // 위 조건에서 this가 가리키는 인스턴스의 클래스와
+    // 파라미터 obj 가 가리키는 인스턴스의 클래스가
+    // 같다고 결론이 났기 때문에 다음과 같이
+    // obj를 Member 타입으로 형변환 한다.
+    Member m = (Member) obj;
+    if (this.getNo() != m.getNo()) {
+      return false;
+    }
+
+    if (this.getName() != null && !this.getName().equals(m.getName())) {
+      return false;
+    }
+
+    if (this.getEmail() != null && !this.getEmail().equals(m.getEmail())) {
+      return false;
+    }
+
+    if (this.getPassword() != null && !this.getPassword().equals(m.getPassword())) {
+      return false;
+    }
+
+    if (this.getGender() != (m.getGender())) {
+      return false;
+    }
+  }
+
   // 겟터/셋터는 인스턴스 필드의 값을 설정하고 꺼내는 메서드다.
   // 보통 외부에서 직접 필드에 접근하는 것을 막았을 때 사용한다.
   public int getNo() {
     return no;
   }
+
   public void setNo(int no) {
     this.no = no;
   }
+
   public String getName() {
     return name;
   }
+
   public void setName(String name) {
     this.name = name;
   }
+
   public String getEmail() {
     return email;
   }
+
   public void setEmail(String email) {
     this.email = email;
   }
+
   public String getPassword() {
     return password;
   }
+
   public void setPassword(String password) {
     this.password = password;
   }
+
   public char getGender() {
     return gender;
   }
+
   public void setGender(char gender) {
     this.gender = gender;
   }
