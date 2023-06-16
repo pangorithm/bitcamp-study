@@ -71,7 +71,6 @@ public class BoardHandler implements Handler {
     if (board == null) {
       System.out.println("해당 번호의 게시글이 존재하지 않습니다.");
     } else {
-      board.setViewCount(board.getViewCount() + 1);
       System.out.printf("제목: %s\n", board.getTitle());
       System.out.printf("내용: %s\n", board.getContent());
       System.out.printf("작성자: %s\n", board.getWriter());
