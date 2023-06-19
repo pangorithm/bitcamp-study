@@ -1,4 +1,4 @@
-package com.bitcamp.myapp.handler;
+package com.bitcamp.util;
 
 public class ArrayList {
 
@@ -35,14 +35,6 @@ public class ArrayList {
       return null;
     }
     return list[index];
-  }
-
-  public void set(Object obj) {
-    int index = indexOf(obj);
-    if (index == -1) {
-      return;
-    }
-    list[index] = obj;
   }
 
   public void remove(Object obj) {
