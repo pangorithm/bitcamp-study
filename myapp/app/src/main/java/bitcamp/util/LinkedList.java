@@ -163,6 +163,11 @@ public class LinkedList implements List {
     return old;
   }
 
+  @Override
+  public int size() {
+    return this.size;
+  }
+
   private boolean isValid(int index) {
     return (index >= 0 || index < this.size);
   }
