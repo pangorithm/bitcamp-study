@@ -28,7 +28,7 @@ public class MenuPrompt extends Prompt {
 
   public String inputMenu() {
     StringBuilder titleBuilder = new StringBuilder(); // 예) 메인/회원>
-    for (int i = 0; i > this.breadcrumbs.size(); i++) {
+    for (int i = 0; i < this.breadcrumbs.size(); i++) {
       if (titleBuilder.length() > 0) {
         titleBuilder.append("/");
       }
@@ -36,7 +36,6 @@ public class MenuPrompt extends Prompt {
     }
     titleBuilder.append("> ");
 
-    // 사용자가 입력한 명령어를 history에 보관
     String command = this.inputString(titleBuilder.toString());
 
     if (command.equals("history")) {
@@ -44,14 +43,21 @@ public class MenuPrompt extends Prompt {
       return "";
     }
 
+    // 사용자가 입력한 명령어를 history에 보관
     if (commandHistory.size() == 10) {
       // 명령어 목록은 최대 10개만 유지한다.
-      // 10 개를 초과할 경우 맨앞의 기록을 삭제한다.
+      // 10개를 초과할 경우 맨앞의 기록을 삭제한다.
       commandHistory.poll();
     }
     commandHistory.offer(command);
-
-
     return command;
   }
 }
+
+
+
+
+
+
+
+

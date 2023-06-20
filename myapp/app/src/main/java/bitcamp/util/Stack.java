@@ -15,8 +15,7 @@ public class Stack extends LinkedList {
     System.out.println(s.pop());
     System.out.println(s.pop());
     System.out.println(s.pop());
-    System.out.println(s.pop());
-    System.out.println(s.pop());
+
     System.out.println(s.pop());
   }
 
@@ -31,7 +30,6 @@ public class Stack extends LinkedList {
     if (this.empty()) {
       return null;
     }
-
     return this.remove(this.size() - 1);
   }
 
@@ -46,3 +44,13 @@ public class Stack extends LinkedList {
     return this.size() == 0;
   }
 }
+
+
+
+
+
+
+
+
+
+

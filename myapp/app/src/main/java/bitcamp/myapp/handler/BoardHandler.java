@@ -19,7 +19,9 @@ public class BoardHandler implements Handler {
   }
 
   public void execute() {
+
     prompt.appendBreadcrumb(this.title, getMenu());
+
     prompt.printMenu();
 
     while (true) {
@@ -71,11 +73,14 @@ public class BoardHandler implements Handler {
     System.out.println("번호, 제목, 작성자, 조회수, 등록일");
     System.out.println("---------------------------------------");
 
-    // Object[] arr = this.list.toArray();
     for (int i = 0; i < this.list.size(); i++) {
       Board board = (Board) this.list.get(i);
-      System.out.printf("%d, %s, %s, %d, %tY-%5$tm-%5$td\n", board.getNo(), board.getTitle(),
-          board.getWriter(), board.getViewCount(), board.getCreatedDate());
+      System.out.printf("%d, %s, %s, %d, %tY-%5$tm-%5$td\n",
+          board.getNo(),
+          board.getTitle(),
+          board.getWriter(),
+          board.getViewCount(),
+          board.getCreatedDate());
     }
   }
 
@@ -121,7 +126,6 @@ public class BoardHandler implements Handler {
   }
 
   private Board findBy(int no) {
-    // Object[] arr = this.list.toArray();
     for (int i = 0; i < this.list.size(); i++) {
       Board b = (Board) this.list.get(i);
       if (b.getNo() == no) {
@@ -130,4 +134,17 @@ public class BoardHandler implements Handler {
     }
     return null;
   }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+

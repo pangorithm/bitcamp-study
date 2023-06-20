@@ -17,7 +17,9 @@ public class MemberHandler implements Handler {
   }
 
   public void execute() {
+
     prompt.appendBreadcrumb(this.title, getMenu());
+
     prompt.printMenu();
 
     while (true) {
@@ -59,7 +61,8 @@ public class MemberHandler implements Handler {
     m.setName(this.prompt.inputString("이름? "));
     m.setEmail(this.prompt.inputString("이메일? "));
     m.setPassword(this.prompt.inputString("암호? "));
-    m.setGender(inputGender((char) 0));
+    m.setGender(inputGender((char)0));
+
     this.list.add(m);
   }
 
@@ -68,10 +71,10 @@ public class MemberHandler implements Handler {
     System.out.println("번호, 이름, 이메일, 성별");
     System.out.println("---------------------------------------");
 
-    // Object[] arr = this.list.toArray();
     for (int i = 0; i < this.list.size(); i++) {
       Member m = (Member) this.list.get(i);
-      System.out.printf("%d, %s, %s, %s\n", m.getNo(), m.getName(), m.getEmail(),
+      System.out.printf("%d, %s, %s, %s\n",
+          m.getNo(), m.getName(), m.getEmail(),
           toGenderString(m.getGender()));
     }
   }
@@ -118,7 +121,10 @@ public class MemberHandler implements Handler {
     }
 
     while (true) {
-      String menuNo = this.prompt.inputString(label + "  1. 남자\n" + "  2. 여자\n" + "> ");
+      String menuNo = this.prompt.inputString(label +
+          "  1. 남자\n" +
+          "  2. 여자\n" +
+          "> ");
 
       switch (menuNo) {
         case "1":
@@ -138,8 +144,6 @@ public class MemberHandler implements Handler {
   }
 
   private Member findBy(int no) {
-    // Object[] arr = this.list.toArray();
-    // linked 리스트는 사실 배열 받아서 처리하는게 더 퍼포먼스가 좋음 but 배열 인덱스 활용 연습
     for (int i = 0; i < this.list.size(); i++) {
       Member m = (Member) this.list.get(i);
       if (m.getNo() == no) {
@@ -148,4 +152,5 @@ public class MemberHandler implements Handler {
     }
     return null;
   }
+
 }

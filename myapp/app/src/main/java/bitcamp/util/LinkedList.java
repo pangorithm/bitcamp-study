@@ -1,5 +1,6 @@
 package bitcamp.util;
 
+
 public class LinkedList implements List {
 
   Node head;
@@ -15,41 +16,34 @@ public class LinkedList implements List {
     list.add(Integer.valueOf(500)); // index: 4
 
     print(list);
-    //
-    // System.out.println(list.retrieve(100));
-    // System.out.println(list.retrieve(300));
-    // System.out.println(list.retrieve(500));
-    // System.out.println(list.retrieve(600));
 
-    // System.out.print(list.remove(Integer.valueOf(300)));
-    // print(list);
-    // System.out.print(list.remove(Integer.valueOf(500)));
-    // print(list);
-    // System.out.print(list.remove(Integer.valueOf(100)));
-    // print(list);
-    // System.out.print(list.remove(Integer.valueOf(200)));
-    // print(list);
-    // System.out.print(list.remove(Integer.valueOf(400)));
-    // print(list);
-    // System.out.print(list.remove(Integer.valueOf(600)));
-    // print(list);
+    //    System.out.println(list.remove(Integer.valueOf(300)));
+    //    System.out.println(list.remove(Integer.valueOf(500)));
+    //    System.out.println(list.remove(Integer.valueOf(100)));
+    //    System.out.println(list.remove(Integer.valueOf(200)));
+    //    System.out.println(list.remove(Integer.valueOf(400)));
+    //    System.out.println(list.remove(Integer.valueOf(600)));
 
     System.out.println(list.remove(2));
     System.out.println(list.remove(3));
     System.out.println(list.remove(0));
     System.out.println(list.remove(0));
     System.out.println(list.remove(0));
-    //
-    // list.add(Integer.valueOf(1000));
-    // list.add(Integer.valueOf(2000));
+
+    list.add(Integer.valueOf(1000));
+    list.add(Integer.valueOf(2000));
 
     print(list);
 
+
+    //    System.out.println(list.retrieve(100));
+    //    System.out.println(list.retrieve(300));
+    //    System.out.println(list.retrieve(500));
+    //    System.out.println(list.retrieve(600));
   }
 
   static void print(LinkedList list) {
     Object[] arr = list.toArray();
-    System.out.print(" list: ");
     for (Object obj : arr) {
       System.out.print(obj);
       System.out.print(", ");
@@ -59,18 +53,15 @@ public class LinkedList implements List {
 
   @Override
   public boolean add(Object value) {
-    // 1. 새 노드를 생성한다.
     Node node = new Node();
-
-    // 2. 새 노드에 값 저장
     node.value = value;
 
-    // 3. 리스트의 마지막 노드에 새 노드를 연결
     if (this.head == null) {
       this.head = node;
     } else if (this.tail != null) {
       this.tail.next = node;
     }
+
     this.tail = node;
     this.size++;
     return true;
@@ -85,15 +76,16 @@ public class LinkedList implements List {
       arr[i] = cursor.value;
       cursor = cursor.next;
     }
+
     return arr;
   }
 
-
   @Override
   public Object get(int index) {
-    if (isValid(index)) {
+    if (!isValid(index)) {
       return null;
     }
+
     Node cursor = this.head;
 
     for (int i = 0; i < index; i++) {
@@ -112,12 +104,14 @@ public class LinkedList implements List {
       if (cursor.value.equals(value)) {
         if (prev == null) {
           this.head = cursor.next;
+          if (this.head == null) {
+            this.tail = null;
+          }
+        } else if (cursor.next == null) {
+          this.tail = prev;
+          this.tail.next = null;
         } else {
           prev.next = cursor.next;
-        }
-
-        if (cursor.next == null) {
-          this.tail = prev;
         }
         this.size--;
         cursor.next = null;
@@ -127,6 +121,7 @@ public class LinkedList implements List {
       prev = cursor;
       cursor = cursor.next;
     }
+
     return false;
   }
 
@@ -150,16 +145,19 @@ public class LinkedList implements List {
 
     if (prev == null) {
       this.head = cursor.next;
+      if (this.head == null) {
+        this.tail = null;
+      }
+    } else if (cursor.next == null) {
+      this.tail = prev;
+      this.tail.next = null;
     } else {
       prev.next = cursor.next; // 현재 커서의 다음 노드를 현재 커서의 이전 노드와 연결한다.
-    }
-
-    if (cursor.next == null) {
-      this.tail = prev;
     }
     this.size--;
     cursor.next = null;
     cursor.value = null;
+
     return old;
   }
 
@@ -169,7 +167,7 @@ public class LinkedList implements List {
   }
 
   private boolean isValid(int index) {
-    return (index >= 0 || index < this.size);
+    return index >= 0 && index < this.size;
   }
 
   static class Node {
