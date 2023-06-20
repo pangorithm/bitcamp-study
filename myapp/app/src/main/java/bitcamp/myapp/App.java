@@ -5,7 +5,7 @@ import bitcamp.myapp.handler.Handler;
 import bitcamp.myapp.handler.MemberHandler;
 import bitcamp.util.ArrayList;
 import bitcamp.util.LinkedList;
-import bitcamp.util.Prompt;
+import bitcamp.util.MenuPrompt;
 
 public class App {
 
@@ -13,8 +13,9 @@ public class App {
 
     // 기본 생성자를 이용해 Prompt 인스턴스를 준비한다.
     // => 기본 생성자는 Scanner를 키보드와 연결한다. OK
-    Prompt prompt = new Prompt();
+    MenuPrompt prompt = new MenuPrompt();
 
+    prompt.appendBreadcrumb("메인", getMenu());
     // 모든 핸들러는 Handler 규칙에 따라 정의되었기 때문에
     // Handler 레퍼런스에 그 주소를 담을 수 있다.
     Handler memberHandler = new MemberHandler(prompt, "회원", new ArrayList());
@@ -23,14 +24,14 @@ public class App {
 
     printTitle();
 
-    printMenu();
+    prompt.printMenu();
 
     while (true) {
-      String menuNo = prompt.inputString("메인> ");
+      String menuNo = prompt.inputMenu();
       if (menuNo.equals("0")) {
         break;
       } else if (menuNo.equals("menu")) {
-        printMenu();
+        prompt.printMenu();
       } else if (menuNo.equals("1")) {
         memberHandler.execute();
       } else if (menuNo.equals("2")) {
@@ -45,11 +46,13 @@ public class App {
     prompt.close();
   }
 
-  static void printMenu() {
-    System.out.println("1. 회원");
-    System.out.println("2. 게시글");
-    System.out.println("3. 독서록");
-    System.out.println("0. 종료");
+  static String getMenu() {
+    StringBuilder menu = new StringBuilder();
+    menu.append("1. 회원\n");
+    menu.append("2. 게시글\n");
+    menu.append("3. 독서록\n");
+    menu.append("0. 종료\n");
+    return menu.toString();
   }
 
   static void printTitle() {

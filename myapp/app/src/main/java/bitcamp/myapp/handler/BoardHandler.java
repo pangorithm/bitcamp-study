@@ -2,30 +2,33 @@ package bitcamp.myapp.handler;
 
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.List;
-import bitcamp.util.Prompt;
+import bitcamp.util.MenuPrompt;
 
 public class BoardHandler implements Handler {
 
 
   private List list;
-  private Prompt prompt;
+  private MenuPrompt prompt;
 
   private String title;
 
-  public BoardHandler(Prompt prompt, String title, List list) {
+  public BoardHandler(MenuPrompt prompt, String title, List list) {
     this.prompt = prompt;
     this.title = title;
+    this.list = list;
   }
 
   public void execute() {
-    printMenu();
+    prompt.appendBreadcrumb(this.title, getMenu());
+    prompt.printMenu();
 
     while (true) {
-      String menuNo = prompt.inputString("%s> ", this.title);
+      String menuNo = prompt.inputMenu();
       if (menuNo.equals("0")) {
+        prompt.removeBreadcrumb();
         return;
       } else if (menuNo.equals("menu")) {
-        printMenu();
+        prompt.printMenu();
       } else if (menuNo.equals("1")) {
         this.inputBoard();
       } else if (menuNo.equals("2")) {
@@ -42,13 +45,15 @@ public class BoardHandler implements Handler {
     }
   }
 
-  private static void printMenu() {
-    System.out.println("1. 등록");
-    System.out.println("2. 목록");
-    System.out.println("3. 조회");
-    System.out.println("4. 변경");
-    System.out.println("5. 삭제");
-    System.out.println("0. 메인");
+  private static String getMenu() {
+    StringBuilder menu = new StringBuilder();
+    menu.append("1. 등록\n");
+    menu.append("2. 목록\n");
+    menu.append("3. 조회\n");
+    menu.append("4. 변경\n");
+    menu.append("5. 삭제\n");
+    menu.append("0. 메인\n");
+    return menu.toString();
   }
 
   private void inputBoard() {

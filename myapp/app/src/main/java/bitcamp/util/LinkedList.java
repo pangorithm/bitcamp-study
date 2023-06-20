@@ -66,8 +66,8 @@ public class LinkedList implements List {
     node.value = value;
 
     // 3. 리스트의 마지막 노드에 새 노드를 연결
-    if (head == null) {
-      head = node;
+    if (this.head == null) {
+      this.head = node;
     } else if (this.tail != null) {
       this.tail.next = node;
     }
@@ -111,15 +111,15 @@ public class LinkedList implements List {
     while (cursor != null) {
       if (cursor.value.equals(value)) {
         if (prev == null) {
-          head = cursor.next;
+          this.head = cursor.next;
         } else {
           prev.next = cursor.next;
         }
 
         if (cursor.next == null) {
-          tail = prev;
+          this.tail = prev;
         }
-        size--;
+        this.size--;
         cursor.next = null;
         cursor.value = null;
         return true;
@@ -149,15 +149,15 @@ public class LinkedList implements List {
     Object old = cursor.value;
 
     if (prev == null) {
-      head = cursor.next;
+      this.head = cursor.next;
     } else {
       prev.next = cursor.next; // 현재 커서의 다음 노드를 현재 커서의 이전 노드와 연결한다.
     }
 
     if (cursor.next == null) {
-      tail = prev;
+      this.tail = prev;
     }
-    size--;
+    this.size--;
     cursor.next = null;
     cursor.value = null;
     return old;
