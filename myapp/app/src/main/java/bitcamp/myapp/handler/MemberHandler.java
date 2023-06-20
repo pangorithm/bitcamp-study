@@ -24,23 +24,25 @@ public class MemberHandler implements Handler {
 
     while (true) {
       String menuNo = prompt.inputMenu();
-      if (menuNo.equals("0")) {
-        prompt.removeBreadcrumb();
-        return;
-      } else if (menuNo.equals("menu")) {
-        prompt.printMenu();
-      } else if (menuNo.equals("1")) {
-        this.inputMember();
-      } else if (menuNo.equals("2")) {
-        this.printMembers();
-      } else if (menuNo.equals("3")) {
-        this.viewMember();
-      } else if (menuNo.equals("4")) {
-        this.updateMember();
-      } else if (menuNo.equals("5")) {
-        this.deleteMember();
-      } else {
-        System.out.println("메뉴 번호가 옳지 않습니다!");
+      switch (menuNo) {
+        case "0":
+          prompt.removeBreadcrumb();
+          return;
+        case "1":
+          this.inputMember();
+          break;
+        case "2":
+          this.printMembers();
+          break;
+        case "3":
+          this.viewMember();
+          break;
+        case "4":
+          this.updateMember();
+          break;
+        case "5":
+          this.deleteMember();
+          break;
       }
     }
   }
@@ -61,7 +63,7 @@ public class MemberHandler implements Handler {
     m.setName(this.prompt.inputString("이름? "));
     m.setEmail(this.prompt.inputString("이메일? "));
     m.setPassword(this.prompt.inputString("암호? "));
-    m.setGender(inputGender((char)0));
+    m.setGender(inputGender((char) 0));
 
     this.list.add(m);
   }
@@ -73,8 +75,7 @@ public class MemberHandler implements Handler {
 
     for (int i = 0; i < this.list.size(); i++) {
       Member m = (Member) this.list.get(i);
-      System.out.printf("%d, %s, %s, %s\n",
-          m.getNo(), m.getName(), m.getEmail(),
+      System.out.printf("%d, %s, %s, %s\n", m.getNo(), m.getName(), m.getEmail(),
           toGenderString(m.getGender()));
     }
   }
@@ -121,10 +122,7 @@ public class MemberHandler implements Handler {
     }
 
     while (true) {
-      String menuNo = this.prompt.inputString(label +
-          "  1. 남자\n" +
-          "  2. 여자\n" +
-          "> ");
+      String menuNo = this.prompt.inputString(label + "  1. 남자\n" + "  2. 여자\n" + "> ");
 
       switch (menuNo) {
         case "1":

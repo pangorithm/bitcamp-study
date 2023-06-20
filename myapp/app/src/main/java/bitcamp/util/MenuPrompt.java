@@ -17,12 +17,12 @@ public class MenuPrompt extends Prompt {
   }
 
   public void printMenu() {
-    System.out.println(menus.peek());
+    System.out.println(this.menus.peek());
   }
 
   public void printCommandHistory() {
-    for (int i = 0; i < commandHistory.size(); i++) {
-      System.out.println(commandHistory.get(i));
+    for (int i = 0; i < this.commandHistory.size(); i++) {
+      System.out.println(this.commandHistory.get(i));
     }
   }
 
@@ -36,28 +36,55 @@ public class MenuPrompt extends Prompt {
     }
     titleBuilder.append("> ");
 
-    String command = this.inputString(titleBuilder.toString());
+    String command = null;
 
-    if (command.equals("history")) {
-      printCommandHistory();
-      return "";
+    while (true) {
+      command = this.inputString(titleBuilder.toString());
+      if (command.equals("history")) {
+        printCommandHistory();
+      } else if (command.equals("menu")) {
+        this.printMenu();
+      } else if (findMenuItem(command) == null) {
+        System.out.println("메뉴 번호가 옳지 않습니다!");
+      } else {
+        break;
+      }
     }
 
     // 사용자가 입력한 명령어를 history에 보관
-    if (commandHistory.size() == 10) {
+    if (this.commandHistory.size() == 10) {
       // 명령어 목록은 최대 10개만 유지한다.
       // 10개를 초과할 경우 맨앞의 기록을 삭제한다.
-      commandHistory.poll();
+      this.commandHistory.poll();
     }
-    commandHistory.offer(command);
+    String menuItem = findMenuItem(command);
+    if (menuItem != null) {
+      this.commandHistory.offer(titleBuilder.toString() + ": " + menuItem);
+    } else {
+      this.commandHistory.offer(command);
+    }
     return command;
   }
+
+  private String findMenuItem(String command) {
+    String menuTitle = null;
+
+    // 메뉴에서 command에 해당하는 메뉴가 있다면 그 메뉴 이름을 리턴하고
+    // 없다면 원래 null을 리턴한다.
+
+    // 1) 현재 메뉴를 알아낸다. 메뉴 스택에서 맨 마지막에 입력한 메뉴를 조회한다.
+    String menu = (String) this.menus.peek();
+
+    // 2) 꺼낸 메뉴에서 해당 번호의 메뉴를 찾는다.
+    String[] munuItems = menu.split("\n");
+    for (String munuItem : munuItems) {
+      if (munuItem.startsWith(command)) {
+        return munuItem;
+      }
+    }
+
+    return menuTitle;
+  }
 }
-
-
-
-
-
-
 
 
