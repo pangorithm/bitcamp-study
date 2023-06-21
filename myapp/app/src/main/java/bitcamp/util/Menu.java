@@ -5,7 +5,13 @@ public class Menu {
   private ArrayList listeners = new ArrayList();
 
   public Menu(String title) {
+    super();
     this.title = title;
+  }
+
+  public Menu(String title, ActionListener listener) {
+    this(title);
+    this.addActionListener(listener);
   }
 
   public void addActionListener(ActionListener listener) {
