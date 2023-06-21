@@ -1,7 +1,7 @@
-package bitcamp.myapp.handler;
+package com.bitcamp.myapp.handler;
 
-import bitcamp.util.ActionListener;
-import bitcamp.util.BreadcrumbPrompt;
+import com.bitcamp.util.ActionListener;
+import com.bitcamp.util.BreadcrumbPrompt;
 
 public class FooterListener implements ActionListener {
   @Override
