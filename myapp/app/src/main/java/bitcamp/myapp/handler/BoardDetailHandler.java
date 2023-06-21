@@ -15,7 +15,7 @@ public class BoardDetailHandler implements ActionListener {
   }
 
   @Override
-  private void service(BreadcrumbPrompt prompt) {
+  public void service(BreadcrumbPrompt prompt) {
     int boardNo = prompt.inputInt("번호? ");
 
     Board board = this.findBy(boardNo);

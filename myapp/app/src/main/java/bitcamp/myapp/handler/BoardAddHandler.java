@@ -14,7 +14,7 @@ public class BoardAddHandler implements ActionListener {
   }
 
   @Override
-  public void servise(BreadcrumbPrompt prompt) {
+  public void service(BreadcrumbPrompt prompt) {
     Board board = new Board();
     board.setTitle(prompt.inputString("제목? "));
     board.setContent(prompt.inputString("내용? "));
