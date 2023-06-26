@@ -10,13 +10,10 @@ public class Stack<E> extends LinkedList<E> {
     s.push("안중근");
     s.push("윤봉길");
 
-    System.out.println(s.pop());
-    System.out.println(s.pop());
-    System.out.println(s.pop());
-    System.out.println(s.pop());
-    System.out.println(s.pop());
-
-    System.out.println(s.pop());
+    Iterator<String> iterator = s.iterator();
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+    }
   }
 
   public void push(E value) {
@@ -42,6 +39,22 @@ public class Stack<E> extends LinkedList<E> {
 
   public boolean empty() {
     return this.size() == 0;
+  }
+
+  @Override
+  public Iterator<E> iterator() {
+    return new Iterator<>() {
+      @Override
+      public boolean hasNext() {
+        return !Stack.this.empty();
+      }
+
+      @Override
+      public E next() {
+        // TODO Auto-generated method stub
+        return Stack.this.pop();
+      }
+    };
   }
 }
 

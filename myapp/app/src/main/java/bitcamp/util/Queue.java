@@ -10,13 +10,11 @@ public class Queue<E> extends LinkedList<E> {
     q.offer("안중근");
     q.offer("윤봉길");
 
-    System.out.println(q.poll());
-    System.out.println(q.poll());
-    System.out.println(q.poll());
-    System.out.println(q.poll());
-    System.out.println(q.poll());
 
-    System.out.println(q.poll());
+    Iterator<String> iterator = q.iterator();
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+    }
   }
 
   public void offer(E value) {
@@ -28,5 +26,22 @@ public class Queue<E> extends LinkedList<E> {
       return null;
     }
     return this.remove(0);
+  }
+
+  @Override
+  public Iterator<E> iterator() {
+
+    return new Iterator<>() {
+      @Override
+      public boolean hasNext() {
+
+        return /* Queue.this. */size() > 0;
+      }
+
+      @Override
+      public E next() {
+        return /* Queue.this. */poll();
+      }
+    };
   }
 }

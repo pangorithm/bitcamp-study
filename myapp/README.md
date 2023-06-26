@@ -172,3 +172,5 @@
 
 - GoF의 디자인 패턴 중 Iterator 패턴의 동작원리 이해 및 구현
 - ArrayList, LinkedList, Stack, Queue에 적용
+- 중접 클래스 문법을 이용하여 Iterator 구현하기
+  - static/non-st
