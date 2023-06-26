@@ -256,6 +256,13 @@ https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
     - ex01: Object 클래스 사용법
     - ex02: String, Wrapper, Date, Calendar 클래스 사용법
 
+### 24일(6/26,월)
+
+- 프로젝트 실습
+  - 24. 제네릭을 사용하여 타입을 파라미터로 다루기
+  - 25. Iterator 디자인 패턴을 활용하여 목록 조회 기능을 캡슐화하기
+  - 26. 자바 Collection API 사용하기
+
 ## 웨일즈 화상회의
 
 https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
