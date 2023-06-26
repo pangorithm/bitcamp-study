@@ -59,9 +59,16 @@ public class Exam0170 {
     // 비록 Object의 서브 클래스라 할지라도 남의 인스턴스로 protected 멤버를 사용할 수 없다.
     // 자신이 상속 받은 protected 멤버인 경우에만 접근할 수 있다.
 
+    try {
+      Exam0170 test = new Exam0170();
+      test.clone(); // Ok!
+    } catch (Exception e) {
+
+    }
     // 해결책:
     // => Object에서 상속 받은 clone()을 오버라이딩 하라!
     // => Exam0171.java 를 살펴보라!
+
   }
 
   // 테스트용 인스턴스 메서드
