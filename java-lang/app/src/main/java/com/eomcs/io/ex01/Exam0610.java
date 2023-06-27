@@ -21,9 +21,9 @@ public class Exam0610 {
         // false를 리턴하면 배열에 포함되지 않는다.
 
         // 파일,디렉토리 이름이 .java 로 끝나는 경우만 리턴 배열에 포함시키다.
-        if (name.endsWith(".java"))
-          return true; // 조회 결과에 포함시켜라!
-        return false; // 조회 결과에서 제외하라!
+        return name.endsWith(".java");
+        // return true; // 조회 결과에 포함시켜라!
+        // return false; // 조회 결과에서 제외하라!
       }
     }
 
@@ -45,7 +45,7 @@ public class Exam0610 {
     // - 현재의 필터는 파일 이름으로만 검사한다.
     // - 파일인지 디렉토리인지 여부는 검사하지 않는다.
     // - 해결책?
-    //   다음 예제를 보라!
+    // 다음 예제를 보라!
   }
 
 }
