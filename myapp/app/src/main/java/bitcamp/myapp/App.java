@@ -158,7 +158,7 @@ public class App {
 
         length = in.read() << 8 | in.read();
         in.read(buf, 0, length);
-        board.setContent(null);
+        board.setContent(new String(buf, 0, length, "UTF-8"));
 
         length = in.read() << 8 | in.read();
         in.read(buf, 0, length);
@@ -174,17 +174,15 @@ public class App {
             | (long) in.read() << 40 | (long) in.read() << 32 | (long) in.read() << 24
             | (long) in.read() << 16 | (long) in.read() << 8 | in.read());
 
-
         list.add(board);
-
       }
-      // 데이터를 로딩한 이후에 추가할 회원의 번호를 설정한다.
-      Board.boardNo = Math.max(Board.boardNo, list.get(list.size() - 1).getNo()) + 1;
+
+      Board.boardNo = Math.max(Board.boardNo, list.get(list.size() - 1).getNo() + 1);
 
       in.close();
 
     } catch (Exception e) {
-      System.out.println(filename + "파일을 읽는 중 오류 발생!");
+      System.out.println(filename + " 파일을 읽는 중 오류 발생!");
     }
   }
 
@@ -285,13 +283,12 @@ public class App {
         out.write((int) (createdDate >> 24));
         out.write((int) (createdDate >> 16));
         out.write((int) (createdDate >> 8));
-        out.write((int) (createdDate));
+        out.write((int) createdDate);
       }
       out.close();
 
     } catch (Exception e) {
-      System.out.println(filename + "파일을 저장하는 중 오류 발생!");
+      System.out.println(filename + " 파일을 저장하는 중 오류 발생!");
     }
   }
-
 }
