@@ -108,13 +108,13 @@ public class App {
   public void loadData() {
     loadSchedule("schedule.data", scheduleList);
     loadBoard("board.data", boardList);
-    loadReading("reading.data", readingList);
+    loadBoard("reading.data", readingList);
   }
 
   public void saveData() {
     saveSchedule("schedule.data", scheduleList);
     saveBoard("board.data", boardList);
-    saveReading("reading.data", readingList);
+    saveBoard("reading.data", readingList);
   }
 
   public void loadSchedule(String fileName, List<Schedule> list) {
@@ -156,52 +156,6 @@ public class App {
 
 
   private void loadBoard(String filename, List<Board> list) {
-    try {
-      FileInputStream in = new FileInputStream(filename);
-      int size = in.read() << 8;
-      size |= in.read();
-
-      byte[] buf = new byte[1000];
-
-      for (int i = 0; i < size; i++) {
-        Board board = new Board();
-        board.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-        int length = in.read() << 8 | in.read();
-        in.read(buf, 0, length);
-        board.setTitle(new String(buf, 0, length, "UTF-8"));
-
-        length = in.read() << 8 | in.read();
-        in.read(buf, 0, length);
-        board.setContent(new String(buf, 0, length, "UTF-8"));
-
-        length = in.read() << 8 | in.read();
-        in.read(buf, 0, length);
-        board.setWriter(new String(buf, 0, length, "UTF-8"));
-
-        length = in.read() << 8 | in.read();
-        in.read(buf, 0, length);
-        board.setPassword(new String(buf, 0, length, "UTF-8"));
-
-        board.setViewCount(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-        board.setCreatedDate((long) in.read() << 56 | (long) in.read() << 48
-            | (long) in.read() << 40 | (long) in.read() << 32 | (long) in.read() << 24
-            | (long) in.read() << 16 | (long) in.read() << 8 | in.read());
-
-        list.add(board);
-      }
-
-      Board.boardId = Math.max(Board.boardId, list.get(list.size() - 1).getNo() + 1);
-
-      in.close();
-
-    } catch (Exception e) {
-      System.out.println(filename + " 파일을 읽는 중 오류 발생!");
-    }
-  }
-
-  private void loadReading(String filename, List<Board> list) {
     try {
       FileInputStream in = new FileInputStream(filename);
       int size = in.read() << 8;
@@ -360,63 +314,4 @@ public class App {
     }
   }
 
-  private void saveReading(String filename, List<Board> list) {
-    try {
-      FileOutputStream out = new FileOutputStream(filename);
-
-      // 저장할 데이터의 개수를 먼저 출력한다.
-      int size = list.size();
-      out.write(size >> 8);
-      out.write(size);
-
-      for (Board board : list) {
-        int no = board.getNo();
-        out.write(no >> 24);
-        out.write(no >> 16);
-        out.write(no >> 8);
-        out.write(no);
-
-        byte[] bytes = board.getTitle().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-
-        bytes = board.getContent().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        bytes = board.getWriter().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        bytes = board.getPassword().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        int viewCount = board.getViewCount();
-        out.write(viewCount >> 24);
-        out.write(viewCount >> 16);
-        out.write(viewCount >> 8);
-        out.write(viewCount);
-
-        long createdDate = board.getCreatedDate();
-        out.write((int) (createdDate >> 56));
-        out.write((int) (createdDate >> 48));
-        out.write((int) (createdDate >> 40));
-        out.write((int) (createdDate >> 32));
-        out.write((int) (createdDate >> 24));
-        out.write((int) (createdDate >> 16));
-        out.write((int) (createdDate >> 8));
-        out.write((int) createdDate);
-      }
-      out.close();
-
-    } catch (Exception e) {
-      System.out.println(filename + " 파일을 저장하는 중 오류 발생!");
-    }
-  }
 }
