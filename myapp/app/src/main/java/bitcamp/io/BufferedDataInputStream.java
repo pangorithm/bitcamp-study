@@ -26,7 +26,6 @@ public class BufferedDataInputStream extends FileInputStream {
       }
       cursor = 0;
     }
-
     return buf[cursor++] & 0x000000ff;
   }
 
@@ -51,19 +50,22 @@ public class BufferedDataInputStream extends FileInputStream {
   }
 
   public long readLong() throws IOException {
-    return ((long) this.read() << 56 | (long) this.read() << 48 | (long) this.read() << 40
+    return (long) this.read() << 56 | (long) this.read() << 48 | (long) this.read() << 40
         | (long) this.read() << 32 | (long) this.read() << 24 | (long) this.read() << 16
-        | (long) this.read() << 8 | this.read());
+        | (long) this.read() << 8 | this.read();
+  }
+
+  public char readChar() throws IOException {
+    return (char) (this.read() << 8 | this.read());
   }
 
   public String readUTF() throws IOException {
     int length = this.read() << 8 | this.read();
     byte[] buf = new byte[length];
-    this.read(buf, 0, length);
-    return (new String(buf, "UTF-8"));
+    this.read(buf);
+    return new String(buf, "UTF-8");
   }
 
-  public char readChar() throws IOException {
-    return ((char) (this.read() << 8 | this.read()));
-  }
 }
+
+

@@ -64,16 +64,15 @@ public class BufferedDataOutputStream extends FileOutputStream {
     this.write((int) v);
   }
 
-  public void writeUTF(String str) throws IOException {
-    byte[] bytes = str.getBytes("UTF-8");
-    // 출력할 바이트의 개수를 2바이트로 표시한다.
-    this.writeShort(bytes.length);
-    // 문자열의 바이트를 출력한다.
-    this.write(bytes);
-  }
-
   public void writeChar(int v) throws IOException {
     this.write(v >> 8);
     this.write(v);
+  }
+
+  public void writeUTF(String str) throws IOException {
+    byte[] bytes = str.getBytes("UTF-8");
+    this.write(bytes.length >> 8);
+    this.write(bytes.length);
+    this.write(bytes);
   }
 }
