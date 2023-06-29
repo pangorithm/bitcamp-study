@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 public class Exam0110 {
 
   public static void main(String[] args) throws Exception {
-    FileInputStream in = new FileInputStream("temp/jls11.pdf");
+    FileInputStream in = new FileInputStream("temp/jls17.pdf");
 
     int b;
 
@@ -21,6 +21,8 @@ public class Exam0110 {
 
     System.out.println(endTime - startTime);
     System.out.println(callCount);
+    // 19547
+    // 5111425
 
     in.close();
   }
