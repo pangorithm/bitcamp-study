@@ -1,10 +1,14 @@
 package bitcamp.myapp;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import bitcamp.io.BufferedDataInputStream;
-import bitcamp.io.BufferedDataOutputStream;
 import bitcamp.myapp.handler.BoardAddListener;
 import bitcamp.myapp.handler.BoardDeleteListener;
 import bitcamp.myapp.handler.BoardDetailListener;
@@ -103,7 +107,9 @@ public class App {
 
   private void loadMember(String filename, List<Member> list) {
     try {
-      BufferedDataInputStream in = new BufferedDataInputStream(filename);
+      FileInputStream in0 = new FileInputStream(filename);
+      BufferedInputStream in1 = new BufferedInputStream(in0);
+      DataInputStream in = new DataInputStream(in1); // <== Decorator 역할을 수행!
       int size = in.readShort();
 
 
@@ -134,7 +140,10 @@ public class App {
 
   private void loadBoard(String filename, List<Board> list) {
     try {
-      BufferedDataInputStream in = new BufferedDataInputStream(filename);
+      FileInputStream in0 = new FileInputStream(filename);
+      BufferedInputStream in1 = new BufferedInputStream(in0);
+      DataInputStream in = new DataInputStream(in1); // <== Decorator 역할을 수행!
+
       int size = in.readShort();
 
       for (int i = 0; i < size; i++) {
@@ -167,7 +176,9 @@ public class App {
 
   private void saveMember(String filename, List<Member> list) {
     try {
-      BufferedDataOutputStream out = new BufferedDataOutputStream(filename);
+      FileOutputStream out0 = new FileOutputStream(filename);
+      BufferedOutputStream out1 = new BufferedOutputStream(out0);
+      DataOutputStream out = new DataOutputStream(out1);
 
       // 저장할 데이터의 개수를 먼저 출력한다.
       out.writeShort(memberList.size());
@@ -188,7 +199,9 @@ public class App {
 
   private void saveBoard(String filename, List<Board> list) {
     try {
-      BufferedDataOutputStream out = new BufferedDataOutputStream(filename);
+      FileOutputStream out0 = new FileOutputStream(filename);
+      BufferedOutputStream out1 = new BufferedOutputStream(out0);
+      DataOutputStream out = new DataOutputStream(out1);
 
       // 저장할 데이터의 개수를 먼저 출력한다.
       out.writeShort(list.size());

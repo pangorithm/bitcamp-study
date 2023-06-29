@@ -286,6 +286,22 @@ https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
   - 27. File I/O API를 이용하여 데이터를 바이너리 형식으로 입출력하기
   - 28. 상속을 이용하여 primitive type과 String 출력 기능을 추가하기
 
+### 27일(6/29,목)
+
+- 자바 프로그래밍(com.eomcs.io)
+  - 바이너리 파일 입출력 다루기(ex04)(자습)
+    - primitive type 과 String 값을 입출력하기
+  - 버퍼 사용하기(ex06)
+    - 버퍼 사용 전/후 성능 비교
+  - 상속을 이용한 입출력 기능 확장(ex07)(자습)
+  - 포함 관계를 이용한 입출력 기능 확장(ex08)(자습)
+  - 데코레이터 패턴을 이용한 입출력 기능 확장(ex09)(자습)
+  - Java Stream API 사용법(ex10)(자습)
+- 프로젝트 실습
+  - 29. 입출력 성능을 높이기 위해 버퍼 기능 추가하기
+  - 30. 입출력 기능 확장에 상속 대신 Decorator 패턴을 적용하기
+  - 31. Java Stream API 로 교체하기
+
 ## 웨일즈 화상회의
 
 https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
