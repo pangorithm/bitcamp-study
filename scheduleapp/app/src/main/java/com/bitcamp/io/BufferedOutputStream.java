@@ -3,30 +3,43 @@ package com.bitcamp.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class DataOutputStream extends OutputStream {
+public class BufferedOutputStream extends OutputStream {
 
   OutputStream original;
 
-  public DataOutputStream(OutputStream original) {
+  byte[] buf = new byte[8192];
+  int cursor;
+
+  public BufferedOutputStream(OutputStream original) {
     this.original = original;
   }
 
   @Override
   public void write(int b) throws IOException {
-
-    original.write(b);
-
+    if (cursor == buf.length) {
+      original.write(buf);
+      cursor = 0;
+    }
+    buf[cursor++] = (byte) b;
   }
 
   @Override
   public void flush() throws IOException {
-    original.flush();
+    original.write(buf, 0, cursor);
+    cursor = 0;
   }
 
   @Override
   public void close() throws IOException {
     this.flush();
     original.close();
+  }
+
+  @Override
+  public void write(byte[] arr) throws IOException {
+    for (int i = 0; i < arr.length; i++) {
+      this.write(arr[i]);
+    }
   }
 
   public void writeShort(int v) throws IOException {
@@ -55,7 +68,8 @@ public class DataOutputStream extends OutputStream {
   public void writeUTF(String str) throws IOException {
     byte[] bytes = str.getBytes("UTF-8");
     // 출력할 바이트의 개수를 2바이트로 표시한다.
-    this.writeShort(bytes.length);
+    this.write(bytes.length >> 8);
+    this.write(bytes.length);
     // 문자열의 바이트를 출력한다.
     this.write(bytes);
   }

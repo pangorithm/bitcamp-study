@@ -1,22 +1,23 @@
 package com.bitcamp.io;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
-public class BufferedDataOutputStream extends FileOutputStream {
+public class BufferedOutputStream extends OutputStream {
+
+  OutputStream original;
 
   byte[] buf = new byte[8192];
   int cursor;
 
-  public BufferedDataOutputStream(String name) throws FileNotFoundException {
-    super(name);
+  public BufferedOutputStream(OutputStream original) {
+    this.original = original;
   }
 
   @Override
   public void write(int b) throws IOException {
     if (cursor == buf.length) {
-      super.write(buf);
+      original.write(buf);
       cursor = 0;
     }
     buf[cursor++] = (byte) b;
@@ -24,14 +25,14 @@ public class BufferedDataOutputStream extends FileOutputStream {
 
   @Override
   public void flush() throws IOException {
-    super.write(buf, 0, cursor);
+    original.write(buf, 0, cursor);
     cursor = 0;
   }
 
   @Override
   public void close() throws IOException {
     this.flush();
-    super.close();
+    original.close();
   }
 
   @Override

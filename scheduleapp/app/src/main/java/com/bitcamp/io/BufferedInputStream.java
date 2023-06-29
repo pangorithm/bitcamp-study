@@ -3,23 +3,48 @@ package com.bitcamp.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class DataInputStream extends InputStream {
+public class BufferedInputStream extends InputStream {
 
   InputStream original;
 
-  public DataInputStream(InputStream original) {
+  byte[] buf = new byte[8192];
+  int size;
+  int cursor;
+
+  public BufferedInputStream(InputStream original) {
     this.original = original;
   }
 
   @Override
   public int read() throws IOException {
-    return original.read();
+    if (size == -1) {
+      return -1;
+    }
+    if (cursor == size) {
+      if ((size = original.read(buf)) == -1) {
+        return -1;
+      }
+      cursor = 0;
+    }
+    return buf[cursor++] & 0x000000ff;
   }
 
   @Override
   public void close() throws IOException {
     original.close();
   }
+
+  // @Override
+  // public int read(byte[] arr) throws IOException {
+  // for (int i = 0; i < arr.length; i++) {
+  // int b = this.read();
+  // if (b == -1) {
+  // return i;
+  // }
+  // arr[i] = (byte) b;
+  // }
+  // return arr.length;
+  // }
 
   public short readShort() throws IOException {
     return (short) (this.read() << 8 | this.read());
@@ -45,5 +70,4 @@ public class DataInputStream extends InputStream {
   public char readChar() throws IOException {
     return ((char) (this.read() << 8 | this.read()));
   }
-
 }

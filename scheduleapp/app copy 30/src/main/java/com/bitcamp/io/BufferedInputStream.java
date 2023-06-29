@@ -1,17 +1,18 @@
 package com.bitcamp.io;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
-public class BufferedDataInputStream extends FileInputStream {
+public class BufferedInputStream extends InputStream {
+
+  InputStream original;
 
   byte[] buf = new byte[8192];
   int size;
   int cursor;
 
-  public BufferedDataInputStream(String name) throws FileNotFoundException {
-    super(name);
+  public BufferedInputStream(InputStream original) {
+    this.original = original;
   }
 
   @Override
@@ -20,7 +21,7 @@ public class BufferedDataInputStream extends FileInputStream {
       return -1;
     }
     if (cursor == size) {
-      if ((size = super.read(buf)) == -1) {
+      if ((size = original.read(buf)) == -1) {
         return -1;
       }
       cursor = 0;
@@ -29,16 +30,21 @@ public class BufferedDataInputStream extends FileInputStream {
   }
 
   @Override
-  public int read(byte[] arr) throws IOException {
-    for (int i = 0; i < arr.length; i++) {
-      int b = this.read();
-      if (b == -1) {
-        return i;
-      }
-      arr[i] = (byte) b;
-    }
-    return arr.length;
+  public void close() throws IOException {
+    original.close();
   }
+
+  // @Override
+  // public int read(byte[] arr) throws IOException {
+  // for (int i = 0; i < arr.length; i++) {
+  // int b = this.read();
+  // if (b == -1) {
+  // return i;
+  // }
+  // arr[i] = (byte) b;
+  // }
+  // return arr.length;
+  // }
 
   public short readShort() throws IOException {
     return (short) (this.read() << 8 | this.read());
