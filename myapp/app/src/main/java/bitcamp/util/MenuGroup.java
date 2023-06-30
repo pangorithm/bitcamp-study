@@ -17,6 +17,7 @@ public class MenuGroup extends Menu {
 
   @Override
   public void execute(BreadcrumbPrompt prompt) {
+
     prompt.appendBreadcrumb(this.getTitle());
 
     this.printMenu();
@@ -38,6 +39,7 @@ public class MenuGroup extends Menu {
         menu.execute(prompt);
       }
     }
+
   }
 
   private void printMenu() {

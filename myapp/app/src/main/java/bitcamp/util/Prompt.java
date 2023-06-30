@@ -23,7 +23,7 @@ public class Prompt {
   }
 
   public int inputInt(String title, Object... args) {
-    return Integer.parseInt(this.inputString(title, args));
+    return Integer.parseInt(this.inputString(title, args).replaceAll("[^0-9]", ""));
   }
 
   public void close() {
