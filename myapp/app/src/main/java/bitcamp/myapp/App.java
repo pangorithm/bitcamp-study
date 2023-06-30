@@ -106,14 +106,13 @@ public class App {
     mainMenu.add(helloMenu);
   }
 
-
   @SuppressWarnings("unchecked")
   private <T extends CsvObject> void loadCsv(String filename, List<T> list, Class<T> clazz) {
     try {
       Method factoryMethod = clazz.getDeclaredMethod("fromCsv", String.class);
 
       FileReader in0 = new FileReader(filename);
-      BufferedReader in = new BufferedReader(in0);
+      BufferedReader in = new BufferedReader(in0); // <== Decorator 역할을 수행!
 
       String line = null;
 
@@ -126,25 +125,22 @@ public class App {
 
     } catch (Exception e) {
       System.out.println(filename + " 파일을 읽는 중 오류 발생!");
-      System.out.println(e);
     }
   }
 
   private void saveCsv(String filename, List<? extends CsvObject> list) {
     try {
       FileWriter out0 = new FileWriter(filename);
-      BufferedWriter out1 = new BufferedWriter(out0);
-      PrintWriter out = new PrintWriter(out1);
+      BufferedWriter out1 = new BufferedWriter(out0); // <== Decorator(장식품) 역할 수행!
+      PrintWriter out = new PrintWriter(out1); // <== Decorator(장식품) 역할 수행!
 
-      // 저장할 데이터의 개수를 먼저 출력한다.
-
-      for (Object obj : list) {
-        out.println(((CsvObject) obj).toCsvString());
-        // Board/Member 클래스에 필드가 추가/변경/삭제 되더라도
+      for (CsvObject obj : list) {
+        out.println(obj.toCsvString());
+        // Board나 Member 클래스에 필드가 추가/변경/삭제되더라도
         // 여기 코드를 변경할 필요가 없다.
         // 이것이 Information Expert 설계를 적용하는 이유다!
-        // 설계를 어떻게 하느냐에 따라 유지 보수가 쉬워질 수도 있고,
-        // 어려워 질 수도 있다.
+        // 설계를 어떻게 하느냐에 따라 유지보수가 쉬워질 수도 있고,
+        // 어려워질 수도 있다.
       }
       out.close();
 
