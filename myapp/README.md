@@ -228,7 +228,7 @@
 
 - CSV 데이터 생성을 Board 클래스에 맡기기
   - Information Expert 패턴 적용
-- CSV 데이터를 가지로 Board 클래스 생성하기
+- CSV 데이터를 가지고 Board 클래스 생성하기
   - Factory Method 패턴 적용
   - Reflection API 사용법
     - Class, Method 사용법
