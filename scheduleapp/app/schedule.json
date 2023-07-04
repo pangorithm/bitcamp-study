@@ -13,8 +13,20 @@
   },
   {
     "no": 3,
+    "scheduleTitle": "일정 변경 테스트",
+    "startTime": -27107508412000,
+    "endTime": 253392451740000
+  },
+  {
+    "no": 4,
+    "scheduleTitle": "네이버 클라우드 7기",
+    "startTime": 1682469000000,
+    "endTime": 1698397200000
+  },
+  {
+    "no": 6,
     "scheduleTitle": "test",
-    "startTime": 113142341100000,
-    "endTime": 148204933560000
+    "startTime": -27107508412000,
+    "endTime": 7955082120000
   }
 ]

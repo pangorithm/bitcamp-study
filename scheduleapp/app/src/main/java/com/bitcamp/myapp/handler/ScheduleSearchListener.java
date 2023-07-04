@@ -30,14 +30,11 @@ public class ScheduleSearchListener extends AbstractScheduleListener {
       long searchRangeStart = inputTime(prompt);
       System.out.println("검색 종료 시간 ex)2023-06-06 20:00 ");
       long searchRangeEnd = inputTime(prompt);
-      for (Object obj : this.list.toArray()) {
-        Schedule sch = (Schedule) obj;
-        if (sch.getEndTime() > searchRangeStart && sch.getStartTime() < searchRangeEnd) {
-          printScheduleInfo(sch);
-        }
-      }
+      searchSchedules(searchRangeStart, searchRangeEnd);
     } else {
       System.out.println("올바르지 않은 형식입니다.");
     }
   }
+
+
 }

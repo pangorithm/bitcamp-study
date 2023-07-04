@@ -28,6 +28,15 @@ public abstract class AbstractScheduleListener implements ActionListener {
       System.out.println("스케줄 종료 날짜와 시간을 입력하세요");
       System.out.println("ex)2023-06-06 20:00");
       sch.setEndTime(inputTime(prompt));
+
+      int count = searchSchedules(sch.getStartTime(), sch.getEndTime());
+      if (count != 0) {
+        System.out.println("입력한 일정과 중복되는 일정이 " + count + "개 있습니다.");
+        if (!prompt.promptContinue(prompt.inputString("해당 일정을 저장 하시겠습니까? (y/N)"))) {
+          sch = null;
+        }
+      }
+
     } catch (Exception e) {
       System.out.println("날짜 입력 중 오류 발생");
       Schedule.scheduleId--;
@@ -53,6 +62,9 @@ public abstract class AbstractScheduleListener implements ActionListener {
     String time;
     do {
       time = prompt.inputString("> ").replaceAll("[^0-9]", "");
+      if (time.length() != 12) {
+        System.out.println("올바르지 않은 입력입니다. 다시 입력해주시기 바랍니다.");
+      }
     } while (time.length() != 12);
     return localDateTimeToLong(LocalDateTime.parse(time, formatter));
   }
@@ -66,6 +78,18 @@ public abstract class AbstractScheduleListener implements ActionListener {
       }
     }
     return -1;
+  }
+
+  public int searchSchedules(long searchRangeStart, long searchRangeEnd) {
+    int count = 0;
+    for (Object obj : this.list.toArray()) {
+      Schedule sch = (Schedule) obj;
+      if (sch.getEndTime() > searchRangeStart && sch.getStartTime() < searchRangeEnd) {
+        printScheduleInfo(sch);
+        count++;
+      }
+    }
+    return count;
   }
 
   protected static long localDateTimeToLong(LocalDateTime localDateTime) {
