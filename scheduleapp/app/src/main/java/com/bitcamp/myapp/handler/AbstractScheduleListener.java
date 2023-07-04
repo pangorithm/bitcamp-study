@@ -19,23 +19,30 @@ public abstract class AbstractScheduleListener implements ActionListener {
 
   protected Schedule inputScheduleInfo(Schedule sch, Prompt prompt) {
     try {
-      sch.setScheduleTitle(prompt.inputString("스케줄 제목을 입력하세요\n> "));
+      String scheduleTitle = prompt.inputString("스케줄 제목을 입력하세요\n> ");
 
       System.out.println("스케줄 시작 날짜와 시간을 입력하세요");
       System.out.println("ex)2023-06-05 08:30");
-      sch.setStartTime(inputTime(prompt));
+      long startTime = inputTime(prompt);
 
       System.out.println("스케줄 종료 날짜와 시간을 입력하세요");
       System.out.println("ex)2023-06-06 20:00");
-      sch.setEndTime(inputTime(prompt));
+      long endTime = inputTime(prompt);
+      System.out.println("--------------------------------------------------");
 
-      int count = searchSchedules(sch.getStartTime(), sch.getEndTime());
+      int count = searchSchedules(startTime, endTime);
       if (count != 0) {
-        System.out.println("입력한 일정과 중복되는 일정이 " + count + "개 있습니다.");
-        if (!prompt.promptContinue(prompt.inputString("해당 일정을 저장 하시겠습니까? (y/N)"))) {
-          sch = null;
+        System.out.println("입력한 스케줄과 중복되는 스캐줄이 " + count + "개 있습니다.");
+        if (!prompt.promptContinue(prompt.inputString("해당 스케줄을 저장 하시겠습니까? (y/N)"))) {
+          return null;
         }
       }
+
+      sch.setScheduleTitle(scheduleTitle);
+      sch.setStartTime(startTime);
+      sch.setEndTime(endTime);
+      printScheduleInfo(sch);
+      System.out.println("스케줄이 추가되었습니다.");
 
     } catch (Exception e) {
       System.out.println("날짜 입력 중 오류 발생");

@@ -13,9 +13,9 @@
   },
   {
     "no": 3,
-    "scheduleTitle": "일정 변경 테스트",
-    "startTime": -27107508412000,
-    "endTime": 253392451740000
+    "scheduleTitle": "수정 후 스캐줄",
+    "startTime": -30585849412000,
+    "endTime": 976583400000
   },
   {
     "no": 4,
@@ -25,6 +25,12 @@
   },
   {
     "no": 6,
+    "scheduleTitle": "test",
+    "startTime": -27107508412000,
+    "endTime": 7955082120000
+  },
+  {
+    "no": 7,
     "scheduleTitle": "test",
     "startTime": -27107508412000,
     "endTime": 7955082120000

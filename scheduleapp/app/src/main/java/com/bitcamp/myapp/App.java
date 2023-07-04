@@ -77,7 +77,7 @@ public class App {
   }
 
   private void prepareMenu() {
-    MenuGroup memberMenu = new MenuGroup("스캐줄");
+    MenuGroup memberMenu = new MenuGroup("스케줄");
     memberMenu.add(new Menu("등록", new ScheduleAddListener(scheduleList)));
     memberMenu.add(new Menu("목록", new ScheduleListListener(scheduleList)));
     memberMenu.add(new Menu("검색", new ScheduleSearchListener(scheduleList)));
