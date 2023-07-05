@@ -309,6 +309,29 @@ https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
   - 33. character stream API를 사용하여 CSV 텍스트 형식으로 입출력하기
   - 34. 리팩토링: Factory Method 패턴(GoF), Information Expert 패턴(GRASP)
 
+### 29일(7/03,월)
+
+- 자바 프로그래밍(com.eomcs.openapi.json)
+  - Gson 라이브러리 사용법
+  - Jackson 라이브러리 사용법
+- 프로젝트 실습
+  - 35. JSON 형식으로 입출력하기
+
+### 30일(7/04,화)
+
+- 자바 프로그래밍(com.eomcs.oop)
+  - 추상클래스(ex07) 사용법
+    - Template Method 패턴(GoF)
+  - 인터페이스(ex09, ex10) 사용법
+- 개인 과제 발표
+  - 프로젝트 진행 상황 보고
+    - 김선준, 김현덕, 박동우, 이승혁, 이정훈, 전준호, 손병진, 박진혁, 박승현, 이진석, 김동영, 신현우
+    - 김묘경, 방현석, 최근우, 김선래, 최기현, 김호일, 곽나현, 양소율, 신준식, 정연수, 김종원, 봉세환
+    - 주현욱, 서재운, 한태영, 김성주, 김세연
+    - 오동현(예비군)
+
+### 31일(7/05,수)
+
 ## 웨일즈 화상회의
 
 https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
