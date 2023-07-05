@@ -20,7 +20,7 @@ public class MemberAddListener implements MemberActionListener {
     member.setPassword(prompt.inputString("암호? "));
     member.setGender(MemberActionListener.inputGender((char) 0, prompt));
 
-    memberDao.insert(member);;
+    memberDao.insert(member);
   }
 
 
