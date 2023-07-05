@@ -4,20 +4,15 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import com.bitcamp.myapp.vo.Schedule;
 import com.bitcamp.util.ActionListener;
 import com.bitcamp.util.Prompt;
 
-public abstract class AbstractScheduleListener implements ActionListener {
-  protected List<Schedule> list;
+public interface ScheduleActionListener extends ActionListener {
 
-  public AbstractScheduleListener(List<Schedule> list) {
-    this.list = list;
-  }
-
-
-  protected Schedule inputScheduleInfo(Schedule sch, Prompt prompt) {
+  static Schedule inputScheduleInfo(List<Schedule> list, Schedule sch, Prompt prompt) {
     try {
       String scheduleTitle = prompt.inputString("스케줄 제목을 입력하세요\n> ");
 
@@ -30,9 +25,9 @@ public abstract class AbstractScheduleListener implements ActionListener {
       long endTime = inputTime(prompt);
       System.out.println("--------------------------------------------------");
 
-      int count = searchSchedules(startTime, endTime);
-      if (count != 0) {
-        System.out.println("입력한 스케줄과 중복되는 스캐줄이 " + count + "개 있습니다.");
+      LinkedList<Schedule> resultList = searchSchedules(list, startTime, endTime);
+      if (resultList.size() != 0) {
+        System.out.println("입력한 스케줄과 중복되는 스캐줄이 " + resultList.size() + "개 있습니다.");
         if (!prompt.promptContinue(prompt.inputString("해당 스케줄을 저장 하시겠습니까? (y/N)"))) {
           return null;
         }
@@ -52,9 +47,11 @@ public abstract class AbstractScheduleListener implements ActionListener {
     return sch;
   }
 
-  protected void printScheduleInfo(Schedule sch) {
-    System.out.print("번호: ");
-    System.out.println(sch.getNo());
+  static void printScheduleInfo(Schedule sch) {
+    if (sch.getNo() != 0) {
+      System.out.print("번호: ");
+      System.out.println(sch.getNo());
+    }
     System.out.print("제목: ");
     System.out.println(sch.getScheduleTitle());
     System.out.print("시작: ");
@@ -64,7 +61,19 @@ public abstract class AbstractScheduleListener implements ActionListener {
     System.out.println("");
   }
 
-  protected long inputTime(Prompt prompt) {
+  public static LinkedList<Schedule> searchSchedules(List<Schedule> list, long searchRangeStart,
+      long searchRangeEnd) {
+    LinkedList<Schedule> resultList = new LinkedList<>();
+    for (Object obj : list.toArray()) {
+      Schedule sch = (Schedule) obj;
+      if (sch.getEndTime() > searchRangeStart && sch.getStartTime() < searchRangeEnd) {
+        resultList.add(sch);
+      }
+    }
+    return resultList;
+  }
+
+  static long inputTime(Prompt prompt) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
     String time;
     do {
@@ -76,34 +85,12 @@ public abstract class AbstractScheduleListener implements ActionListener {
     return localDateTimeToLong(LocalDateTime.parse(time, formatter));
   }
 
-  protected int findBy(int no) {
-    Object[] list = this.list.toArray();
-    for (int i = 0; i < this.list.size(); i++) {
-      Schedule b = (Schedule) list[i];
-      if (b.getNo() == no) {
-        return i;
-      }
-    }
-    return -1;
-  }
 
-  public int searchSchedules(long searchRangeStart, long searchRangeEnd) {
-    int count = 0;
-    for (Object obj : this.list.toArray()) {
-      Schedule sch = (Schedule) obj;
-      if (sch.getEndTime() > searchRangeStart && sch.getStartTime() < searchRangeEnd) {
-        printScheduleInfo(sch);
-        count++;
-      }
-    }
-    return count;
-  }
-
-  protected static long localDateTimeToLong(LocalDateTime localDateTime) {
+  static long localDateTimeToLong(LocalDateTime localDateTime) {
     return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
   }
 
-  protected static LocalDateTime longToLocalDateTime(long milliseconds) {
+  static LocalDateTime longToLocalDateTime(long milliseconds) {
     return LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault());
   }
 }
