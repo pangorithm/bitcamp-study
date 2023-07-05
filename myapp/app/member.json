@@ -33,5 +33,12 @@
     "email": "d",
     "password": "d",
     "gender": "M"
+  },
+  {
+    "no": 6,
+    "name": "e",
+    "email": "e",
+    "password": "e",
+    "gender": "M"
   }
 ]
