@@ -25,6 +25,8 @@ public class MemberUpdateListener implements MemberActionListener {
     m.setEmail(prompt.inputString("이메일(%s)? ", m.getEmail()));
     m.setPassword(prompt.inputString("새암호? "));
     m.setGender(MemberActionListener.inputGender(m.getGender(), prompt));
+
+    memberDao.update(m);
   }
 
 

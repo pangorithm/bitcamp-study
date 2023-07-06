@@ -9,6 +9,7 @@ import bitcamp.myapp.dao.BoardListDao;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.dao.MemberListDao;
 import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Member;
 import bitcamp.net.RequestEntity;
 import bitcamp.net.ResponseEntity;
 
@@ -93,6 +94,34 @@ public class ServerApp {
               .result(boardDao.remove(request.getObject(Integer.class)));
           break;
 
+
+        case "member/list":
+          response.status(ResponseEntity.SUCCESS).result(memberDao.list());
+          break;
+
+        case "member/insert":
+          memberDao.insert(request.getObject(Member.class));
+          response.status(ResponseEntity.SUCCESS);
+          break;
+
+        case "member/findBy":
+          Member member = memberDao.findBy(request.getObject(Integer.class));
+          if (member != null) {
+            response.status(ResponseEntity.SUCCESS).result(member);
+          } else {
+            response.status(ResponseEntity.FAILURE).result("해당 번호의 게시글이 없습니다");
+          }
+          break;
+
+        case "member/update":
+          response.status(ResponseEntity.SUCCESS)
+              .result(memberDao.update(request.getObject(Member.class)));
+          break;
+
+        case "member/remove":
+          response.status(ResponseEntity.SUCCESS)
+              .result(memberDao.remove(request.getObject(Integer.class)));
+          break;
         default:
           response.status(ResponseEntity.ERROR).result("해당 명령을 지원하지 않습니다.");
       }
