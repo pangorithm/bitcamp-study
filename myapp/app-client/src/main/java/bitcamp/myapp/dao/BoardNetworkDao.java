@@ -3,10 +3,10 @@ package bitcamp.myapp.dao;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.List;
-import java.util.Map;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import bitcamp.myapp.vo.Board;
+import bitcamp.net.RequestEntity;
+import bitcamp.net.ResponseEntity;
 
 public class BoardNetworkDao implements BoardDao {
   String dataName;
@@ -19,22 +19,18 @@ public class BoardNetworkDao implements BoardDao {
     this.out = out;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public void insert(Board board) {
     try {
-      // 서버에서 실행할 명령을 보낸다.
-      out.writeUTF(dataName + "/insert");
-
-      // 명령을 실행할 때 사용할 데이터를 보낸다.
       Gson gson = new Gson();
-      String jsonStr = gson.toJson(board);
-      out.writeUTF(jsonStr);
+
+      // 서버에 요청을 보낸다.
+      out.writeUTF(new RequestEntity().command(dataName + "/insert").data(board).toJson());
 
       // 서버에서 보낸 응답을 받는다.
-      Map<String, Object> response = gson.fromJson(in.readUTF(), Map.class);
-      if (!response.get("status").equals("success")) {
-        throw new RuntimeException((String) response.get("message"));
+      ResponseEntity response = ResponseEntity.fromJson(in.readUTF());
+      if (response.getStatus().equals(ResponseEntity.FAILURE)) {
+        throw new RuntimeException(response.getResult());
       }
     } catch (Exception e) {
       System.out.println(e.getMessage());
@@ -42,20 +38,18 @@ public class BoardNetworkDao implements BoardDao {
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public List<Board> list() {
     try {
-      out.writeUTF(dataName + "/list");
+      out.writeUTF(new RequestEntity().command(dataName + "/list").toJson());
 
-      Gson gson = new Gson();
-      Map<String, Object> response = gson.fromJson(in.readUTF(), Map.class);
-      if (!response.get("status").equals("success")) {
-        throw new RuntimeException((String) response.get("message"));
+
+      ResponseEntity response = ResponseEntity.fromJson(in.readUTF());
+      if (response.getStatus().equals(ResponseEntity.FAILURE)) {
+        throw new RuntimeException(response.getResult());
       }
 
-      return gson.fromJson((String) response.get("data"),
-          TypeToken.getParameterized(List.class, Board.class).getType());
+      return response.getList(Board.class);
 
     } catch (Exception e) {
       System.out.println(e.getMessage());

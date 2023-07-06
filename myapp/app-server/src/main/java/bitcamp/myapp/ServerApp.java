@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Map;
 import com.google.gson.Gson;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.BoardListDao;
@@ -42,6 +43,7 @@ public class ServerApp {
   }
 
 
+  @SuppressWarnings("unchecked")
   public void execute() throws Exception {
     System.out.println("[MyList 서버 애플리케이션]");
 
@@ -55,8 +57,9 @@ public class ServerApp {
     Gson gson = new Gson();
 
     while (true) {
-      String command = in.readUTF();
+      Map<String, Object> request = RequestEntitiy.fromJson(in.readUTF(), Map.class);
 
+      String command = (String) request.get("command");
       System.out.println(command);
 
       HashMap<String, String> response = new HashMap<>();
@@ -66,11 +69,11 @@ public class ServerApp {
 
       } else if (command.equals("board/list")) {
         response.put("status", "success");
-        response.put("data", gson.toJson(boardDao.list()));
+        response.put("result", gson.toJson(boardDao.list()));
 
       } else {
         response.put("status", "failure");
-        response.put("message", "nono!");
+        response.put("result", "nono!");
 
       }
 
