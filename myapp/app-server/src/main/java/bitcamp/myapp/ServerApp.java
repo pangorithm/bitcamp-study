@@ -80,7 +80,7 @@ public class ServerApp {
           if (board != null) {
             response.status(ResponseEntity.SUCCESS).result(board);
           } else {
-            response.status(ResponseEntity.FAILURE).result("해당 번호의 게시글이 없습니다");
+            response.status(ResponseEntity.SUCCESS);
           }
           break;
 
@@ -109,7 +109,7 @@ public class ServerApp {
           if (member != null) {
             response.status(ResponseEntity.SUCCESS).result(member);
           } else {
-            response.status(ResponseEntity.FAILURE).result("해당 번호의 게시글이 없습니다");
+            response.status(ResponseEntity.SUCCESS);
           }
           break;
 
