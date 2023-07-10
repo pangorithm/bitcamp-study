@@ -2,14 +2,13 @@ package bitcamp.myapp;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import bitcamp.myapp.dao.BoardDao;
+import java.util.HashMap;
 import bitcamp.myapp.dao.BoardListDao;
-import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.dao.MemberListDao;
-import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.Member;
 import bitcamp.net.RequestEntity;
 import bitcamp.net.ResponseEntity;
 
@@ -18,12 +17,14 @@ public class ServerApp {
   int port;
   ServerSocket serverSocket;
 
-  MemberDao memberDao = new MemberListDao("member.json");
-  BoardDao boardDao = new BoardListDao("board.json");
-  BoardDao readingDao = new BoardListDao("reading.json");
+  // 클라이언트 요청을 처리할 DAO 객체를 맵에 보관한다.
+  HashMap<String, Object> daoMap = new HashMap<>();
 
   public ServerApp(int port) throws Exception {
     this.port = port;
+    daoMap.put("member", new MemberListDao("member.json"));
+    daoMap.put("board", new BoardListDao("board.json"));
+    daoMap.put("reading", new BoardListDao("reading.json"));
   }
 
   public void close() throws Exception {
@@ -55,78 +56,43 @@ public class ServerApp {
 
     while (true) {
       RequestEntity request = RequestEntity.fromJson(in.readUTF());
-
       String command = request.getCommand();
       System.out.println(command);
 
-      ResponseEntity response = new ResponseEntity();
 
       if (command.equals("quit")) {
         break;
-
-      }
-      switch (command) {
-        case "board/list":
-          response.status(ResponseEntity.SUCCESS).result(boardDao.list());
-          break;
-
-        case "board/insert":
-          boardDao.insert(request.getObject(Board.class));
-          response.status(ResponseEntity.SUCCESS);
-          break;
-
-        case "board/findBy":
-          Board board = boardDao.findBy(request.getObject(Integer.class));
-          if (board != null) {
-            response.status(ResponseEntity.SUCCESS).result(board);
-          } else {
-            response.status(ResponseEntity.SUCCESS);
-          }
-          break;
-
-        case "board/update":
-          response.status(ResponseEntity.SUCCESS)
-              .result(boardDao.update(request.getObject(Board.class)));
-          break;
-
-        case "board/remove":
-          response.status(ResponseEntity.SUCCESS)
-              .result(boardDao.remove(request.getObject(Integer.class)));
-          break;
-
-
-        case "member/list":
-          response.status(ResponseEntity.SUCCESS).result(memberDao.list());
-          break;
-
-        case "member/insert":
-          memberDao.insert(request.getObject(Member.class));
-          response.status(ResponseEntity.SUCCESS);
-          break;
-
-        case "member/findBy":
-          Member member = memberDao.findBy(request.getObject(Integer.class));
-          if (member != null) {
-            response.status(ResponseEntity.SUCCESS).result(member);
-          } else {
-            response.status(ResponseEntity.SUCCESS);
-          }
-          break;
-
-        case "member/update":
-          response.status(ResponseEntity.SUCCESS)
-              .result(memberDao.update(request.getObject(Member.class)));
-          break;
-
-        case "member/remove":
-          response.status(ResponseEntity.SUCCESS)
-              .result(memberDao.remove(request.getObject(Integer.class)));
-          break;
-        default:
-          response.status(ResponseEntity.ERROR).result("해당 명령을 지원하지 않습니다.");
       }
 
+      String[] values = command.split("/");
+      String dataName = values[0];
+      String methodName = values[1];
+
+
+      Object dao = daoMap.get(dataName);
+      if (dao == null) {
+        out.writeUTF(
+            new ResponseEntity().status(ResponseEntity.ERROR).result("데이터를 찾을 수 없습니다.").toJson());
+        continue;
+      }
+
+      Method method = findMethod(dao, methodName);
+
+      if (method == null) {
+        out.writeUTF(
+            new ResponseEntity().status(ResponseEntity.ERROR).result("메소드를 찾을 수 없습니다.").toJson());
+        continue;
+      }
+
+      Object result = call(dao, method, request);
+
+
+
+      ResponseEntity response = new ResponseEntity();
+      response.status(ResponseEntity.SUCCESS);
+      response.result(result);
       out.writeUTF(response.toJson());
+
     }
 
     in.close();
@@ -134,5 +100,24 @@ public class ServerApp {
     socket.close();
   }
 
+
+  public static Method findMethod(Object obj, String methodName) {
+    Method[] methods = obj.getClass().getDeclaredMethods();
+    for (int i = 0; i < methods.length; i++) {
+      if (methods[i].getName().equals(methodName)) {
+        return methods[i];
+      }
+    }
+    return null;
+  }
+
+  public static Object call(Object obj, Method method, RequestEntity request) throws Exception {
+    Parameter[] params = method.getParameters();
+    if (params.length > 0) {
+      return method.invoke(obj, request.getObject(params[0].getType()));
+    } else {
+      return method.invoke(obj);
+    }
+  }
 }
 
