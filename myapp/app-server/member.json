@@ -40,5 +40,12 @@
     "email": "f",
     "password": "f",
     "gender": "W"
+  },
+  {
+    "no": 8,
+    "name": "test",
+    "email": "test",
+    "password": "test",
+    "gender": "M"
   }
 ]
