@@ -15,8 +15,6 @@ import com.bitcamp.myapp.dao.BoardListDao;
 import com.bitcamp.myapp.dao.ScheduleListDao;
 import com.bitcamp.net.RequestEntity;
 import com.bitcamp.net.ResponseEntity;
-import com.bitcamp.util.ManagedThread;
-import com.bitcamp.util.ThreadPool;
 
 public class ServerApp {
 
@@ -24,8 +22,6 @@ public class ServerApp {
   ServerSocket serverSocket;
 
   HashMap<String, Object> daoMap = new HashMap<>();
-
-  ThreadPool threadPool = new ThreadPool();
 
   public ServerApp(int port) throws Exception {
     this.port = port;
@@ -70,9 +66,7 @@ public class ServerApp {
     System.out.println("서버 실행 중...");
 
     while (true) {
-      Socket socket = serverSocket.accept();
-      ManagedThread t = threadPool.getResource();
-      t.setJob(() -> processRequest(socket));
+      new RequestAgentThread(serverSocket.accept()).start();
     }
 
   }
