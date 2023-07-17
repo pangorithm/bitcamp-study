@@ -8,12 +8,12 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import bitcamp.myapp.dao.BoardListDao;
 import bitcamp.myapp.dao.MemberListDao;
 import bitcamp.net.RequestEntity;
 import bitcamp.net.ResponseEntity;
-import bitcamp.util.ManagedThread;
-import bitcamp.util.ThreadPool;
 
 public class ServerApp {
 
@@ -23,7 +23,7 @@ public class ServerApp {
   HashMap<String, Object> daoMap = new HashMap<>();
 
   // 스레드를 리턴해 줄 스테드 풀 준비
-  ThreadPool threadPool = new ThreadPool();
+  ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
   public ServerApp(int port) throws Exception {
     this.port = port;
@@ -58,8 +58,7 @@ public class ServerApp {
 
     while (true) {
       Socket socket = serverSocket.accept();
-      ManagedThread t = threadPool.getResource();
-      t.setJob(() -> processRequest(socket));
+      threadPool.execute(() -> processRequest(socket));
     }
   }
 
@@ -90,8 +89,8 @@ public class ServerApp {
         DataOutputStream out = new DataOutputStream(s.getOutputStream());) {
 
       InetSocketAddress socketAddress = (InetSocketAddress) socket.getRemoteSocketAddress();
-      System.out.printf("%s:%s 클라이언트가 접속했음\n", socketAddress.getHostString(),
-          socketAddress.getPort());
+      System.out.printf("[%s] %s:%s 클라이언트가 접속했음\n", Thread.currentThread().getName(),
+          socketAddress.getHostString(), socketAddress.getPort());
 
 
       RequestEntity request = RequestEntity.fromJson(in.readUTF());
