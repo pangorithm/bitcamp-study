@@ -27,7 +27,7 @@ public class BoardDetailListener implements ActionListener {
     System.out.printf("내용: %s\n", board.getContent());
     System.out.printf("작성자: %s\n", board.getWriter());
     System.out.printf("조회수: %s\n", board.getViewCount());
-    System.out.printf("등록일: %tY-%1$tm-%1$td\n", board.getCreatedDate());
+    System.out.printf("등록일: %tY-%1$tm-%1$td %1$tH:%1$tM\n", board.getCreatedDate());
     board.setViewCount(board.getViewCount() + 1);
 
     boardDao.update(board);
