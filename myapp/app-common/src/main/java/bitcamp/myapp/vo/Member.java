@@ -2,11 +2,9 @@ package bitcamp.myapp.vo;
 
 import java.io.Serializable;
 
-public class Member implements Serializable, CsvObject, AutoIncrement {
+public class Member implements Serializable {
 
   private static final long serialVersionUID = 1L;
-
-  public static int userId = 1;
 
   public static final char MALE = 'M';
   public static final char FEMALE = 'W';
@@ -24,33 +22,6 @@ public class Member implements Serializable, CsvObject, AutoIncrement {
   // => "생성자 오버로딩(overloading)"
   public Member(int no) {
     this.no = no;
-  }
-
-  public static Member fromCsv(String csv) {
-    String[] values = csv.split(",");
-    Member member = new Member(Integer.parseInt(values[0]));
-    member.setName(values[1]);
-    member.setEmail(values[2]);
-    member.setPassword(values[3]);
-    member.setGender(values[4].charAt(0));
-
-    if (Member.userId <= member.getNo()) {
-      Member.userId = member.getNo() + 1;
-    }
-
-    return member;
-  }
-
-  @Override
-  public void updateKey() {
-    if (this.no >= Member.userId) {
-      Member.userId = this.no + 1;
-    }
-  }
-
-  public String toCsvString() {
-    return String.format("%d,%s,%s,%s,%c\n", this.getNo(), this.getName(), this.getEmail(),
-        this.getPassword(), this.getGender());
   }
 
   // Object의 equals()는 Member 인스턴스를 비교하는데 적합하지 않다.
