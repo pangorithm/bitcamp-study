@@ -39,3 +39,16 @@ insert into scheduleapp_schedule(schedule_no, schedule_title, start_time, end_ti
   values(4, 'ddd', '5555-05-05 05:05:55', '6666-06-06 06:06:06', 3);
 insert into scheduleapp_schedule(schedule_no, schedule_title, start_time, end_time, owner) 
   values(5, 'eee', '7777-07-07 07:07:07', '8888-08-08 08:08:08', 1);
+
+-- 스케줄 멤버 다대다 예제 데이터  
+insert into scheduleapp_schedule_participants(schedule_no, member_no)
+  values(1, 1);
+insert into scheduleapp_schedule_participants(schedule_no, member_no)
+  values(2, 2);
+insert into scheduleapp_schedule_participants(schedule_no, member_no)
+  values(3, 3);
+insert into scheduleapp_schedule_participants(schedule_no, member_no)
+  values(4, 3);
+insert into scheduleapp_schedule_participants(schedule_no, member_no)
+  values(5, 1);
+  

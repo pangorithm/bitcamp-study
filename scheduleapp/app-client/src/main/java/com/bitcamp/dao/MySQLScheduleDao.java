@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import com.bitcamp.myapp.ClientApp;
 import com.bitcamp.myapp.dao.ScheduleDao;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
@@ -20,14 +21,22 @@ public class MySQLScheduleDao implements ScheduleDao {
 
   @Override
   public void insert(Schedule schedule) {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "insert into scheduleapp_schedule(schedule_title, start_time, end_time, owner)"
-            + " values(?, ?, ?, ?)");) {
-      stmt.setString(1, schedule.getScheduleTitle());
-      stmt.setString(2, new Timestamp(schedule.getStartTime()).toString());
-      stmt.setString(3, new Timestamp(schedule.getEndTime()).toString());
-      stmt.setInt(4, schedule.getOwner().getNo());
-      stmt.executeUpdate();
+    try (
+        PreparedStatement stmt1 = con.prepareStatement(
+            "insert into scheduleapp_schedule(schedule_title, start_time, end_time, owner)"
+                + " values(?, ?, ?, ?)");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "insert into scheduleapp_schedule_participants(schedule_no, member_no)"
+                + " values(?, ?)");) {
+      stmt1.setString(1, schedule.getScheduleTitle());
+      stmt1.setString(2, new Timestamp(schedule.getStartTime()).toString());
+      stmt1.setString(3, new Timestamp(schedule.getEndTime()).toString());
+      stmt1.setInt(4, schedule.getOwner().getNo());
+      stmt1.executeUpdate();
+
+      stmt2.setInt(1, schedule.getNo());
+      stmt2.setInt(2, schedule.getOwner().getNo());
+      stmt2.executeUpdate();
 
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -36,25 +45,31 @@ public class MySQLScheduleDao implements ScheduleDao {
 
   @Override
   public List<Schedule> list() {
-    try (
-        PreparedStatement stmt =
-            con.prepareStatement("select schedule_no, schedule_title, start_time, end_time"
-                + " from scheduleapp_schedule order by start_time asc");
-        ResultSet rs = stmt.executeQuery()) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "select sch.schedule_no, sch.schedule_title, sch.start_time, sch.end_time, m.member_no"
+            + " from  (select * from scheduleapp_schedule_participants where member_no=?) x"
+            + " inner join scheduleapp_schedule sch on sch.schedule_no = x.schedule_no"
+            + " inner join scheduleapp_member m on m.member_no = x.member_no"
+            + " order by start_time asc");) {
+      stmt.setInt(1, ClientApp.loginUser.getNo());
 
-      List<Schedule> list = new ArrayList<>();
+      try (ResultSet rs = stmt.executeQuery()) {
 
-      while (rs.next()) {
-        Schedule schedule = new Schedule();
-        schedule.setNo(rs.getInt("schedule_no"));
-        schedule.setScheduleTitle(rs.getString("schedule_title"));
-        schedule.setStartTime(rs.getTimestamp("start_time").getTime());
-        schedule.setEndTime(rs.getTimestamp("end_time").getTime());
+        List<Schedule> list = new ArrayList<>();
 
-        list.add(schedule);
+        while (rs.next()) {
+          Schedule schedule = new Schedule();
+          schedule.setNo(rs.getInt("schedule_no"));
+          schedule.setScheduleTitle(rs.getString("schedule_title"));
+          schedule.setStartTime(rs.getTimestamp("start_time").getTime());
+          schedule.setEndTime(rs.getTimestamp("end_time").getTime());
+
+          list.add(schedule);
+        }
+
+        return list;
+
       }
-
-      return list;
 
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -65,27 +80,33 @@ public class MySQLScheduleDao implements ScheduleDao {
   public Schedule findBy(int no) {
     try (PreparedStatement stmt = con.prepareStatement(
         "select sch.schedule_no, sch.schedule_title, sch.start_time, sch.end_time, m.member_no, m.name"
-            + " from scheduleapp_schedule sch inner join scheduleapp_member m on sch.owner=m.member_no"
-            + " where schedule_no=" + no);
-        ResultSet rs = stmt.executeQuery()) {
+            + " from  (select * from scheduleapp_schedule_participants where member_no=?) x"
+            + " inner join scheduleapp_schedule sch on sch.schedule_no = x.schedule_no"
+            + " inner join scheduleapp_member m on m.member_no = x.member_no"
+            + " where sch.schedule_no=?");) {
+      stmt.setInt(1, ClientApp.loginUser.getNo());
+      stmt.setInt(2, no);
 
-      if (rs.next()) {
-        Schedule schedule = new Schedule();
-        schedule.setNo(rs.getInt("schedule_no"));
-        schedule.setScheduleTitle(rs.getString("schedule_title"));
-        schedule.setStartTime(rs.getTimestamp("start_time").getTime());
-        schedule.setEndTime(rs.getTimestamp("end_time").getTime());
+      try (ResultSet rs = stmt.executeQuery()) {
 
-        Member owner = new Member();
-        owner.setNo(rs.getInt("member_no"));
-        owner.setName(rs.getString("name"));
-        schedule.setOwner(owner);
+        if (rs.next()) {
+          Schedule schedule = new Schedule();
+          schedule.setNo(rs.getInt("schedule_no"));
+          schedule.setScheduleTitle(rs.getString("schedule_title"));
+          schedule.setStartTime(rs.getTimestamp("start_time").getTime());
+          schedule.setEndTime(rs.getTimestamp("end_time").getTime());
 
-        return schedule;
+          Member owner = new Member();
+          owner.setNo(rs.getInt("member_no"));
+          owner.setName(rs.getString("name"));
+          schedule.setOwner(owner);
+
+          return schedule;
+        }
+
+        return null;
+
       }
-
-      return null;
-
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -119,6 +140,33 @@ public class MySQLScheduleDao implements ScheduleDao {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public int scheduleAddParticipant(int scheduleNo, int memberNo) {
+    try (PreparedStatement stmtSelect =
+        con.prepareStatement("select * from scheduleapp_schedule_participants"
+            + " where schedule_no=? and member_no=?");) {
+      stmtSelect.setInt(1, scheduleNo);
+      stmtSelect.setInt(2, memberNo);
+
+      try (ResultSet rs = stmtSelect.executeQuery()) {
+        if (!rs.next()) {
+          try (PreparedStatement stmtInsert = con.prepareStatement(
+              "insert into scheduleapp_schedule_participants(schedule_no, member_no)"
+                  + " values(?, ?)");) {
+            stmtInsert.setInt(1, scheduleNo);
+            stmtInsert.setInt(2, memberNo);
+            return stmtInsert.executeUpdate();
+          }
+        } else {
+          return -1;
+        }
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+
   }
 
 }

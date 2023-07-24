@@ -49,4 +49,15 @@ alter table scheduleapp_board
 alter table scheduleapp_schedule
   add constraint scheduleapp_schedule_fk foreign key (owner) references scheduleapp_member (member_no);
   
+create table scheduleapp_schedule_participants(
+  schedule_no int not null,
+  member_no int not null
+);
+
+alter table scheduleapp_schedule_participants
+  add constraint scheduleapp_schedule_participants_schedule_fk foreign key (schedule_no) references scheduleapp_schedule (schedule_no);
+  
+alter table scheduleapp_schedule_participants
+  add constraint scheduleapp_schedule_participants_member_fk foreign key (member_no) references scheduleapp_member (member_no);
+  
   

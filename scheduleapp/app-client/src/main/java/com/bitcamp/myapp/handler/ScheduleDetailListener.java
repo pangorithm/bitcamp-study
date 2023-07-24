@@ -29,6 +29,16 @@ public class ScheduleDetailListener implements ActionListener {
     System.out.printf("시작 시간: %s\n", new Timestamp(schedule.getStartTime()).toString());
     System.out.printf("종료 시간: %s\n", new Timestamp(schedule.getEndTime()).toString());
     System.out.printf("소유자: %s\n", schedule.getOwner().getName());
+
+    // 참가중인 멤버 목록 출력 필요
+
+    while (prompt.promptContinue(prompt.inputString("스케줄 참가자를 추가하시겠습니까?(y/N)"))) {
+      if (scheduleDao.scheduleAddParticipant(schedule.getNo(),
+          prompt.inputInt("추가할 참가자 번호?")) == -1) {
+        System.out.println("이미 참가중인 멤버입니다.");
+      }
+    }
+
   }
 }
 
