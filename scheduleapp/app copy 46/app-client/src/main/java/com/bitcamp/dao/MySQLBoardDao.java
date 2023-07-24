@@ -98,11 +98,12 @@ public class MySQLBoardDao implements BoardDao {
   }
 
   @Override
-  public int remove(int no) {
+  public int remove(Board board) {
     try (Statement stmt = con.createStatement();) {
 
-      return stmt.executeUpdate(String
-          .format("delete from scheduleapp_board where board_no=%d and category=%d", no, category));
+      return stmt.executeUpdate(String.format(
+          "delete from myapp_board where board_no=%d and category=%d and password='%s'",
+          board.getNo(), this.category, board.getPassword()));
 
     } catch (Exception e) {
       throw new RuntimeException(e);
