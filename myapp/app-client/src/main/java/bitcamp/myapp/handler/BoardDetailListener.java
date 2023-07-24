@@ -1,5 +1,6 @@
 package bitcamp.myapp.handler;
 
+import java.text.SimpleDateFormat;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.util.ActionListener;
@@ -8,6 +9,7 @@ import bitcamp.util.BreadcrumbPrompt;
 public class BoardDetailListener implements ActionListener {
 
   BoardDao boardDao;
+  SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd a hh:mm");
 
   public BoardDetailListener(BoardDao boardDao) {
     this.boardDao = boardDao;
@@ -27,10 +29,7 @@ public class BoardDetailListener implements ActionListener {
     System.out.printf("내용: %s\n", board.getContent());
     System.out.printf("작성자: %s\n", board.getWriter());
     System.out.printf("조회수: %s\n", board.getViewCount());
-    System.out.printf("등록일: %tY-%1$tm-%1$td %1$tH:%1$tM\n", board.getCreatedDate());
-    board.setViewCount(board.getViewCount() + 1);
-
-    boardDao.update(board);
+    System.out.printf("등록일: %s\n", dateFormatter.format(board.getCreatedDate()));
   }
 
 }
