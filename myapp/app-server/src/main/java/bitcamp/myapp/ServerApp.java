@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import bitcamp.dao.MySQLBoardDao;
 import bitcamp.dao.MySQLMemberDao;
 import bitcamp.myapp.dao.BoardDao;
@@ -16,15 +18,12 @@ import bitcamp.myapp.handler.BoardDeleteListener;
 import bitcamp.myapp.handler.BoardDetailListener;
 import bitcamp.myapp.handler.BoardListListener;
 import bitcamp.myapp.handler.BoardUpdateListener;
-import bitcamp.myapp.handler.FooterListener;
-import bitcamp.myapp.handler.HeaderListener;
-import bitcamp.myapp.handler.HelloListener;
+import bitcamp.myapp.handler.LoginListener;
 import bitcamp.myapp.handler.MemberAddListener;
 import bitcamp.myapp.handler.MemberDeleteListener;
 import bitcamp.myapp.handler.MemberDetailListener;
 import bitcamp.myapp.handler.MemberListListener;
 import bitcamp.myapp.handler.MemberUpdateListener;
-import bitcamp.myapp.vo.Member;
 import bitcamp.net.NetProtocol;
 import bitcamp.util.BreadcrumbPrompt;
 import bitcamp.util.Menu;
@@ -32,7 +31,7 @@ import bitcamp.util.MenuGroup;
 
 public class ServerApp {
 
-  public static Member loginUser;
+  ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
   Connection con;
   MemberDao memberDao;
@@ -77,24 +76,9 @@ public class ServerApp {
       System.out.println("서버 실행 중...");
 
       while (true) {
-        try (Socket socket = serverSocket.accept();
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());) {
 
-          BreadcrumbPrompt prompt = new BreadcrumbPrompt(in, out);
-
-          InetSocketAddress clientAdress = (InetSocketAddress) socket.getRemoteSocketAddress();
-          System.out.printf("%s 클라이언트 접속함!\n", clientAdress.getHostString());
-
-          out.writeUTF("[나의 목록관리 시스템]\n--------------------------------------------");
-
-          mainMenu.execute(prompt);
-          out.writeUTF(NetProtocol.NET_END);
-
-        } catch (Exception e) {
-          System.out.println("클라이언트 통신 오류!");
-          e.printStackTrace();
-        }
+        Socket socket = serverSocket.accept();
+        threadPool.execute(() -> processRequest(socket));
       }
 
     } catch (Exception e) {
@@ -104,6 +88,28 @@ public class ServerApp {
 
   }
 
+  private void processRequest(Socket socket) {
+    try (Socket s = socket;
+        DataInputStream in = new DataInputStream(socket.getInputStream());
+        DataOutputStream out = new DataOutputStream(socket.getOutputStream());) {
+
+      BreadcrumbPrompt prompt = new BreadcrumbPrompt(in, out);
+
+      InetSocketAddress clientAdress = (InetSocketAddress) socket.getRemoteSocketAddress();
+      System.out.printf("%s 클라이언트 접속함!\n", clientAdress.getHostString());
+
+      out.writeUTF("[나의 목록관리 시스템]\n--------------------------------------------");
+
+      new LoginListener(memberDao).service(prompt);
+
+      mainMenu.execute(prompt);
+      out.writeUTF(NetProtocol.NET_END);
+
+    } catch (Exception e) {
+      System.out.println("클라이언트 통신 오류!");
+      e.printStackTrace();
+    }
+  }
 
   private void prepareMenu() {
     MenuGroup memberMenu = new MenuGroup("회원");
@@ -130,11 +136,11 @@ public class ServerApp {
     readingMenu.add(new Menu("삭제", new BoardDeleteListener(readingDao)));
     mainMenu.add(readingMenu);
 
-    Menu helloMenu = new Menu("안녕!");
-    helloMenu.addActionListener(new HeaderListener());
-    helloMenu.addActionListener(new HelloListener());
-    helloMenu.addActionListener(new FooterListener());
-    mainMenu.add(helloMenu);
+    // Menu helloMenu = new Menu("안녕!");
+    // helloMenu.addActionListener(new HeaderListener());
+    // helloMenu.addActionListener(new HelloListener());
+    // helloMenu.addActionListener(new FooterListener());
+    // mainMenu.add(helloMenu);
   }
 
 }

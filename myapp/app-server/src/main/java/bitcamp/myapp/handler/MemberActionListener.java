@@ -1,12 +1,13 @@
 package bitcamp.myapp.handler;
 
+import java.io.IOException;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.ActionListener;
 import bitcamp.util.BreadcrumbPrompt;
 
 public interface MemberActionListener extends ActionListener {
 
-  static char inputGender(char gender, BreadcrumbPrompt prompt) {
+  static char inputGender(char gender, BreadcrumbPrompt prompt) throws IOException {
     String label;
     if (gender == 0) {
       label = "성별?\n";

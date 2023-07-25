@@ -1,5 +1,6 @@
 package bitcamp.myapp.handler;
 
+import java.io.IOException;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.BreadcrumbPrompt;
@@ -12,7 +13,7 @@ public class MemberUpdateListener implements MemberActionListener {
   }
 
   @Override
-  public void service(BreadcrumbPrompt prompt) {
+  public void service(BreadcrumbPrompt prompt) throws IOException {
     int memberNo = prompt.inputInt("번호? ");
 
     Member m = memberDao.findBy(memberNo);
