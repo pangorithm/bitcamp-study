@@ -9,6 +9,8 @@ public interface ScheduleDao {
 
   List<Schedule> list(Member loginUser);
 
+  List<Member> participantList(int no);
+
   Schedule findBy(int no, Member loginUser);
 
   int update(Schedule board);
@@ -16,4 +18,5 @@ public interface ScheduleDao {
   int remove(Schedule board);
 
   int scheduleAddParticipant(int scheduleNo, int participantNo);
+
 }

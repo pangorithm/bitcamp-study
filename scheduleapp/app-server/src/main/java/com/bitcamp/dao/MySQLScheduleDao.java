@@ -39,13 +39,19 @@ public class MySQLScheduleDao implements ScheduleDao {
 
   @Override
   public List<Schedule> list(Member loginUser) {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select sch.schedule_no, sch.schedule_title, sch.start_time, sch.end_time, m.member_no"
-            + " from  (select * from scheduleapp_schedule_participants where member_no=?) x"
-            + " inner join scheduleapp_schedule sch on sch.schedule_no = x.schedule_no"
-            + " inner join scheduleapp_member m on m.member_no = x.member_no"
-            + " order by start_time asc");) {
+    try (PreparedStatement stmt = con.prepareStatement("""
+        select schedule_no, schedule_title, start_time, end_time, owner, m_owner.name as owner_name,
+        ss.participant_no, m_member.name as participant_name
+        from (select sch.schedule_no, sch.schedule_title, sch.start_time, sch.end_time, sch.owner,
+          sp.member_no as participant_no
+          from scheduleapp_schedule as sch inner join scheduleapp_schedule_participants as sp
+          on sch.schedule_no=sp.schedule_no where sch.owner=? or sp.member_no=?) ss
+            inner join scheduleapp_member m_owner on ss.owner=m_owner.member_no
+            inner join scheduleapp_member m_member on ss.participant_no=m_member.member_no
+            order by start_time asc
+            """);) {
       stmt.setInt(1, loginUser.getNo());
+      stmt.setInt(2, loginUser.getNo());
 
       try (ResultSet rs = stmt.executeQuery()) {
 
@@ -71,15 +77,53 @@ public class MySQLScheduleDao implements ScheduleDao {
   }
 
   @Override
+  public List<Member> participantList(int scheduleNo) {
+    try (PreparedStatement stmt = con.prepareStatement("""
+        select sp.schedule_no, m.member_no, m.name
+          from scheduleapp_schedule_participants as sp inner join scheduleapp_member m
+            on sp.member_no=m.member_no
+          where schedule_no=?
+          order by member_no
+            """);) {
+      stmt.setInt(1, scheduleNo);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+
+        List<Member> list = new ArrayList<>();
+
+        while (rs.next()) {
+          Member member = new Member();
+          member.setNo(rs.getInt("member_no"));
+          member.setName(rs.getString("name"));
+
+          list.add(member);
+        }
+
+        return list;
+
+      }
+
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
   public Schedule findBy(int no, Member loginUser) {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select sch.schedule_no, sch.schedule_title, sch.start_time, sch.end_time, m.member_no, m.name"
-            + " from  (select * from scheduleapp_schedule_participants where member_no=?) x"
-            + " inner join scheduleapp_schedule sch on sch.schedule_no = x.schedule_no"
-            + " inner join scheduleapp_member m on m.member_no = x.member_no"
-            + " where sch.schedule_no=?");) {
+    try (PreparedStatement stmt = con.prepareStatement("""
+        select schedule_no, schedule_title, start_time, end_time, owner, m_owner.name as owner_name,
+        ss.participant_no, m_member.name as participant_name
+        from (select sch.schedule_no, sch.schedule_title, sch.start_time, sch.end_time, sch.owner,
+          sp.member_no as participant_no
+          from scheduleapp_schedule as sch inner join scheduleapp_schedule_participants as sp
+          on sch.schedule_no=sp.schedule_no where sch.owner=? or sp.member_no=?) ss
+            inner join scheduleapp_member m_owner on ss.owner=m_owner.member_no
+            inner join scheduleapp_member m_member on ss.participant_no=m_member.member_no
+            where schedule_no=?
+            """);) {
       stmt.setInt(1, loginUser.getNo());
-      stmt.setInt(2, no);
+      stmt.setInt(2, loginUser.getNo());
+      stmt.setInt(3, no);
 
       try (ResultSet rs = stmt.executeQuery()) {
 
@@ -91,8 +135,8 @@ public class MySQLScheduleDao implements ScheduleDao {
           schedule.setEndTime(rs.getTimestamp("end_time").getTime());
 
           Member owner = new Member();
-          owner.setNo(rs.getInt("member_no"));
-          owner.setName(rs.getString("name"));
+          owner.setNo(rs.getInt("owner"));
+          owner.setName(rs.getString("owner_name"));
           schedule.setOwner(owner);
 
           return schedule;

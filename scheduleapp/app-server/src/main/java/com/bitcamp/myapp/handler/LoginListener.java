@@ -23,7 +23,7 @@ public class LoginListener implements MemberActionListener {
       Member loginUser = memberDao.findByEmailAndPassword(member);
       if (loginUser == null) {
         prompt.println("회원 정보가 일치하지 않습니다.");
-
+        prompt.writeBuf();
       } else {
         prompt.setAttribute("loginUser", loginUser);
         break;
