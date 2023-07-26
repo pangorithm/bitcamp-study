@@ -47,17 +47,17 @@ public class ScheduleDetailListener implements ActionListener {
     if (schedule.getOwner().equals(prompt.getAttribute("loginUser"))) {
       while (prompt.promptContinue(prompt.inputString("스케줄 참가자를 추가하시겠습니까?(y/N)"))) {
 
-        int result =
-            scheduleDao.scheduleAddParticipant(schedule.getNo(), prompt.inputInt("추가할 참가자 번호?"));
-        if (result == -1) {
-          prompt.println("이미 참가중인 멤버입니다.");
-          prompt.end();
-        } else if (result == -2) {
-          prompt.println("존재하지 않는 멤버입니다.");
-          prompt.end();
-        }
-
         try {
+          int result =
+              scheduleDao.scheduleAddParticipant(schedule.getNo(), prompt.inputInt("추가할 참가자 번호?"));
+          if (result == -1) {
+            prompt.println("이미 참가중인 멤버입니다.");
+            prompt.end();
+          } else if (result == -2) {
+            prompt.println("존재하지 않는 멤버입니다.");
+            prompt.end();
+          }
+
           ds.getConnection().commit();
         } catch (Exception e) {
           try {

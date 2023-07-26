@@ -36,9 +36,9 @@ public class ScheduleUpdateListener implements ScheduleActionListener {
       newSch = ScheduleActionListener.inputScheduleInfo(
           scheduleDao.list((Member) prompt.getAttribute("loginUser")), newSch, prompt);
       if (newSch != null) {
-        scheduleDao.update(newSch);
 
         try {
+          scheduleDao.update(newSch);
           ds.getConnection().commit();
         } catch (Exception e) {
           try {

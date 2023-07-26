@@ -34,8 +34,8 @@ public class MemberUpdateListener implements MemberActionListener {
     m.setPassword(prompt.inputString("새암호? "));
     m.setGender(MemberActionListener.inputGender(m.getGender(), prompt));
 
-    memberDao.update(m);
     try {
+      memberDao.update(m);
       ds.getConnection().commit();
     } catch (Exception e) {
       try {

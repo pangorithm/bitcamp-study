@@ -20,9 +20,10 @@ public class ScheduleAddListener implements ScheduleActionListener {
   @Override
   public void service(BreadcrumbPrompt prompt) throws IOException {
     Schedule sch = new Schedule();
-    scheduleDao.insert(ScheduleActionListener.inputScheduleInfo(
-        scheduleDao.list((Member) prompt.getAttribute("loginUser")), sch, prompt));
+
     try {
+      scheduleDao.insert(ScheduleActionListener.inputScheduleInfo(
+          scheduleDao.list((Member) prompt.getAttribute("loginUser")), sch, prompt));
       ds.getConnection().commit();
     } catch (Exception e) {
       try {

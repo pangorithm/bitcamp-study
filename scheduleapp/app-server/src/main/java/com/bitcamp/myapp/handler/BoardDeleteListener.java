@@ -29,8 +29,8 @@ public class BoardDeleteListener implements ActionListener {
       return;
     }
 
-    boardDao.remove(board);
     try {
+      boardDao.remove(board);
       ds.getConnection().commit();
     } catch (Exception e) {
       try {

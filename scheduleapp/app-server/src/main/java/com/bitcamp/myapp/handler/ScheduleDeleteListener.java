@@ -31,9 +31,9 @@ public class ScheduleDeleteListener implements ScheduleActionListener {
     }
     ScheduleActionListener.printScheduleInfo(sch, prompt);
     if (prompt.inputString("정말로 이 스케줄을 삭제 하시겠습니까?(y/N)").equalsIgnoreCase("y")) {
-      scheduleDao.remove(sch);
 
       try {
+        scheduleDao.remove(sch);
         ds.getConnection().commit();
       } catch (Exception e) {
         try {

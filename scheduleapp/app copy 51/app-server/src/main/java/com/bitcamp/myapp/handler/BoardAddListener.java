@@ -25,8 +25,8 @@ public class BoardAddListener implements ActionListener {
     board.setContent(prompt.inputString("내용? "));
     board.setWriter((Member) prompt.getAttribute("loginUser"));
 
-    boardDao.insert(board);
     try {
+      boardDao.insert(board);
       ds.getConnection().commit();
     } catch (Exception e) {
       try {

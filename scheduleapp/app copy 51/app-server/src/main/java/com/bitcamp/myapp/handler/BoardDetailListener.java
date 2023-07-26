@@ -5,13 +5,16 @@ import com.bitcamp.myapp.dao.BoardDao;
 import com.bitcamp.myapp.vo.Board;
 import com.bitcamp.util.ActionListener;
 import com.bitcamp.util.BreadcrumbPrompt;
+import com.bitcamp.util.DataSource;
 
 public class BoardDetailListener implements ActionListener {
 
   BoardDao boardDao;
+  DataSource ds;
 
-  public BoardDetailListener(BoardDao boardDao) {
+  public BoardDetailListener(BoardDao boardDao, DataSource ds) {
     this.boardDao = boardDao;
+    this.ds = ds;
   }
 
   @Override
@@ -30,7 +33,17 @@ public class BoardDetailListener implements ActionListener {
     prompt.printf("조회수: %s\n", board.getViewCount());
     prompt.printf("등록일: %tY-%1$tm-%1$td\n", board.getCreatedDate());
     board.setViewCount(board.getViewCount() + 1);
-    boardDao.update(board);
+
+    try {
+      boardDao.update(board);
+      ds.getConnection().commit();
+    } catch (Exception e) {
+      try {
+        ds.getConnection().rollback();
+      } catch (Exception e2) {
+        // TODO: handle exception
+      }
+    }
   }
 }
 

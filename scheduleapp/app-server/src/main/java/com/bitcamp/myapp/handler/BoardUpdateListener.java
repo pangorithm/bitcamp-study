@@ -35,9 +35,8 @@ public class BoardUpdateListener implements ActionListener {
     board.setTitle(prompt.inputString("제목(%s)? ", board.getTitle()));
     board.setContent(prompt.inputString("내용(%s)? ", board.getContent()));
 
-    boardDao.update(board);
-
     try {
+      boardDao.update(board);
       ds.getConnection().commit();
     } catch (Exception e) {
       try {

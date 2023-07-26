@@ -24,8 +24,8 @@ public class MemberDeleteListener implements ActionListener {
       prompt.println("본인 계정만 삭제 가능합니다.");
       return;
     }
-    memberDao.remove(no);
     try {
+      memberDao.remove(no);
       ds.getConnection().commit();
     } catch (Exception e) {
       try {

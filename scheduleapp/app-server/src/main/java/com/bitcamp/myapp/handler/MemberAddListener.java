@@ -24,8 +24,8 @@ public class MemberAddListener implements MemberActionListener {
     member.setPassword(prompt.inputString("암호? "));
     member.setGender(MemberActionListener.inputGender((char) 0, prompt));
 
-    memberDao.insert(member);
     try {
+      memberDao.insert(member);
       ds.getConnection().commit();
     } catch (Exception e) {
       try {
