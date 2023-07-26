@@ -1,6 +1,7 @@
 package bitcamp.myapp.handler;
 
 import java.io.IOException;
+import java.sql.Connection;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
@@ -10,9 +11,11 @@ import bitcamp.util.BreadcrumbPrompt;
 public class BoardAddListener implements ActionListener {
 
   BoardDao boardDao;
+  Connection con;
 
-  public BoardAddListener(BoardDao boardDao) {
+  public BoardAddListener(BoardDao boardDao, Connection con) {
     this.boardDao = boardDao;
+    this.con = con;
   }
 
   @Override
@@ -22,7 +25,22 @@ public class BoardAddListener implements ActionListener {
     board.setContent(prompt.inputString("내용? "));
     board.setWriter((Member) prompt.getAttribute("loginUser"));
 
-    boardDao.insert(board);
+    try {
+      boardDao.insert(board);
+      Thread.currentThread().sleep(5000);
+      boardDao.insert(board);
+      Thread.currentThread().sleep(5000);
+      boardDao.insert(board);
+      Thread.currentThread().sleep(5000);
+      con.commit();
+    } catch (Exception e) {
+      try {
+        con.rollback();
+      } catch (Exception e2) {
+        // TODO: handle exception
+      }
+      throw new RuntimeException(e);
+    }
   }
 
 }

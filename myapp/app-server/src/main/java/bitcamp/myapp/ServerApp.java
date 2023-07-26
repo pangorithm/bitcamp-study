@@ -52,6 +52,7 @@ public class ServerApp {
     con = DriverManager.getConnection("jdbc:mysql://study:1111@localhost:3306/studydb"
     // JDBC URL
     );
+    con.setAutoCommit(false);
 
     this.memberDao = new MySQLMemberDao(con);
     this.boardDao = new MySQLBoardDao(con, BOARD_CATEGORY);
@@ -121,7 +122,7 @@ public class ServerApp {
     mainMenu.add(memberMenu);
 
     MenuGroup boardMenu = new MenuGroup("게시글");
-    boardMenu.add(new Menu("등록", new BoardAddListener(boardDao)));
+    boardMenu.add(new Menu("등록", new BoardAddListener(boardDao, con)));
     boardMenu.add(new Menu("목록", new BoardListListener(boardDao)));
     boardMenu.add(new Menu("조회", new BoardDetailListener(boardDao)));
     boardMenu.add(new Menu("변경", new BoardUpdateListener(boardDao)));
@@ -129,7 +130,7 @@ public class ServerApp {
     mainMenu.add(boardMenu);
 
     MenuGroup readingMenu = new MenuGroup("독서록");
-    readingMenu.add(new Menu("등록", new BoardAddListener(readingDao)));
+    readingMenu.add(new Menu("등록", new BoardAddListener(readingDao, con)));
     readingMenu.add(new Menu("목록", new BoardListListener(readingDao)));
     readingMenu.add(new Menu("조회", new BoardDetailListener(readingDao)));
     readingMenu.add(new Menu("변경", new BoardUpdateListener(readingDao)));
