@@ -5,8 +5,6 @@ import java.io.DataOutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import bitcamp.dao.MySQLBoardDao;
@@ -26,6 +24,7 @@ import bitcamp.myapp.handler.MemberListListener;
 import bitcamp.myapp.handler.MemberUpdateListener;
 import bitcamp.net.NetProtocol;
 import bitcamp.util.BreadcrumbPrompt;
+import bitcamp.util.DataSource;
 import bitcamp.util.Menu;
 import bitcamp.util.MenuGroup;
 
@@ -33,7 +32,7 @@ public class ServerApp {
 
   ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
-  Connection con;
+  DataSource ds = new DataSource("jdbc:mysql://localhost:3306/studydb", "study", "1111");
   MemberDao memberDao;
   BoardDao boardDao;
   BoardDao readingDao;
@@ -49,20 +48,15 @@ public class ServerApp {
 
     this.port = port;
 
-    con = DriverManager.getConnection("jdbc:mysql://study:1111@localhost:3306/studydb"
-    // JDBC URL
-    );
-    con.setAutoCommit(false);
-
-    this.memberDao = new MySQLMemberDao(con);
-    this.boardDao = new MySQLBoardDao(con, BOARD_CATEGORY);
-    this.readingDao = new MySQLBoardDao(con, READING_CATEGORY);
+    this.memberDao = new MySQLMemberDao(ds);
+    this.boardDao = new MySQLBoardDao(ds, BOARD_CATEGORY);
+    this.readingDao = new MySQLBoardDao(ds, READING_CATEGORY);
 
     prepareMenu();
   }
 
   public void close() throws Exception {
-    con.close();
+
   }
 
   public static void main(String[] args) throws Exception {
@@ -109,6 +103,9 @@ public class ServerApp {
     } catch (Exception e) {
       System.out.println("클라이언트 통신 오류!");
       e.printStackTrace();
+
+    } finally {
+      ds.clean(); // 현재 스레드에 보관된 커넥션 객체를 닫고, 스레드에서 제거한다.
     }
   }
 
@@ -122,7 +119,7 @@ public class ServerApp {
     mainMenu.add(memberMenu);
 
     MenuGroup boardMenu = new MenuGroup("게시글");
-    boardMenu.add(new Menu("등록", new BoardAddListener(boardDao, con)));
+    boardMenu.add(new Menu("등록", new BoardAddListener(boardDao, ds)));
     boardMenu.add(new Menu("목록", new BoardListListener(boardDao)));
     boardMenu.add(new Menu("조회", new BoardDetailListener(boardDao)));
     boardMenu.add(new Menu("변경", new BoardUpdateListener(boardDao)));
@@ -130,7 +127,7 @@ public class ServerApp {
     mainMenu.add(boardMenu);
 
     MenuGroup readingMenu = new MenuGroup("독서록");
-    readingMenu.add(new Menu("등록", new BoardAddListener(readingDao, con)));
+    readingMenu.add(new Menu("등록", new BoardAddListener(readingDao, ds)));
     readingMenu.add(new Menu("목록", new BoardListListener(readingDao)));
     readingMenu.add(new Menu("조회", new BoardDetailListener(readingDao)));
     readingMenu.add(new Menu("변경", new BoardUpdateListener(readingDao)));

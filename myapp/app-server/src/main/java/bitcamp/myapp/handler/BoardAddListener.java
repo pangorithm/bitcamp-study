@@ -1,21 +1,21 @@
 package bitcamp.myapp.handler;
 
 import java.io.IOException;
-import java.sql.Connection;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.ActionListener;
 import bitcamp.util.BreadcrumbPrompt;
+import bitcamp.util.DataSource;
 
 public class BoardAddListener implements ActionListener {
 
   BoardDao boardDao;
-  Connection con;
+  DataSource ds;
 
-  public BoardAddListener(BoardDao boardDao, Connection con) {
+  public BoardAddListener(BoardDao boardDao, DataSource ds) {
     this.boardDao = boardDao;
-    this.con = con;
+    this.ds = ds;
   }
 
   @Override
@@ -27,15 +27,15 @@ public class BoardAddListener implements ActionListener {
 
     try {
       boardDao.insert(board);
-      Thread.currentThread().sleep(5000);
+      Thread.sleep(5000);
       boardDao.insert(board);
-      Thread.currentThread().sleep(5000);
+      Thread.sleep(5000);
       boardDao.insert(board);
-      Thread.currentThread().sleep(5000);
-      con.commit();
+      Thread.sleep(5000);
+      ds.getConnection(false).commit();
     } catch (Exception e) {
       try {
-        con.rollback();
+        ds.getConnection().rollback();
       } catch (Exception e2) {
         // TODO: handle exception
       }
