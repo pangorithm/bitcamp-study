@@ -1,20 +1,20 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.ScheduleDao;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
 import com.bitcamp.util.BreadcrumbPrompt;
-import com.bitcamp.util.DataSource;
 
 public class ScheduleAddListener implements ScheduleActionListener {
 
   ScheduleDao scheduleDao;
-  DataSource ds;
+  SqlSessionFactory sqlSessionFactory;
 
-  public ScheduleAddListener(ScheduleDao scheduleDao, DataSource ds) {
+  public ScheduleAddListener(ScheduleDao scheduleDao, SqlSessionFactory sqlSessionFactory) {
     this.scheduleDao = scheduleDao;
-    this.ds = ds;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -24,13 +24,9 @@ public class ScheduleAddListener implements ScheduleActionListener {
     try {
       scheduleDao.insert(ScheduleActionListener.inputScheduleInfo(
           scheduleDao.list((Member) prompt.getAttribute("loginUser")), sch, prompt));
-      ds.getConnection().commit();
+      sqlSessionFactory.openSession(false).commit();
     } catch (Exception e) {
-      try {
-        ds.getConnection().rollback();
-      } catch (Exception e2) {
-        // TODO: handle exception
-      }
+      sqlSessionFactory.openSession(false).rollback();
     }
   }
 

@@ -15,7 +15,7 @@ public interface ScheduleDao {
 
   int update(Schedule board);
 
-  int remove(Schedule board);
+  int delete(Schedule board);
 
   int scheduleAddParticipant(int scheduleNo, int participantNo);
 

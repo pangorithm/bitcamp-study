@@ -1,20 +1,20 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.ScheduleDao;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
 import com.bitcamp.util.BreadcrumbPrompt;
-import com.bitcamp.util.DataSource;
 
 public class ScheduleDeleteListener implements ScheduleActionListener {
 
   ScheduleDao scheduleDao;
-  DataSource ds;
+  SqlSessionFactory sqlSessionFactory;
 
-  public ScheduleDeleteListener(ScheduleDao scheduleDao, DataSource ds) {
+  public ScheduleDeleteListener(ScheduleDao scheduleDao, SqlSessionFactory sqlSessionFactory) {
     this.scheduleDao = scheduleDao;
-    this.ds = ds;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -33,14 +33,10 @@ public class ScheduleDeleteListener implements ScheduleActionListener {
     if (prompt.inputString("정말로 이 스케줄을 삭제 하시겠습니까?(y/N)").equalsIgnoreCase("y")) {
 
       try {
-        scheduleDao.remove(sch);
-        ds.getConnection().commit();
+        scheduleDao.delete(sch);
+        sqlSessionFactory.openSession(false).commit();
       } catch (Exception e) {
-        try {
-          ds.getConnection().rollback();
-        } catch (Exception e2) {
-          // TODO: handle exception
-        }
+        sqlSessionFactory.openSession(false).rollback();
       }
     }
   }

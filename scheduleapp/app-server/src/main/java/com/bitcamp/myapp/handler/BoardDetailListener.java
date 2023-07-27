@@ -1,20 +1,23 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.BoardDao;
 import com.bitcamp.myapp.vo.Board;
 import com.bitcamp.util.ActionListener;
 import com.bitcamp.util.BreadcrumbPrompt;
-import com.bitcamp.util.DataSource;
 
 public class BoardDetailListener implements ActionListener {
 
   BoardDao boardDao;
-  DataSource ds;
+  SqlSessionFactory sqlSessionFactory;
 
-  public BoardDetailListener(BoardDao boardDao, DataSource ds) {
+  SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd a hh:mm");
+
+  public BoardDetailListener(BoardDao boardDao, SqlSessionFactory sqlSessionFactory) {
     this.boardDao = boardDao;
-    this.ds = ds;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -31,20 +34,19 @@ public class BoardDetailListener implements ActionListener {
     prompt.printf("내용: %s\n", board.getContent());
     prompt.printf("작성자: %s\n", board.getWriter().getName());
     prompt.printf("조회수: %s\n", board.getViewCount());
-    prompt.printf("등록일: %tY-%1$tm-%1$td\n", board.getCreatedDate());
-    board.setViewCount(board.getViewCount() + 1);
+    prompt.printf("등록일: %s\n", dateFormatter.format(board.getCreatedDate()));
 
     try {
-      boardDao.update(board);
-      ds.getConnection().commit();
+      board.setViewCount(board.getViewCount() + 1);
+      boardDao.updateCount(board);
+      sqlSessionFactory.openSession(false).commit();
+
     } catch (Exception e) {
-      try {
-        ds.getConnection().rollback();
-      } catch (Exception e2) {
-        // TODO: handle exception
-      }
+      sqlSessionFactory.openSession(false).rollback();
+      throw new RuntimeException(e);
     }
   }
+
 }
 
 

@@ -1,45 +1,40 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.BoardDao;
 import com.bitcamp.myapp.vo.Board;
+import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.util.ActionListener;
 import com.bitcamp.util.BreadcrumbPrompt;
-import com.bitcamp.util.DataSource;
 
 public class BoardDeleteListener implements ActionListener {
 
   BoardDao boardDao;
-  DataSource ds;
+  SqlSessionFactory sqlSessionFactory;
 
-  public BoardDeleteListener(BoardDao boardDao, DataSource ds) {
+  public BoardDeleteListener(BoardDao boardDao, SqlSessionFactory sqlSessionFactory) {
     this.boardDao = boardDao;
-    this.ds = ds;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
   public void service(BreadcrumbPrompt prompt) throws IOException {
-    Board board = boardDao.findBy(prompt.inputInt("번호? "));
-    if (board == null) {
-      prompt.println("해당 번호의 게시글이 없습니다!");
-      return;
-    }
-    if (!board.getWriter().equals(prompt.getAttribute("loginUser"))) {
-      prompt.println("삭제 권한이 없습니다!");
-      return;
-    }
+
+    Board b = new Board();
+    b.setNo(prompt.inputInt("번호? "));
+    b.setWriter((Member) prompt.getAttribute("loginUser"));
 
     try {
-      boardDao.remove(board);
-      ds.getConnection().commit();
-    } catch (Exception e) {
-      try {
-        ds.getConnection().rollback();
-      } catch (Exception e2) {
-        // TODO: handle exception
+      if (boardDao.delete(b) == 0) {
+        prompt.println("해당 번호의 게시글이 없거나 삭제 권한이 없습니다.");
       }
+      sqlSessionFactory.openSession(false).commit();
+      prompt.println("삭제했습니다.");
+    } catch (Exception e) {
+      sqlSessionFactory.openSession(false).rollback();
+      throw new RuntimeException(e);
     }
-    prompt.println("삭제했습니다.");
   }
 }
 

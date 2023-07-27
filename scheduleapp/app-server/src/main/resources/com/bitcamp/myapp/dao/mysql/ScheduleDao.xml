@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bitcamp.myapp.dao.ScheduleDao">
+
+  <!-- 결과 레코드의 컬럼 값을 자바 객체에 어떻게 담을 것인지 설정한다. -->
+  <resultMap type="com.bitcamp.myapp.vo.Schedule" id="scheduleMap">
+    <id     column="schedule_no"      property="no"/>
+    <result column="schedule_title"   property="scheduleTitle"/>
+    <result column="start_time"       property="startTime"/>
+    <result column="end_time"         property="endTime"/>
+    
+    <association property="owner" javaType="com.bitcamp.myapp.vo.Member">
+      <id     column="member_no"      property="no"/>
+      <result column="name"           property="name"/>
+    </association>
+    
+  </resultMap>
+
+  <insert id="insert" parameterType="com.bitcamp.myapp.vo.Schedule">
+    insert into scheduleapp_schedule(schedule_title, start_time, end_time, owner)
+    values(#{scheduleTitle}, #{startTime}, #{endTime}, #{owner.no})
+  </insert>
+  
+  <select id="list" parameterType="com.bitcamp.myapp.vo.Member" resultMap="scheduleMap">
+    select schedule_no, schedule_title, start_time, end_time, owner, m_owner.name as owner_name,
+        ss.participant_no, m_member.name as participant_name
+    from 
+      (select
+         sch.schedule_no,
+         sch.schedule_title,
+         sch.start_time,
+         sch.end_time,
+         sch.owner,
+         sp.member_no as participant_no
+       from
+         scheduleapp_schedule as sch
+           inner join scheduleapp_schedule_participants as sp
+             on sch.schedule_no=sp.schedule_no
+       where
+         sch.owner=#{no}
+         or sp.member_no=#{no}
+       ) ss
+      inner join scheduleapp_member m_owner on ss.owner=m_owner.member_no
+      inner join scheduleapp_member m_member on ss.participant_no=m_member.member_no
+    order by start_time asc
+  </select>
+  
+  <select id="participantList" parameterType="int" resultMap="com.bitcamp.myapp.vo.Member">
+    select
+      sp.schedule_no,
+      m.member_no,
+      m.name
+    from
+      scheduleapp_schedule_participants as sp
+        inner join
+          scheduleapp_member m
+        on sp.member_no=m.member_no
+    where
+      schedule_no=#{scheduleNo}
+    order by member_no
+  </select>
+  
+  <select id="findBy" parameterType="map" resultMap="scheduleMap">
+    select
+      schedule_no,
+      schedule_title,
+      start_time,
+      end_time,
+      owner,
+      m_owner.name as owner_name,
+      ss.participant_no,
+      m_member.name as participant_name
+    from
+      (select
+         sch.schedule_no,
+         sch.schedule_title,
+         sch.start_time,
+         sch.end_time,
+         sch.owner,
+         sp.member_no as participant_no
+       from
+         scheduleapp_schedule as sch inner join scheduleapp_schedule_participants as sp
+           on sch.schedule_no=sp.schedule_no
+       where
+         sch.owner=#{loginUserNo}
+         or sp.member_no=#{loginUserNo}
+       ) ss
+     inner join
+       scheduleapp_member m_owner on ss.owner=m_owner.member_no
+     inner join
+       scheduleapp_member m_member on ss.participant_no=m_member.member_no
+     where
+       schedule_no=#{scheduleNo}
+  </select>
+    
+  <update id="update" parameterType="map">
+    update scheduleapp_schedule set
+      schedule_title=#{scheduleTitle},
+      start_time=#{startTime},
+      end_time=#{endTime}
+    where
+      schedule_no=#{scheduleNo}
+      and owner=#{ownerNo}
+  </update>
+  
+  <delete id="delete" parameterType="map">
+    delete
+    from scheduleapp_schedule
+    where
+      schedule_no=#{scheduleNo}
+      and owner=#{ownerNo}
+  </delete>
+    
+  
+  <select id="checkParticipant" parameterType="map" resultMap="scheduleMap">
+    select * 
+    from
+      scheduleapp_schedule_participants
+    where
+      schedule_no=#{scheduleNo}
+      and member_no=#{memberNo}
+  </select>
+  
+  <insert id="insertParticipant" parameterType="map">
+    insert into scheduleapp_schedule_participants(schedule_no, member_no)
+    values(#{scheduleNo}, #{memberNo})
+  </insert>
+  
+  </mapper>

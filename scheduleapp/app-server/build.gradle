@@ -18,6 +18,9 @@ repositories {
 }
 
 dependencies {
+    // Mybatis 라이브러리
+    implementation 'org.mybatis:mybatis:3.5.13'
+    
     implementation project(':app-common')
     
     // Use JUnit Jupiter for testing.

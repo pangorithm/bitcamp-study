@@ -24,7 +24,7 @@ public interface MemberActionListener extends ActionListener {
         case "2":
           return Member.FEMALE;
         default:
-          prompt.println("무효한 번호입니다.");
+          System.out.println("무효한 번호입니다.");
       }
     }
   }

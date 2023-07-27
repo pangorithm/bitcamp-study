@@ -1,20 +1,20 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.MemberDao;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.util.ActionListener;
 import com.bitcamp.util.BreadcrumbPrompt;
-import com.bitcamp.util.DataSource;
 
 public class MemberDeleteListener implements ActionListener {
   MemberDao memberDao;
-  DataSource ds;
+  SqlSessionFactory sqlSessionFactory;
 
-  public MemberDeleteListener(MemberDao memberDao, DataSource ds) {
+  public MemberDeleteListener(MemberDao memberDao, SqlSessionFactory sqlSessionFactory) {
 
     this.memberDao = memberDao;
-    this.ds = ds;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -25,14 +25,11 @@ public class MemberDeleteListener implements ActionListener {
       return;
     }
     try {
-      memberDao.remove(no);
-      ds.getConnection().commit();
+      memberDao.delete(no);
+      sqlSessionFactory.openSession(false).commit();
     } catch (Exception e) {
-      try {
-        ds.getConnection().rollback();
-      } catch (Exception e2) {
-        // TODO: handle exception
-      }
+      sqlSessionFactory.openSession(false).rollback();
+      throw new RuntimeException(e);
     }
   }
 

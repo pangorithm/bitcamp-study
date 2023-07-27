@@ -6,7 +6,7 @@ import com.bitcamp.myapp.vo.Member;
 public interface MemberDao {
   void insert(Member member);
 
-  List<Member> list();
+  List<Member> findAll();
 
   Member findBy(int no);
 
@@ -14,6 +14,6 @@ public interface MemberDao {
 
   int update(Member member);
 
-  int remove(int no);
+  int delete(int no);
 
 }

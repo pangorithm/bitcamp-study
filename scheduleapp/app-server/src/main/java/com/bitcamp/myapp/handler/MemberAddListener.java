@@ -1,19 +1,19 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.MemberDao;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.util.BreadcrumbPrompt;
-import com.bitcamp.util.DataSource;
 
 public class MemberAddListener implements MemberActionListener {
 
   MemberDao memberDao;
-  DataSource ds;
+  SqlSessionFactory sqlSessionFactory;
 
-  public MemberAddListener(MemberDao memberDao, DataSource ds) {
+  public MemberAddListener(MemberDao memberDao, SqlSessionFactory sqlSessionFactory) {
     this.memberDao = memberDao;
-    this.ds = ds;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -26,15 +26,11 @@ public class MemberAddListener implements MemberActionListener {
 
     try {
       memberDao.insert(member);
-      ds.getConnection().commit();
+      sqlSessionFactory.openSession(false).commit();
     } catch (Exception e) {
-      try {
-        ds.getConnection().rollback();
-      } catch (Exception e2) {
-        // TODO: handle exception
-      }
+      sqlSessionFactory.openSession(false).rollback();
+      throw new RuntimeException(e);
     }
   }
-
 
 }
