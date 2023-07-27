@@ -1,13 +1,11 @@
 package bitcamp.myapp.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.Member;
 import bitcamp.util.DataSource;
 
 public class MySQLBoardDao implements BoardDao {
@@ -24,115 +22,47 @@ public class MySQLBoardDao implements BoardDao {
 
   @Override
   public void insert(Board board) {
+    board.setCategory(this.category);
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
     sqlSession.insert("bitcamp.myapp.dao.BoardDao.insert", board);
   }
 
   @Override
   public List<Board> findAll() {
-    try (PreparedStatement stmt = ds.getConnection(false).prepareStatement(
-        "select b.board_no, b.title, b.view_count, b.created_date, m.member_no, m.name"
-            + " from myapp_board as b inner join myapp_member as m on b.writer=m.member_no"
-            + " where category=? order by board_no desc");) {
-      stmt.setInt(1, this.category);
-
-      try (ResultSet rs = stmt.executeQuery();) {
-
-        List<Board> list = new ArrayList<>();
-
-        while (rs.next()) {
-          Board board = new Board();
-          board.setNo(rs.getInt("board_no"));
-          board.setTitle(rs.getString("title"));
-          board.setViewCount(rs.getInt("view_count"));
-          board.setCreatedDate(rs.getTimestamp("created_date"));
-
-          Member writer = new Member();
-          writer.setNo(rs.getInt("member_no"));
-          writer.setName(rs.getString("name"));
-          board.setWriter(writer);
-
-          list.add(board);
-        }
-
-        return list;
-
-      }
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    SqlSession sqlSession = sqlSessionFactory.openSession(true);
+    return sqlSession.selectList("bitcamp.myapp.dao.BoardDao.findAll", this.category);
   }
 
   @Override
   public Board findBy(int no) {
-    try (PreparedStatement stmt = ds.getConnection(false).prepareStatement(
-        "select b.board_no, b.title, b.content, b.view_count, b.created_date, m.member_no, m.name"
-            + " from myapp_board as b inner join myapp_member as m on b.writer=m.member_no"
-            + " where b.board_no=? and category=?");) {
+    SqlSession sqlSession = sqlSessionFactory.openSession(true);
 
-      stmt.setInt(1, no);
-      stmt.setInt(2, this.category);
-      try (ResultSet rs = stmt.executeQuery()) {
+    Map<String, Object> paramMap = new HashMap<>();
+    paramMap.put("categoryNo", this.category);
+    paramMap.put("boardNo", no);
 
-        if (rs.next()) {
-          Board board = new Board();
-          board.setNo(rs.getInt("board_no"));
-          board.setTitle(rs.getString("title"));
-          board.setContent(rs.getString("content"));
-          board.setViewCount(rs.getInt("view_count"));
-          board.setCreatedDate(rs.getTimestamp("created_date"));
+    return sqlSession.selectOne("bitcamp.myapp.dao.BoardDao.findBy", paramMap);
+  }
 
-          Member writer = new Member();
-          writer.setNo(rs.getInt("member_no"));
-          writer.setName(rs.getString("name"));
-          board.setWriter(writer);
-
-          stmt.executeUpdate("update myapp_board set view_count=view_count+1 where board_no=" + no);
-
-          return board;
-        }
-        return null;
-
-      }
-
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  @Override
+  public int updateCount(Board board) {
+    board.setCategory(this.category);
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    return sqlSession.update("bitcamp.myapp.dao.BoardDao.updateCount", board);
   }
 
   @Override
   public int update(Board board) {
-    try (PreparedStatement stmt = ds.getConnection(false)
-        .prepareStatement("update myapp_board set title=?, content=?, view_count=?"
-            + " where board_no=? and category=? and writer=?");) {
-
-      stmt.setString(1, board.getTitle());
-      stmt.setString(2, board.getContent());
-      stmt.setInt(3, board.getViewCount());
-      stmt.setInt(4, board.getNo());
-      stmt.setInt(5, this.category);
-      stmt.setInt(6, board.getWriter().getNo());
-
-      return stmt.executeUpdate();
-
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+    board.setCategory(this.category);
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    return sqlSession.update("bitcamp.myapp.dao.BoardDao.update", board);
   }
 
   @Override
-  public int remove(Board board) {
-    try (PreparedStatement stmt = ds.getConnection(false).prepareStatement(
-        "delete from myapp_board where board_no=? and category=? and writer=?");) {
-
-      stmt.setInt(1, board.getNo());
-      stmt.setInt(2, this.category);
-      stmt.setInt(3, board.getWriter().getNo());
-      return stmt.executeUpdate();
-
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  public int delete(Board board) {
+    board.setCategory(this.category);
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    return sqlSession.delete("bitcamp.myapp.dao.BoardDao.delete", board);
   }
 
 }
