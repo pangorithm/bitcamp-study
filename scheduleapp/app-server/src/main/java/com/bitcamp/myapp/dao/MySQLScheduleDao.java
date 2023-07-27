@@ -1,4 +1,4 @@
-package com.bitcamp.dao;
+package com.bitcamp.myapp.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import com.bitcamp.myapp.dao.ScheduleDao;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
 import com.bitcamp.util.DataSource;

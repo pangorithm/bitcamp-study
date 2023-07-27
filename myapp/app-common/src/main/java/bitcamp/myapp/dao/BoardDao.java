@@ -6,7 +6,7 @@ import bitcamp.myapp.vo.Board;
 public interface BoardDao {
   void insert(Board board);
 
-  List<Board> list();
+  List<Board> findAll();
 
   Board findBy(int no);
 

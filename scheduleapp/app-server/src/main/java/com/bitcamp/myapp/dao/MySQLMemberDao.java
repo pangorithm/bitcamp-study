@@ -1,10 +1,9 @@
-package com.bitcamp.dao;
+package com.bitcamp.myapp.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import com.bitcamp.myapp.dao.MemberDao;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.util.DataSource;
 

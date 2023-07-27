@@ -1,4 +1,4 @@
-package bitcamp.dao;
+package bitcamp.myapp.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +34,7 @@ public class MySQLMemberDao implements MemberDao {
   }
 
   @Override
-  public List<Member> list() {
+  public List<Member> findAll() {
     try (
         PreparedStatement stmt = ds.getConnection(false).prepareStatement(
             "select member_no, name, email, gender from myapp_member order by name asc");

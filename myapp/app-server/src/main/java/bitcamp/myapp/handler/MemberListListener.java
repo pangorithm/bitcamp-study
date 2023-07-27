@@ -22,7 +22,7 @@ public class MemberListListener implements ActionListener {
     prompt.println("---------------------------------------");
 
     // 목록에서 데이터를 대신 꺼내주는 객체를 얻는다.
-    List<Member> list = memberDao.list();
+    List<Member> list = memberDao.findAll();
 
     for (Member m : list) {
       prompt.printf("%d, %s, %s, %s\n", m.getNo(), m.getName(), m.getEmail(),
