@@ -23,7 +23,7 @@ public class ScheduleDetailListener implements ActionListener {
   public void service(BreadcrumbPrompt prompt) throws IOException {
     int scheduleNo = prompt.inputInt("번호? ");
 
-    Schedule schedule = scheduleDao.findBy(scheduleNo, (Member) prompt.getAttribute("loginUser"));
+    Schedule schedule = scheduleDao.findBy(scheduleNo);
     if (schedule == null) {
       prompt.println("해당 번호의 스케줄이 없습니다!");
       return;

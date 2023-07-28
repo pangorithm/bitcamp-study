@@ -47,13 +47,9 @@ public class MySQLScheduleDao implements ScheduleDao {
   }
 
   @Override
-  public Schedule findBy(int no, Member loginUser) {
-    Map<String, Object> paramMap = new HashMap<>();
-    paramMap.put("loginUserNo", loginUser.getNo());
-    paramMap.put("scheduleNo", no);
-
+  public Schedule findBy(int no) {
     SqlSession sqlSession = sqlSessionFactory.openSession();
-    return sqlSession.selectOne("com.bitcamp.myapp.dao.ScheduleDao.findBy", paramMap);
+    return sqlSession.selectOne("com.bitcamp.myapp.dao.ScheduleDao.findBy", no);
   }
 
   @Override
@@ -63,17 +59,17 @@ public class MySQLScheduleDao implements ScheduleDao {
     paramMap.put("startTime", schedule.getStartTime().toString());
     paramMap.put("endTime", schedule.getEndTime().toString());
     paramMap.put("scheduleNo", schedule.getNo());
-    paramMap.put("ownerNo", schedule.getNo());
+    paramMap.put("ownerNo", schedule.getOwner().getNo());
 
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
-    return sqlSession.selectOne("com.bitcamp.myapp.dao.ScheduleDao.update", paramMap);
+    return sqlSession.update("com.bitcamp.myapp.dao.ScheduleDao.update", paramMap);
   }
 
   @Override
   public int delete(Schedule schedule) {
     Map<String, Object> paramMap = new HashMap<>();
     paramMap.put("scheduleNo", schedule.getNo());
-    paramMap.put("ownerNo", schedule.getNo());
+    paramMap.put("ownerNo", schedule.getOwner().getNo());
 
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
     return sqlSession.delete("com.bitcamp.myapp.dao.ScheduleDao.delete", paramMap);

@@ -19,8 +19,7 @@ public class ScheduleUpdateListener implements ScheduleActionListener {
 
   @Override
   public void service(BreadcrumbPrompt prompt) throws IOException {
-    Schedule sch =
-        scheduleDao.findBy(prompt.inputInt("번호? "), (Member) prompt.getAttribute("loginUser"));
+    Schedule sch = scheduleDao.findBy(prompt.inputInt("번호? "));
     if (sch == null) {
       prompt.println("일치하는 번호가 존재하지 않습니다.");
     } else {
@@ -30,15 +29,13 @@ public class ScheduleUpdateListener implements ScheduleActionListener {
       }
       prompt.println("수정 전------------------------------------------");
       ScheduleActionListener.printScheduleInfo(sch, prompt);
-      Schedule newSch = new Schedule();
-      newSch.setNo(sch.getNo());
-      newSch = ScheduleActionListener.inputScheduleInfo(
-          scheduleDao.findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")),
-          newSch, prompt);
-      if (newSch != null) {
 
+      sch = ScheduleActionListener.inputScheduleInfo(
+          scheduleDao.findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")), sch,
+          prompt);
+      if (sch != null) {
         try {
-          scheduleDao.update(newSch);
+          scheduleDao.update(sch);
           sqlSessionFactory.openSession(false).commit();
         } catch (Exception e) {
           sqlSessionFactory.openSession(false).rollback();

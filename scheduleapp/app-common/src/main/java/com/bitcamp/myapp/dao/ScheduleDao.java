@@ -13,7 +13,7 @@ public interface ScheduleDao {
 
   List<Member> findAllParticipatedMember(int no);
 
-  Schedule findBy(int no, Member loginUser);
+  Schedule findBy(int no);
 
   int update(Schedule board);
 

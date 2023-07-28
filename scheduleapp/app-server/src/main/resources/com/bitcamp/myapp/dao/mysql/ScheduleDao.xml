@@ -82,33 +82,18 @@
     order by m.name
   </select>
   
-  <select id="findBy" parameterType="map" resultMap="scheduleMap">
+  <select id="findBy" parameterType="int" resultMap="scheduleMap">
     select
-      schedule_no,
-      schedule_title,
-      start_time,
-      end_time,
-      m_owner.member_no,
-      m_owner.name
+      sch.schedule_no,
+      sch.schedule_title,
+      sch.start_time,
+      sch.end_time,
+      m.member_no,
+      m.name
     from
-      (select
-         sch.schedule_no,
-         sch.schedule_title,
-         sch.start_time,
-         sch.end_time,
-         sch.owner,
-         sp.member_no as participant_no
-       from
-         scheduleapp_schedule as sch inner join scheduleapp_schedule_participants as sp
-           on sch.schedule_no=sp.schedule_no
-       where
-         sch.owner=#{loginUserNo}
-         or sp.member_no=#{loginUserNo}
-       ) ss
-     inner join
-       scheduleapp_member m_owner on ss.owner=m_owner.member_no
-     inner join
-       scheduleapp_member m_member on ss.participant_no=m_member.member_no
+      scheduleapp_schedule as sch
+        inner join scheduleapp_member as m
+        on sch.owner=m.member_no
      where
        schedule_no=#{scheduleNo}
   </select>
@@ -122,7 +107,7 @@
       schedule_no=#{scheduleNo}
       and owner=#{ownerNo}
   </update>
-  
+
   <delete id="delete" parameterType="map">
     delete from scheduleapp_schedule
     where

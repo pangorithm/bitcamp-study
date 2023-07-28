@@ -3,7 +3,6 @@ package com.bitcamp.myapp.handler;
 import java.io.IOException;
 import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.ScheduleDao;
-import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
 import com.bitcamp.util.BreadcrumbPrompt;
 
@@ -19,8 +18,7 @@ public class ScheduleDeleteListener implements ScheduleActionListener {
 
   @Override
   public void service(BreadcrumbPrompt prompt) throws IOException {
-    Schedule sch =
-        scheduleDao.findBy(prompt.inputInt("번호? "), (Member) prompt.getAttribute("loginUser"));
+    Schedule sch = scheduleDao.findBy(prompt.inputInt("번호? "));
     if (sch == null) {
       prompt.println("해당 번호의 스케줄이 없습니다!");
       return;
