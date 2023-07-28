@@ -19,9 +19,14 @@ public class MemberUpdateListener implements MemberActionListener {
   public void service(BreadcrumbPrompt prompt) throws IOException {
     int memberNo = prompt.inputInt("번호? ");
 
+    if (memberNo != ((Member) prompt.getAttribute("loginUser")).getNo()) {
+      prompt.println("본인 계정만 수정 가능합니다");
+      return;
+    }
+
     Member m = memberDao.findBy(memberNo);
     if (m == null) {
-      System.out.println("해당 번호의 회원이 없습니다!");
+      prompt.println("해당 번호의 회원이 없습니다!");
       return;
     }
 

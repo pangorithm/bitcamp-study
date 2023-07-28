@@ -49,6 +49,7 @@ alter table scheduleapp_board
 alter table scheduleapp_schedule
   add constraint scheduleapp_schedule_fk foreign key (owner) references scheduleapp_member (member_no);
   
+-- 스케줄 참가자 다대다 관계 구현
 create table scheduleapp_schedule_participants(
   schedule_no int not null,
   member_no int not null
@@ -60,4 +61,6 @@ alter table scheduleapp_schedule_participants
 alter table scheduleapp_schedule_participants
   add constraint scheduleapp_schedule_participants_member_fk foreign key (member_no) references scheduleapp_member (member_no);
   
+alter table scheduleapp_schedule_participants
+  add constraint primary key (schedule_no, member_no);
   
