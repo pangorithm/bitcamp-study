@@ -21,4 +21,6 @@ public interface ScheduleDao {
 
   int scheduleAddParticipant(int scheduleNo, int participantNo);
 
+  int scheduleDeleteParticipant(int scheduleNo, int memberNo);
+
 }

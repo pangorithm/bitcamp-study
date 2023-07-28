@@ -25,6 +25,8 @@ public class ScheduleAddListener implements ScheduleActionListener {
       scheduleDao.insert(ScheduleActionListener.inputScheduleInfo(
           scheduleDao.findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")), sch,
           prompt));
+      // 새로 생성된 스케줄 번호를 알아야함
+      // scheduleDao.scheduleAddParticipant(0, ((Member) prompt.getAttribute("loginUser")).getNo());
       sqlSessionFactory.openSession(false).commit();
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();

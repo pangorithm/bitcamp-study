@@ -35,6 +35,58 @@ public class ScheduleDetailListener implements ActionListener {
     prompt.printf("종료 시간: %s\n", schedule.getEndTime().toString());
     prompt.printf("소유자: %s\n", schedule.getOwner().getName());
 
+    if (schedule.getOwner().equals(prompt.getAttribute("loginUser"))) {
+      int selectNo = 0;
+      do {
+        printParticipants(schedule, prompt);
+        selectNo = prompt.inputInt(" 1) 스케줄 참가자 추가 \n 2) 스케줄 참가자 삭제 \n 0) 나가기 \n > ");
+
+        if (selectNo == 1) {
+          try {
+            int result = scheduleDao.scheduleAddParticipant(schedule.getNo(),
+                prompt.inputInt("추가할 참가자 번호?"));
+
+            if (result == -1) {
+              prompt.println("이미 참가중인 멤버입니다.");
+            } else if (result == -2) {
+              prompt.println("존재하지 않는 멤버입니다.");
+            } else {
+              sqlSessionFactory.openSession(false).commit();
+              prompt.println("추가했습니다.");
+            }
+            prompt.end();
+
+          } catch (Exception e) {
+            sqlSessionFactory.openSession(false).rollback();
+          }
+        } else if (selectNo == 2) {
+          try {
+            int result = scheduleDao.scheduleDeleteParticipant(schedule.getNo(),
+                prompt.inputInt("삭제할 참가자 번호?"));
+
+            if (result == -1) {
+              prompt.println("참여하지 않는 멤버입니다.");
+            } else if (result == -2) {
+              prompt.println("존재하지 않는 멤버입니다.");
+            } else {
+              sqlSessionFactory.openSession(false).commit();
+              prompt.println("삭제했습니다.");
+            }
+            prompt.end();
+
+          } catch (Exception e) {
+            sqlSessionFactory.openSession(false).rollback();
+          }
+        }
+      } while (selectNo != 0);
+
+    } else {
+      printParticipants(schedule, prompt);
+    }
+  }
+
+  private void printParticipants(Schedule schedule, BreadcrumbPrompt prompt) throws IOException {
+
     List<Member> participantList = scheduleDao.findAllParticipatedMember(schedule.getNo());
     prompt.printf("스케줄 참가자 명단\n");
     prompt.printf(" 번호 | 이름\n");
@@ -43,28 +95,6 @@ public class ScheduleDetailListener implements ActionListener {
     }
     prompt.println("");
     prompt.writeBuf();
-    if (schedule.getOwner().equals(prompt.getAttribute("loginUser"))) {
-      while (prompt.promptContinue(prompt.inputString("스케줄 참가자를 추가하시겠습니까?(y/N)"))) {
-
-        try {
-          int result =
-              scheduleDao.scheduleAddParticipant(schedule.getNo(), prompt.inputInt("추가할 참가자 번호?"));
-          if (result == -1) {
-            prompt.println("이미 참가중인 멤버입니다.");
-            prompt.end();
-          } else if (result == -2) {
-            prompt.println("존재하지 않는 멤버입니다.");
-            prompt.end();
-          }
-
-          sqlSessionFactory.openSession(false).commit();
-        } catch (Exception e) {
-          sqlSessionFactory.openSession(false).rollback();
-        }
-      }
-    }
-
-
   }
 }
 

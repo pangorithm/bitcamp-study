@@ -14,8 +14,7 @@
     <association property="owner" javaType="member">
       <id     column="member_no"      property="no"/>
       <result column="name"           property="name"/>
-    </association>
-    
+    </association>    
   </resultMap>
 
   <insert id="insert" parameterType="schedule">
@@ -72,17 +71,15 @@
   
   <select id="findAllParticipatedMember" parameterType="int" resultType="member">
     select
-      sp.schedule_no,
-      m.member_no,
+      m.member_no as no,
       m.name
     from
       scheduleapp_schedule_participants as sp
-        inner join
-          scheduleapp_member m
+        inner join scheduleapp_member as m
         on sp.member_no=m.member_no
     where
       schedule_no=#{scheduleNo}
-    order by member_no
+    order by m.name
   </select>
   
   <select id="findBy" parameterType="map" resultMap="scheduleMap">
@@ -127,8 +124,7 @@
   </update>
   
   <delete id="delete" parameterType="map">
-    delete
-    from scheduleapp_schedule
+    delete from scheduleapp_schedule
     where
       schedule_no=#{scheduleNo}
       and owner=#{ownerNo}
@@ -148,5 +144,12 @@
     insert into scheduleapp_schedule_participants(schedule_no, member_no)
     values(#{scheduleNo}, #{memberNo})
   </insert>
+  
+  <delete id="deleteParticipant" parameterType="map">
+    delete from scheduleapp_schedule_participants
+    where
+      schedule_no=#{schedulseNo}
+      and member_no=#{memberNo}    
+  </delete>
   
 </mapper>

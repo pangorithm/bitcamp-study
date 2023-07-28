@@ -54,37 +54,6 @@ public class MySQLScheduleDao implements ScheduleDao {
 
     SqlSession sqlSession = sqlSessionFactory.openSession();
     return sqlSession.selectOne("com.bitcamp.myapp.dao.ScheduleDao.findBy", paramMap);
-
-    // try (PreparedStatement stmt = ds.getConnection().prepareStatement("""
-    //
-    // """);) {
-    // stmt.setInt(1, );
-    // stmt.setInt(2, loginUser.getNo());
-    // stmt.setInt(3, no);
-    //
-    // try (ResultSet rs = stmt.executeQuery()) {
-    //
-    // if (rs.next()) {
-    // Schedule schedule = new Schedule();
-    // schedule.setNo(rs.getInt("schedule_no"));
-    // schedule.setScheduleTitle(rs.getString("schedule_title"));
-    // schedule.setStartTime(rs.getTimestamp("start_time").getTime());
-    // schedule.setEndTime(rs.getTimestamp("end_time").getTime());
-    //
-    // Member owner = new Member();
-    // owner.setNo(rs.getInt("owner"));
-    // owner.setName(rs.getString("owner_name"));
-    // schedule.setOwner(owner);
-    //
-    // return schedule;
-    // }
-    //
-    // return null;
-    //
-    // }
-    // } catch (Exception e) {
-    // throw new RuntimeException(e);
-    // }
   }
 
   @Override
@@ -96,7 +65,7 @@ public class MySQLScheduleDao implements ScheduleDao {
     paramMap.put("scheduleNo", schedule.getNo());
     paramMap.put("ownerNo", schedule.getNo());
 
-    SqlSession sqlSession = sqlSessionFactory.openSession();
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
     return sqlSession.selectOne("com.bitcamp.myapp.dao.ScheduleDao.update", paramMap);
   }
 
@@ -106,7 +75,7 @@ public class MySQLScheduleDao implements ScheduleDao {
     paramMap.put("scheduleNo", schedule.getNo());
     paramMap.put("ownerNo", schedule.getNo());
 
-    SqlSession sqlSession = sqlSessionFactory.openSession();
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
     return sqlSession.delete("com.bitcamp.myapp.dao.ScheduleDao.delete", paramMap);
   }
 
@@ -116,11 +85,31 @@ public class MySQLScheduleDao implements ScheduleDao {
     paramMap.put("scheduleNo", scheduleNo);
     paramMap.put("memberNo", memberNo);
 
-    SqlSession sqlSession = sqlSessionFactory.openSession();
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
     if (sqlSession.selectOne("com.bitcamp.myapp.dao.ScheduleDao.checkParticipant",
         paramMap) == null) {
       try {
         return sqlSession.insert("com.bitcamp.myapp.dao.ScheduleDao.insertParticipant", paramMap);
+      } catch (Exception sqlE) {
+        return -2;
+      }
+    } else {
+      return -1;
+    }
+  }
+
+
+  @Override
+  public int scheduleDeleteParticipant(int scheduleNo, int memberNo) {
+    Map<String, Object> paramMap = new HashMap<>();
+    paramMap.put("scheduleNo", scheduleNo);
+    paramMap.put("memberNo", memberNo);
+
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    if (sqlSession.selectOne("com.bitcamp.myapp.dao.ScheduleDao.checkParticipant",
+        paramMap) != null) {
+      try {
+        return sqlSession.delete("com.bitcamp.myapp.dao.ScheduleDao.deleteParticipant", paramMap);
       } catch (Exception sqlE) {
         return -2;
       }

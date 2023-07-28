@@ -28,14 +28,13 @@ public class ScheduleUpdateListener implements ScheduleActionListener {
         prompt.println("수정 권한이 없습니다!");
         return;
       }
-      prompt.println("수정 전--------------");
+      prompt.println("수정 전------------------------------------------");
       ScheduleActionListener.printScheduleInfo(sch, prompt);
-      prompt.println("---------------------");
       Schedule newSch = new Schedule();
       newSch.setNo(sch.getNo());
       newSch = ScheduleActionListener.inputScheduleInfo(
-          scheduleDao.findAllOwnedSchedule((Member) prompt.getAttribute("loginUser")), newSch,
-          prompt);
+          scheduleDao.findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")),
+          newSch, prompt);
       if (newSch != null) {
 
         try {

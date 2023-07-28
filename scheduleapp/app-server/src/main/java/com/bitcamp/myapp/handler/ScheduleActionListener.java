@@ -35,7 +35,7 @@ public interface ScheduleActionListener extends ActionListener {
 
       if (resultList.size() != 0) {
         if (!prompt.promptContinue(prompt.inputString(
-            "입력한 스케줄과 중복되는 스캐줄이 " + resultList.size() + "개 있습니다. \n해당 스케줄을 저장 하시겠습니까? (y/N)"))) {
+            "입력한 스케줄과 기간이 겹치는 스캐줄이 " + resultList.size() + "개 있습니다. \n해당 스케줄을 저장 하시겠습니까? (y/N)"))) {
           return null;
         }
       }
@@ -47,12 +47,12 @@ public interface ScheduleActionListener extends ActionListener {
       printScheduleInfo(sch, prompt);
       prompt.println("스케줄이 추가되었습니다.");
 
+      return sch;
     } catch (Exception e) {
       prompt.println(e.getMessage());
       Schedule.scheduleId--;
       return null;
     }
-    return sch;
   }
 
   static void printScheduleInfo(Schedule sch, Prompt prompt) throws IOException {
