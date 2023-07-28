@@ -16,7 +16,16 @@ public class ScheduleListListener implements ScheduleActionListener {
 
   @Override
   public void service(BreadcrumbPrompt prompt) throws IOException {
-    for (Object obj : scheduleDao.list((Member) prompt.getAttribute("loginUser")).toArray()) {
+    prompt.println("<소유한 스케줄>");
+    for (Object obj : scheduleDao.findAllOwnedSchedule((Member) prompt.getAttribute("loginUser"))
+        .toArray()) {
+      Schedule sch = (Schedule) obj;
+      ScheduleActionListener.printScheduleInfo(sch, prompt);
+    }
+
+    prompt.println("<참가한 스케줄>");
+    for (Object obj : scheduleDao
+        .findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")).toArray()) {
       Schedule sch = (Schedule) obj;
       ScheduleActionListener.printScheduleInfo(sch, prompt);
     }

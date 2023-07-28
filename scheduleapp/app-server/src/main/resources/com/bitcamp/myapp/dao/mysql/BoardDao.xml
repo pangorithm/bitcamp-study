@@ -5,7 +5,7 @@
 <mapper namespace="com.bitcamp.myapp.dao.BoardDao">
 
   <!-- 결과 레코드의 컬럼 값을 자바 객체에 어떻게 담을 것인지 설정한다. -->
-  <resultMap type="com.bitcamp.myapp.vo.Board" id="boardMap">
+  <resultMap type="board" id="boardMap">
     <id     column="board_no"       property="no"/>
     <result column="title"          property="title"/>
     <result column="content"        property="content"/>
@@ -13,14 +13,14 @@
     <result column="created_date"   property="createdDate"/>
     <result column="category"       property="category"/>
     
-    <association property="writer" javaType="com.bitcamp.myapp.vo.Member">
+    <association property="writer" javaType="member">
       <id     column="member_no"    property="no"/>
       <result column="name"         property="name"/>
     </association>
     
   </resultMap>
 
-  <insert id="insert" parameterType="com.bitcamp.myapp.vo.Board">
+  <insert id="insert" parameterType="board">
     insert into myapp_board(title, content, writer, category)
     values(#{title}, #{content}, #{writer.no}, #{category})
   </insert>
@@ -60,7 +60,7 @@
 
   </select>
   
-  <update id="updateCount" parameterType="com.bitcamp.myapp.vo.Board">
+  <update id="updateCount" parameterType="board">
     update myapp_board set
       view_count=#{viewCount}
     where
@@ -68,7 +68,7 @@
       and board_no=#{no}
   </update>
     
-  <update id="update" parameterType="com.bitcamp.myapp.vo.Board">
+  <update id="update" parameterType="board">
     update myapp_board set
       title=#{title},
       content=#{content},
@@ -79,7 +79,7 @@
       and writer=#{writer.no}
   </update>
   
-  <delete id="delete" parameterType="com.bitcamp.myapp.vo.Board">
+  <delete id="delete" parameterType="board">
     delete
     from
       myapp_board 
@@ -89,4 +89,4 @@
       and writer=#{writer.no}
   </delete>
   
-  </mapper>
+</mapper>

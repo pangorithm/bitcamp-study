@@ -1,6 +1,7 @@
 package com.bitcamp.myapp.vo;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class Schedule implements Serializable {
@@ -11,8 +12,8 @@ public class Schedule implements Serializable {
 
   private int no;
   private String scheduleTitle;
-  private long startTime;
-  private long endTime;
+  private Timestamp startTime;
+  private Timestamp endTime;
   private Member owner;
 
   public Schedule() {}
@@ -50,19 +51,19 @@ public class Schedule implements Serializable {
     this.scheduleTitle = scheduleTitle;
   }
 
-  public long getStartTime() {
+  public Timestamp getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(long startTime) {
+  public void setStartTime(Timestamp startTime) {
     this.startTime = startTime;
   }
 
-  public long getEndTime() {
+  public Timestamp getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(long endTime) {
+  public void setEndTime(Timestamp endTime) {
     this.endTime = endTime;
   }
 

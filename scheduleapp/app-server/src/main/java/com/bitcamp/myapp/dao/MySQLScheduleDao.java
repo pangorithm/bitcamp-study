@@ -1,6 +1,5 @@
 package com.bitcamp.myapp.dao;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +26,24 @@ public class MySQLScheduleDao implements ScheduleDao {
   }
 
   @Override
-  public List<Schedule> list(Member loginUser) {
+  public List<Schedule> findAllOwnedSchedule(Member loginUser) {
     SqlSession sqlSession = sqlSessionFactory.openSession();
-    return sqlSession.selectList("com.bitcamp.myapp.dao.ScheduleDao.list", loginUser);
+    return sqlSession.selectList("com.bitcamp.myapp.dao.ScheduleDao.findAllOwnedSchedule",
+        loginUser);
   }
 
   @Override
-  public List<Member> participantList(int scheduleNo) {
+  public List<Schedule> findAllParticipatedSchedule(Member loginUser) {
     SqlSession sqlSession = sqlSessionFactory.openSession();
-    return sqlSession.selectList("com.bitcamp.myapp.dao.ScheduleDao.participantList", scheduleNo);
+    return sqlSession.selectList("com.bitcamp.myapp.dao.ScheduleDao.findAllParticipatedSchedule",
+        loginUser);
+  }
+
+  @Override
+  public List<Member> findAllParticipatedMember(int scheduleNo) {
+    SqlSession sqlSession = sqlSessionFactory.openSession();
+    return sqlSession.selectList("com.bitcamp.myapp.dao.ScheduleDao.findAllParticipatedMember",
+        scheduleNo);
   }
 
   @Override
@@ -83,8 +91,8 @@ public class MySQLScheduleDao implements ScheduleDao {
   public int update(Schedule schedule) {
     Map<String, Object> paramMap = new HashMap<>();
     paramMap.put("scheduleTitle", schedule.getScheduleTitle());
-    paramMap.put("startTime", new Timestamp(schedule.getStartTime()).toString());
-    paramMap.put("endTime", new Timestamp(schedule.getEndTime()).toString());
+    paramMap.put("startTime", schedule.getStartTime().toString());
+    paramMap.put("endTime", schedule.getEndTime().toString());
     paramMap.put("scheduleNo", schedule.getNo());
     paramMap.put("ownerNo", schedule.getNo());
 

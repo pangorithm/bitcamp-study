@@ -20,7 +20,8 @@ public class ScheduleSearchListener implements ScheduleActionListener {
 
     if (optNo.equals("1")) {
       String searchTitle = prompt.inputString("제목 : ");
-      for (Object obj : scheduleDao.list((Member) prompt.getAttribute("loginUser")).toArray()) {
+      for (Object obj : scheduleDao
+          .findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")).toArray()) {
         Schedule sch = (Schedule) obj;
         if (sch.getScheduleTitle().contains(searchTitle)) {
           ScheduleActionListener.printScheduleInfo(sch, prompt);
@@ -28,12 +29,12 @@ public class ScheduleSearchListener implements ScheduleActionListener {
       }
     } else if (optNo.equals("2")) {
       long searchRangeStart =
-          ScheduleActionListener.inputTime("검색 시작 시간 ex)2023-06-05 16:30 ", prompt);
+          ScheduleActionListener.inputTime("검색 시작 시간\n ex)2023-06-05 16:30\n ", prompt).getTime();
       long searchRangeEnd =
-          ScheduleActionListener.inputTime("검색 종료 시간 ex)2023-06-06 20:00 ", prompt);
+          ScheduleActionListener.inputTime("검색 종료 시간\n ex)2023-06-06 20:00\n ", prompt).getTime();
       for (Schedule sch : ScheduleActionListener.searchSchedules(
-          scheduleDao.list((Member) prompt.getAttribute("loginUser")), searchRangeStart,
-          searchRangeEnd)) {
+          scheduleDao.findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")),
+          searchRangeStart, searchRangeEnd)) {
         ScheduleActionListener.printScheduleInfo(sch, prompt);
       }
     } else {

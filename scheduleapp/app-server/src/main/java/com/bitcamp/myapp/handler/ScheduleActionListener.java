@@ -1,9 +1,8 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
-import java.time.Instant;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,15 +18,16 @@ public interface ScheduleActionListener extends ActionListener {
     try {
       String scheduleTitle = prompt.inputString("스케줄 제목을 입력하세요\n> ");
 
-      long startTime = inputTime("스케줄 시작 날짜와 시간을 입력하세요\n ex)2023-06-05 08:30\n", prompt);
+      Timestamp startTime = inputTime("스케줄 시작 날짜와 시간을 입력하세요\n ex)2023-06-05 08:30\n", prompt);
 
-      long endTime = inputTime("스케줄 종료 날짜와 시간을 입력하세요\n ex)2023-06-06 20:00\n", prompt);
+      Timestamp endTime = inputTime("스케줄 종료 날짜와 시간을 입력하세요\n ex)2023-06-06 20:00\n", prompt);
       prompt.println("--------------------------------------------------");
 
-      if (startTime > endTime) {
+      if (startTime.getTime() > endTime.getTime()) {
         throw new Exception("스케줄 시작이 종료보다 늦습니다");
       }
-      LinkedList<Schedule> resultList = searchSchedules(list, startTime, endTime);
+      LinkedList<Schedule> resultList =
+          searchSchedules(list, startTime.getTime(), endTime.getTime());
       for (Schedule printSch : resultList.toArray(new Schedule[0])) {
         printScheduleInfo(printSch, prompt);
       }
@@ -63,9 +63,9 @@ public interface ScheduleActionListener extends ActionListener {
     prompt.print("제목: ");
     prompt.println(sch.getScheduleTitle());
     prompt.print("시작: ");
-    prompt.println(longToLocalDateTime(sch.getStartTime()).toString());
+    prompt.println(sch.getStartTime().toString());
     prompt.print("종료: ");
-    prompt.println(longToLocalDateTime(sch.getEndTime()).toString());
+    prompt.println(sch.getEndTime().toString());
     prompt.println("");
   }
 
@@ -74,14 +74,15 @@ public interface ScheduleActionListener extends ActionListener {
     LinkedList<Schedule> resultList = new LinkedList<>();
     for (Object obj : list.toArray()) {
       Schedule sch = (Schedule) obj;
-      if (sch.getEndTime() > searchRangeStart && sch.getStartTime() < searchRangeEnd) {
+      if (sch.getEndTime().getTime() > searchRangeStart
+          && sch.getStartTime().getTime() < searchRangeEnd) {
         resultList.add(sch);
       }
     }
     return resultList;
   }
 
-  static long inputTime(String str, Prompt prompt) throws IOException {
+  static Timestamp inputTime(String str, Prompt prompt) throws IOException {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
     String time;
     do {
@@ -91,15 +92,6 @@ public interface ScheduleActionListener extends ActionListener {
         prompt.end();
       }
     } while (time.length() != 12);
-    return localDateTimeToLong(LocalDateTime.parse(time, formatter));
-  }
-
-
-  static long localDateTimeToLong(LocalDateTime localDateTime) {
-    return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-  }
-
-  static LocalDateTime longToLocalDateTime(long milliseconds) {
-    return LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault());
+    return Timestamp.valueOf(LocalDateTime.parse(time, formatter));
   }
 }

@@ -37,9 +37,9 @@ public class ServerApp {
   ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
   SqlSessionFactory sqlSessionFactory;
+
   MemberDao memberDao;
   BoardDao boardDao;
-  BoardDao readingDao;
 
   private static final int BOARD_CATEGORY = 1;
   private static final int READING_CATEGORY = 2;
@@ -63,8 +63,7 @@ public class ServerApp {
     sqlSessionFactory = new SqlSessionFactoryProxy(builder.build(mybatisConfigIn));
 
     this.memberDao = new MySQLMemberDao(sqlSessionFactory);
-    this.boardDao = new MySQLBoardDao(sqlSessionFactory, BOARD_CATEGORY);
-    this.readingDao = new MySQLBoardDao(sqlSessionFactory, READING_CATEGORY);
+    this.boardDao = new MySQLBoardDao(sqlSessionFactory);
 
     prepareMenu();
   }
@@ -133,19 +132,27 @@ public class ServerApp {
     mainMenu.add(memberMenu);
 
     MenuGroup boardMenu = new MenuGroup("게시글");
-    boardMenu.add(new Menu("등록", new BoardAddListener(boardDao, sqlSessionFactory)));
-    boardMenu.add(new Menu("목록", new BoardListListener(boardDao)));
-    boardMenu.add(new Menu("조회", new BoardDetailListener(boardDao, sqlSessionFactory)));
-    boardMenu.add(new Menu("변경", new BoardUpdateListener(boardDao, sqlSessionFactory)));
-    boardMenu.add(new Menu("삭제", new BoardDeleteListener(boardDao, sqlSessionFactory)));
+    boardMenu
+        .add(new Menu("등록", new BoardAddListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
+    boardMenu.add(new Menu("목록", new BoardListListener(BOARD_CATEGORY, boardDao)));
+    boardMenu
+        .add(new Menu("조회", new BoardDetailListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
+    boardMenu
+        .add(new Menu("변경", new BoardUpdateListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
+    boardMenu
+        .add(new Menu("삭제", new BoardDeleteListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
     mainMenu.add(boardMenu);
 
     MenuGroup readingMenu = new MenuGroup("독서록");
-    readingMenu.add(new Menu("등록", new BoardAddListener(readingDao, sqlSessionFactory)));
-    readingMenu.add(new Menu("목록", new BoardListListener(readingDao)));
-    readingMenu.add(new Menu("조회", new BoardDetailListener(readingDao, sqlSessionFactory)));
-    readingMenu.add(new Menu("변경", new BoardUpdateListener(readingDao, sqlSessionFactory)));
-    readingMenu.add(new Menu("삭제", new BoardDeleteListener(readingDao, sqlSessionFactory)));
+    readingMenu
+        .add(new Menu("등록", new BoardAddListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
+    readingMenu.add(new Menu("목록", new BoardListListener(READING_CATEGORY, boardDao)));
+    readingMenu.add(
+        new Menu("조회", new BoardDetailListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
+    readingMenu.add(
+        new Menu("변경", new BoardUpdateListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
+    readingMenu.add(
+        new Menu("삭제", new BoardDeleteListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
     mainMenu.add(readingMenu);
 
     // Menu helloMenu = new Menu("안녕!");

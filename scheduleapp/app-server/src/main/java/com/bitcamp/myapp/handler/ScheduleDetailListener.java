@@ -1,7 +1,6 @@
 package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.List;
 import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.ScheduleDao;
@@ -32,11 +31,11 @@ public class ScheduleDetailListener implements ActionListener {
 
     prompt.printf("번호: %d\n", schedule.getNo());
     prompt.printf("제목: %s\n", schedule.getScheduleTitle());
-    prompt.printf("시작 시간: %s\n", new Timestamp(schedule.getStartTime()).toString());
-    prompt.printf("종료 시간: %s\n", new Timestamp(schedule.getEndTime()).toString());
+    prompt.printf("시작 시간: %s\n", schedule.getStartTime().toString());
+    prompt.printf("종료 시간: %s\n", schedule.getEndTime().toString());
     prompt.printf("소유자: %s\n", schedule.getOwner().getName());
 
-    List<Member> participantList = scheduleDao.participantList(schedule.getNo());
+    List<Member> participantList = scheduleDao.findAllParticipatedMember(schedule.getNo());
     prompt.printf("스케줄 참가자 명단\n");
     prompt.printf(" 번호 | 이름\n");
     for (Member m : participantList.toArray(new Member[0])) {

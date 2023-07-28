@@ -34,7 +34,8 @@ public class ScheduleUpdateListener implements ScheduleActionListener {
       Schedule newSch = new Schedule();
       newSch.setNo(sch.getNo());
       newSch = ScheduleActionListener.inputScheduleInfo(
-          scheduleDao.list((Member) prompt.getAttribute("loginUser")), newSch, prompt);
+          scheduleDao.findAllOwnedSchedule((Member) prompt.getAttribute("loginUser")), newSch,
+          prompt);
       if (newSch != null) {
 
         try {

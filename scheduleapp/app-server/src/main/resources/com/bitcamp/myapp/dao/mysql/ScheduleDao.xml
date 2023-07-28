@@ -5,49 +5,72 @@
 <mapper namespace="com.bitcamp.myapp.dao.ScheduleDao">
 
   <!-- 결과 레코드의 컬럼 값을 자바 객체에 어떻게 담을 것인지 설정한다. -->
-  <resultMap type="com.bitcamp.myapp.vo.Schedule" id="scheduleMap">
+  <resultMap type="schedule" id="scheduleMap">
     <id     column="schedule_no"      property="no"/>
     <result column="schedule_title"   property="scheduleTitle"/>
     <result column="start_time"       property="startTime"/>
     <result column="end_time"         property="endTime"/>
     
-    <association property="owner" javaType="com.bitcamp.myapp.vo.Member">
+    <association property="owner" javaType="member">
       <id     column="member_no"      property="no"/>
       <result column="name"           property="name"/>
     </association>
     
   </resultMap>
 
-  <insert id="insert" parameterType="com.bitcamp.myapp.vo.Schedule">
+  <insert id="insert" parameterType="schedule">
     insert into scheduleapp_schedule(schedule_title, start_time, end_time, owner)
     values(#{scheduleTitle}, #{startTime}, #{endTime}, #{owner.no})
   </insert>
   
-  <select id="list" parameterType="com.bitcamp.myapp.vo.Member" resultMap="scheduleMap">
-    select schedule_no, schedule_title, start_time, end_time, owner, m_owner.name as owner_name,
-        ss.participant_no, m_member.name as participant_name
-    from 
-      (select
-         sch.schedule_no,
-         sch.schedule_title,
-         sch.start_time,
-         sch.end_time,
-         sch.owner,
-         sp.member_no as participant_no
-       from
-         scheduleapp_schedule as sch
-           inner join scheduleapp_schedule_participants as sp
-             on sch.schedule_no=sp.schedule_no
-       where
-         sch.owner=#{no}
-         or sp.member_no=#{no}
-       ) ss
-      inner join scheduleapp_member m_owner on ss.owner=m_owner.member_no
-      inner join scheduleapp_member m_member on ss.participant_no=m_member.member_no
-    order by start_time asc
+  <select id="findAllOwnedSchedule" parameterType="member" resultMap="scheduleMap">
+    select
+      schedule_no,
+      schedule_title,
+      start_time,
+      end_time,
+      m.member_no,
+      m.name
+    from
+      scheduleapp_schedule sch inner join scheduleapp_member m 
+        on sch.owner=m.member_no
+    where
+      sch.owner=#{no}
+    order by
+      start_time
   </select>
   
-  <select id="participantList" parameterType="int" resultMap="com.bitcamp.myapp.vo.Member">
+  <select id="findAllParticipatedSchedule" parameterType="member" resultMap="scheduleMap">
+    select
+      sch.schedule_no,
+      sch.schedule_title,
+      sch.start_time,
+      sch.end_time,
+      m.member_no,
+      m.name
+    from
+      scheduleapp_schedule sch
+        inner join 
+          (
+          select
+            schedule_no,
+            member_no
+          from
+            scheduleapp_schedule_participants
+          where
+            member_no=#{no}
+          ) sp
+        on sch.schedule_no=sp.schedule_no
+        inner join
+          scheduleapp_member m
+        on sch.owner=m.member_no
+    where
+      m.member_no=#{no}
+    order by
+      start_time
+  </select>
+  
+  <select id="findAllParticipatedMember" parameterType="int" resultType="member">
     select
       sp.schedule_no,
       m.member_no,
@@ -68,10 +91,8 @@
       schedule_title,
       start_time,
       end_time,
-      owner,
-      m_owner.name as owner_name,
-      ss.participant_no,
-      m_member.name as participant_name
+      m_owner.member_no,
+      m_owner.name
     from
       (select
          sch.schedule_no,
@@ -128,4 +149,4 @@
     values(#{scheduleNo}, #{memberNo})
   </insert>
   
-  </mapper>
+</mapper>

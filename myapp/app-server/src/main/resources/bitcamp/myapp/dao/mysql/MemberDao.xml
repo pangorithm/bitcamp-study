@@ -4,17 +4,16 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bitcamp.myapp.dao.MemberDao">
 
-  <resultMap type="bitcamp.myapp.vo.Member" id="memberMap">
+  <resultMap type="member" id="memberMap">
     <id     column="member_no"      property="no"/>
     <result column="name"           property="name"/>
     <result column="email"          property="email"/>
     <result column="password"       property="password"/>
     <result column="gender"         property="gender"/>
-    <result column="created_date"   property="createdDate"/>
-    
+    <result column="created_date"   property="createdDate"/>    
   </resultMap>
 
-  <select id="insert" parameterType="bitcamp.myapp.vo.Member">
+  <select id="insert" parameterType="member">
     insert into myapp_member(name, email, password, gender)
       values(#{name}, #{email}, sha1(#{password}), #{gender})
   </select>
@@ -22,11 +21,12 @@
   <select id ="findAll"  resultMap="memberMap">
     select
       member_no,
-      name, email,
-      gender
+      name,
+      email
     from
       myapp_member
-    order by name asc
+    order by
+      name asc
   </select>  
   
   <select id ="findBy" parameterType="int" resultMap="memberMap">
@@ -42,7 +42,7 @@
       member_no=#{memberNo}
   </select>
     
-  <select id ="findByEmailAndPassword" parameterType="bitcamp.myapp.vo.Member" resultMap="memberMap">
+  <select id ="findByEmailAndPassword" parameterType="member" resultMap="memberMap">
     select
       member_no,
       name,
@@ -56,7 +56,7 @@
       and password=sha1(#{password})
   </select>
   
-  <update id="update" parameterType="bitcamp.myapp.vo.Member">
+  <update id="update" parameterType="member">
     update myapp_member set
       name=#{name},
       email=#{email},

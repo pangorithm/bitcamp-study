@@ -7,9 +7,11 @@ import com.bitcamp.myapp.vo.Schedule;
 public interface ScheduleDao {
   void insert(Schedule board);
 
-  List<Schedule> list(Member loginUser);
+  List<Schedule> findAllOwnedSchedule(Member loginUser);
 
-  List<Member> participantList(int no);
+  List<Schedule> findAllParticipatedSchedule(Member loginUser);
+
+  List<Member> findAllParticipatedMember(int no);
 
   Schedule findBy(int no, Member loginUser);
 

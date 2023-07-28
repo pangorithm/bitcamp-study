@@ -23,7 +23,8 @@ public class ScheduleAddListener implements ScheduleActionListener {
 
     try {
       scheduleDao.insert(ScheduleActionListener.inputScheduleInfo(
-          scheduleDao.list((Member) prompt.getAttribute("loginUser")), sch, prompt));
+          scheduleDao.findAllParticipatedSchedule((Member) prompt.getAttribute("loginUser")), sch,
+          prompt));
       sqlSessionFactory.openSession(false).commit();
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
