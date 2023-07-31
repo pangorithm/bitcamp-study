@@ -2,33 +2,14 @@ package bitcamp.myapp;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import bitcamp.myapp.dao.BoardDao;
-import bitcamp.myapp.dao.MemberDao;
-import bitcamp.myapp.dao.MySQLBoardDao;
-import bitcamp.myapp.dao.MySQLMemberDao;
-import bitcamp.myapp.handler.BoardAddListener;
-import bitcamp.myapp.handler.BoardDeleteListener;
-import bitcamp.myapp.handler.BoardDetailListener;
-import bitcamp.myapp.handler.BoardListListener;
-import bitcamp.myapp.handler.BoardUpdateListener;
-import bitcamp.myapp.handler.LoginListener;
-import bitcamp.myapp.handler.MemberAddListener;
-import bitcamp.myapp.handler.MemberDeleteListener;
-import bitcamp.myapp.handler.MemberDetailListener;
-import bitcamp.myapp.handler.MemberListListener;
-import bitcamp.myapp.handler.MemberUpdateListener;
 import bitcamp.net.NetProtocol;
 import bitcamp.util.BreadcrumbPrompt;
-import bitcamp.util.Menu;
+import bitcamp.util.DispatcherListener;
 import bitcamp.util.MenuGroup;
 import bitcamp.util.SqlSessionFactoryProxy;
 
@@ -36,15 +17,8 @@ public class ServerApp {
 
   ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
-  SqlSessionFactory sqlSessionFactory;
-
-  MemberDao memberDao;
-  BoardDao boardDao;
-
-  private static final int BOARD_CATEGORY = 1;
-  private static final int READING_CATEGORY = 2;
-
-  MenuGroup mainMenu = new MenuGroup("메인");
+  MenuGroup mainMenu = new MenuGroup("/", "메인");
+  DispatcherListener facadeListener = new DispatcherListener();
 
   int port;
 
@@ -52,18 +26,7 @@ public class ServerApp {
 
     this.port = port;
 
-    // 1) mybatis 설정 파일을 읽어들일 도구를 준비한다.
-    InputStream mybatisConfigIn =
-        Resources.getResourceAsStream("bitcamp/myapp/config/mybatis-config.xml");
 
-    // 2) SqlSessionFactory를 만들어 줄 빌더 객체 준비
-    SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-
-    // 3) 빌더 객체를 통해 를 SqlSessionFactory를생성
-    sqlSessionFactory = new SqlSessionFactoryProxy(builder.build(mybatisConfigIn));
-
-    this.memberDao = new MySQLMemberDao(sqlSessionFactory);
-    this.boardDao = new MySQLBoardDao(sqlSessionFactory);
 
     prepareMenu();
   }
@@ -108,7 +71,8 @@ public class ServerApp {
 
       out.writeUTF("[나의 목록관리 시스템]\n--------------------------------------------");
 
-      new LoginListener(memberDao).service(prompt);
+      prompt.setAttribute("menuPath", "login");
+      facadeListener.service(prompt);
 
       mainMenu.execute(prompt);
       out.writeUTF(NetProtocol.NET_END);
@@ -118,48 +82,37 @@ public class ServerApp {
       e.printStackTrace();
 
     } finally {
-      ((SqlSessionFactoryProxy) sqlSessionFactory).clean();
+      SqlSessionFactoryProxy sqlSessionFactoryProxy =
+          (SqlSessionFactoryProxy) facadeListener.getBean("sqlSessionFactoryProxy");
+      sqlSessionFactoryProxy.clean();
     }
   }
 
   private void prepareMenu() {
-    MenuGroup memberMenu = new MenuGroup("회원");
-    memberMenu.add(new Menu("등록", new MemberAddListener(memberDao, sqlSessionFactory)));
-    memberMenu.add(new Menu("목록", new MemberListListener(memberDao)));
-    memberMenu.add(new Menu("조회", new MemberDetailListener(memberDao)));
-    memberMenu.add(new Menu("변경", new MemberUpdateListener(memberDao, sqlSessionFactory)));
-    memberMenu.add(new Menu("삭제", new MemberDeleteListener(memberDao, sqlSessionFactory)));
+    MenuGroup memberMenu = new MenuGroup("member", "회원");
+    memberMenu.add("member/add", "등록", facadeListener);
+    memberMenu.add("member/list", "목록", facadeListener);
+    memberMenu.add("member/detail", "조회", facadeListener);
+    memberMenu.add("member/update", "변경", facadeListener);
+    memberMenu.add("member/delete", "삭제", facadeListener);
     mainMenu.add(memberMenu);
 
-    MenuGroup boardMenu = new MenuGroup("게시글");
-    boardMenu
-        .add(new Menu("등록", new BoardAddListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
-    boardMenu.add(new Menu("목록", new BoardListListener(BOARD_CATEGORY, boardDao)));
-    boardMenu
-        .add(new Menu("조회", new BoardDetailListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
-    boardMenu
-        .add(new Menu("변경", new BoardUpdateListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
-    boardMenu
-        .add(new Menu("삭제", new BoardDeleteListener(BOARD_CATEGORY, boardDao, sqlSessionFactory)));
+    MenuGroup boardMenu = new MenuGroup("board", "게시글");
+    boardMenu.add("board/add", "등록", facadeListener);
+    boardMenu.add("board/list", "목록", facadeListener);
+    boardMenu.add("board/detail", "조회", facadeListener);
+    boardMenu.add("board/update", "변경", facadeListener);
+    boardMenu.add("board/delete", "삭제", facadeListener);
     mainMenu.add(boardMenu);
 
-    MenuGroup readingMenu = new MenuGroup("독서록");
-    readingMenu
-        .add(new Menu("등록", new BoardAddListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
-    readingMenu.add(new Menu("목록", new BoardListListener(READING_CATEGORY, boardDao)));
-    readingMenu.add(
-        new Menu("조회", new BoardDetailListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
-    readingMenu.add(
-        new Menu("변경", new BoardUpdateListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
-    readingMenu.add(
-        new Menu("삭제", new BoardDeleteListener(READING_CATEGORY, boardDao, sqlSessionFactory)));
+    MenuGroup readingMenu = new MenuGroup("reading", "독서록");
+    readingMenu.add("reading/add", "등록", facadeListener);
+    readingMenu.add("reading/list", "목록", facadeListener);
+    readingMenu.add("reading/detail", "조회", facadeListener);
+    readingMenu.add("reading/update", "변경", facadeListener);
+    readingMenu.add("reading/delete", "삭제", facadeListener);
     mainMenu.add(readingMenu);
 
-    // Menu helloMenu = new Menu("안녕!");
-    // helloMenu.addActionListener(new HeaderListener());
-    // helloMenu.addActionListener(new HelloListener());
-    // helloMenu.addActionListener(new FooterListener());
-    // mainMenu.add(helloMenu);
   }
 
 }
