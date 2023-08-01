@@ -29,12 +29,12 @@
 
 - if ~ else ~ 조건문 활용
 - switch 활용
-- break 활용
+- break 활용 
 - while 활용
 
 ## 7. 기능 단위로 명령문 묶기 : 메서드 사용법
 
-- static 메서드를 정의하고 호출하는 방법
+- static 메서드를 정의하고 호출하는 방법 
 
 ## 8. 메서드 간에 변수 공유하기 : 스태틱 변수 사용법
 
@@ -49,7 +49,7 @@
 - import 명령문 사용법
 - public 접근 제어 사용법
 - 스태틱 변수가 생성되고 제거되는 시점, 메모리 영역
-
+ 
 ## 10. 메뉴 구성 및 CRUD 구현
 
 - 회원정보를 다루는 메뉴 구성하기
@@ -68,7 +68,7 @@
 - 인스턴스 필드에 직접 접근하는 것을 막는 방법: private
 - 인스턴스 필드에 값을 저장하고 꺼내는 방법: setter/getter
 - 스태틱 필드 및 생성자 활용
-- 스태틱 상수 필드 활용 + GRASP 패턴의 Information Expert
+- 스태틱 상수 필드 활용 + GRASP 패턴의 Information Expert 
 
 ## 13. 복사/붙여넣기를 이용한 CRUD 구현
 
@@ -159,7 +159,7 @@
   - BoardHandler, MemberHandler에 적용
   - ActionListener 인터페이스 활용
   - BoardXxxListener, MemberXxxListener 클래스로 분해
-- Generalization(상속) 수행
+- Generalization(상속) 수행 
   - AbstractBoardListener 추상 클래스 정의
     - 추상 메서드 도입
 
@@ -211,7 +211,7 @@
 ## 31. Java Stream API 로 교체하기
 
 - 입출력 관련 클래스를 자바 스트림 클래스로 교체
-  - java.io.\* 패키지의 클래스 사용
+  - java.io.* 패키지의 클래스 사용
 
 ## 32. 인스턴스를 통째로 입출력하기(객체 직렬화)
 
@@ -254,12 +254,14 @@
 ## 38. DAO 프록시 객체를 자동 생성하기
 
 - java.lang.reflect.Proxy 클래스 사용법
-- 프록시 객체의 구동원리 이해
+- 프록시 객체의 구동원리 이해 
+
 
 ## 39. Reflection API를 활용하여 DAO 메서드 호출을 자동화하기
 
 - Reflection API를 사용하는 방법
 - 서버의 DAO 메서드 호출을 자동화 하는 방법
+
 
 ## 40. 예외 처리하기
 
@@ -296,6 +298,7 @@
 ## 45. 스레드 재사용하기 : 자바에서 제공하는 스레드풀(thread pool) 사용
 
 - Excutors/ExcutorService 사용법
+
 
 ## 46. DBMS 도입하기
 
@@ -345,3 +348,10 @@
 
 - IoC 컨테이너의 구동 원리와 구현
 - 리스너 객체를 IoC 컨테이너로 관리하기
+
+## 55. 웹 애플리케이션 서버 구조로 전환하기 - 웹 기술 도입
+
+- 웹 기술을 도입하여 애플리케이션 서버 / 클라이언트를 구축하는 방법
+- Netty 라이브러리를 사용하여 웹서버를 구축하는 방법
+- 웹브라우저를 이용하여 클라이언트를 구축하는 방법
+
