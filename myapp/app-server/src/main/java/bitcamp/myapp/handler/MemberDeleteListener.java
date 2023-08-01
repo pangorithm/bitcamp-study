@@ -6,7 +6,9 @@ import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.ActionListener;
 import bitcamp.util.BreadcrumbPrompt;
+import bitcamp.util.Component;
 
+@Component("/member/delete")
 public class MemberDeleteListener implements ActionListener {
   MemberDao memberDao;
   SqlSessionFactory sqlSessionFactory;

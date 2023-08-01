@@ -7,15 +7,15 @@ import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.ActionListener;
 import bitcamp.util.BreadcrumbPrompt;
+import bitcamp.util.Component;
 
+@Component("/board/update")
 public class BoardUpdateListener implements ActionListener {
 
-  int category;
   BoardDao boardDao;
   SqlSessionFactory sqlSessionFactory;
 
-  public BoardUpdateListener(int category, BoardDao boardDao, SqlSessionFactory sqlSessionFactory) {
-    this.category = category;
+  public BoardUpdateListener(BoardDao boardDao, SqlSessionFactory sqlSessionFactory) {
     this.boardDao = boardDao;
     this.sqlSessionFactory = sqlSessionFactory;
   }
@@ -24,7 +24,8 @@ public class BoardUpdateListener implements ActionListener {
   public void service(BreadcrumbPrompt prompt) throws IOException {
     int boardNo = prompt.inputInt("번호? ");
 
-    Board board = boardDao.findBy(category, boardNo);
+    Board board =
+        boardDao.findBy(Integer.parseInt((String) prompt.getAttribute("category")), boardNo);
     if (board == null) {
       prompt.println("해당 번호의 게시글이 없습니다!");
       return;
@@ -33,7 +34,7 @@ public class BoardUpdateListener implements ActionListener {
     board.setTitle(prompt.inputString("제목(%s)? ", board.getTitle()));
     board.setContent(prompt.inputString("내용(%s)? ", board.getContent()));
     board.setWriter((Member) prompt.getAttribute("loginUser"));
-    board.setCategory(category);
+    board.setCategory(Integer.parseInt((String) prompt.getAttribute("category")));
 
     try {
       if (boardDao.update(board) == 0) {
