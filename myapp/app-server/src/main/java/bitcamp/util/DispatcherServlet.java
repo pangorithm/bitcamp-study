@@ -15,8 +15,7 @@ public class DispatcherServlet implements Servlet {
   }
 
   @Override
-  public void service(HttpServletRequest request,
-                      HttpServletResponse response) throws Exception {
+  public void service(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     try {
       // 지정한 경로의 기본 문서를 요청할 경우,
