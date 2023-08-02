@@ -27,12 +27,12 @@ public class MemberListServlet implements Servlet {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-    out.println("<title>게시글</title>");
+    out.println("<title>회원</title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글 목록 </h1>");
+    out.println("<h1>회원 목록 </h1>");
     out.println("<div style='margin:5px;'>");
-    out.println("<a href='/member/form.html'>새 멤버</a>\n");
+    out.println("<a href='/member/form.html'>새 회원</a>\n");
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");

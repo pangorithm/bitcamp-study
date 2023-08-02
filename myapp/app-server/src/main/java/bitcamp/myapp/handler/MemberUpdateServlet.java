@@ -41,21 +41,21 @@ public class MemberUpdateServlet implements Servlet {
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
     out.println("<meta http-equiv='refresh' content='1;url=/member/list'>");
-    out.println("<title>멤버</title>");
+    out.println("<title>회원</title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>멤버 변경</h1>");
+    out.println("<h1>회원 변경</h1>");
 
     try {
       if (memberDao.update(m) == 0) {
-        out.println("멤버가 없거나 변경 권한이 없습니다.");
+        out.println("해당 회원이 없거나 변경 권한이 없습니다.");
       } else {
         sqlSessionFactory.openSession(false).commit();
         out.println("변경했습니다!");
       }
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
-      out.println("멤버 변경 실패입니다!");
+      out.println("회원 변경 실패입니다!");
       e.printStackTrace();
     }
 

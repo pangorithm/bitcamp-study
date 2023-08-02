@@ -28,10 +28,10 @@ public class MemberDetailServlet implements Servlet {
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-    out.println("<title>멤버</title>");
+    out.println("<title>회원</title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>멤버</h1>");
+    out.println("<h1>회원</h1>");
 
     if (m == null) {
       out.println("해당 번호의 회원이 없습니다!");
