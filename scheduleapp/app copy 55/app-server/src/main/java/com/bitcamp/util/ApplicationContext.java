@@ -1,4 +1,4 @@
-package bitcamp.util;
+package com.bitcamp.util;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import bitcamp.myapp.config.AppConfig;
+import com.bitcamp.myapp.config.AppConfig;
 
 // IoC 컨테이너 = Bean 컨테이너
 // - 자바 설정 클래스(예: AppConfig)에서 @Bean 애노테이션이 붙은 메서드를 찾아 호출하고,
@@ -142,8 +142,8 @@ public class ApplicationContext {
     // .collect(Collectors.toSet()); // 스트림을 수행하여 최종 결과물은 Set 컬렉션에 담아서 리턴하라고 명령한다.
 
     // ==> 스트림 프로그래밍 방식( + 람다)
-    Set<Class<?>> classes =
-        dirReader.lines().filter(filename -> filename.endsWith(".class")).map(filename -> {
+    Set<Class<?>> classes = dirReader.lines().filter(filename -> filename.endsWith(".class"))
+        .map(filename -> {
           try {
             return Class.forName(basePackage + "." + filename.replace(".class", ""));
           } catch (Exception e) {

@@ -8,7 +8,7 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
+    id 'java-library'
     id 'eclipse'
 }
 
@@ -18,16 +18,9 @@ repositories {
 }
 
 dependencies {
-    // Mybatis 라이브러리
-    implementation 'org.mybatis:mybatis:3.5.13'
-    
-    // Reactor Netty 프레임워크
-    implementation platform('io.projectreactor:reactor-bom:2022.0.9') 
-    implementation 'io.projectreactor.netty:reactor-netty-core' 
-    implementation 'io.projectreactor.netty:reactor-netty-http'
-    
-    implementation project(':app-common')
-    
+    // MYSQL JDBC Driver
+    implementation 'mysql:mysql-connector-java:8.0.33'
+
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
@@ -42,11 +35,6 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
-}
-
-application {
-    // Define the main class for the application.
-    mainClass = 'com.bitcamp.Server-App'
 }
 
 tasks.named('test') {
@@ -70,7 +58,7 @@ tasks.withType(JavaCompile) {
 // eclipse 프로젝트 이름을 설정하기
 eclipse {
     project {
-        name = "scheduleapp-server"
+        name = "scheduleapp-common"
     }
     jdt {
       sourceCompatibility = 17
