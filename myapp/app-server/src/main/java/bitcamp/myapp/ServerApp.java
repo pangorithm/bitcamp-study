@@ -48,9 +48,10 @@ public class ServerApp {
   }
 
   private NettyOutbound processRequest(HttpServerRequest request, HttpServerResponse response) {
+    HttpServletRequest request2 = new HttpServletRequest(request);
+    HttpServletResponse response2 = new HttpServletResponse(response);
+
     try {
-      HttpServletRequest request2 = new HttpServletRequest(request);
-      HttpServletResponse response2 = new HttpServletResponse(response);
       dispatcherServlet.service(request2, response2);
 
       // HTTP 응답 프로토콜의 헤더 설정
@@ -60,7 +61,8 @@ public class ServerApp {
       return response.sendString(Mono.just(response2.getContent()));
 
     } catch (Exception e) {
-      return response.sendString(Mono.just("Error"));
+      e.printStackTrace();
+      return response.sendString(Mono.just(response2.getContent()));
 
     } finally {
       SqlSessionFactoryProxy sqlSessionFactoryProxy =
