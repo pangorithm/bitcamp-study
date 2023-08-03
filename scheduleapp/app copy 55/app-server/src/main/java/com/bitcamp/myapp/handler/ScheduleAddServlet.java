@@ -29,7 +29,7 @@ public class ScheduleAddServlet implements Servlet {
     sch.setScheduleTitle(request.getParameter("title"));
     sch.setStartTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("start-time"))));
     sch.setEndTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("end-time"))));
-    sch.setOwner((Member) request.getAttribute("loginUser"));
+    sch.setOwner((Member) request.getSession().getAttribute("loginUser"));
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();

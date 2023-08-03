@@ -33,6 +33,7 @@ public class ScheduleListServlet implements Servlet {
     out.println("<h1>스케줄 목록 </h1>");
     out.println("<div style='margin:5px;'>");
     out.println("<a href='/schedule/form.html'>새 스케줄</a>\n");
+    out.println("<a href='/schedule/search.html'>스케줄 검색</a>\n");
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
@@ -67,5 +68,11 @@ public class ScheduleListServlet implements Servlet {
         sch.getStartTime().toString(),
         sch.getEndTime().toString());
     }
+
+    out.println("</tbody>");
+    out.println("</table>");
+    out.println("<a href='/'>메인</a>");
+    out.println("</body>");
+    out.println("</html>");
   }
 }

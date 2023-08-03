@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.ScheduleDao;
+import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
 import com.bitcamp.util.Component;
 import com.bitcamp.util.HttpServletRequest;
@@ -25,9 +26,11 @@ public class ScheduleUpdateServlet implements Servlet {
   @Override
   public void service(HttpServletRequest request, HttpServletResponse response) throws Exception {
     Schedule sch = new Schedule();
+    sch.setNo(Integer.parseInt(request.getParameter("no")));
     sch.setScheduleTitle(request.getParameter("title"));
     sch.setStartTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("start-time"))));
     sch.setEndTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("end-time"))));
+    sch.setOwner((Member) request.getSession().getAttribute("loginUser"));
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();

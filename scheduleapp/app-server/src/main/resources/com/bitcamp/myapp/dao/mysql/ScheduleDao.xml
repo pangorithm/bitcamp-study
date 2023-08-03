@@ -124,16 +124,22 @@
       and member_no=#{memberNo}
   </select>
   
-  <insert id="insertParticipant" parameterType="map">
+  <insert id="addScheduleParticipant" parameterType="map">
     insert into scheduleapp_schedule_participants(schedule_no, member_no)
     values(#{scheduleNo}, #{memberNo})
   </insert>
   
-  <delete id="deleteParticipant" parameterType="map">
+  <delete id="deleteScheduleParticipant" parameterType="map">
+    delete from scheduleapp_schedule_participants
+    where
+      schedule_no=#{scheduleNo}
+      and member_no=#{memberNo}
+  </delete>  
+  
+  <delete id="deleteAllScheduleParticipant" parameterType="int">
     delete from scheduleapp_schedule_participants
     where
       schedule_no=#{schedulseNo}
-      and member_no=#{memberNo}    
   </delete>
   
 </mapper>

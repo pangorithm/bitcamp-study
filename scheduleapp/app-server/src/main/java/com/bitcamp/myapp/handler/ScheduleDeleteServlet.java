@@ -49,13 +49,13 @@ public class ScheduleDeleteServlet implements Servlet {
     }
 
     try {
+      scheduleDao.deleteAllScheduleParticipant(sch.getNo());
       scheduleDao.delete(sch);
       sqlSessionFactory.openSession(false).commit();
       out.println("<p>삭제 성공입니다</p>");
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
       out.println("<p>삭제 실패입니다</p>");
-      // 해당 스케줄에 참가자가 남아있을 경우 fk 규칙에 의해 삭제 불가
       e.printStackTrace();
     }
     out.println("</body>");

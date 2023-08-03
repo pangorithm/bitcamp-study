@@ -33,6 +33,7 @@ public class ScheduleListServlet implements Servlet {
     out.println("<h1>스케줄 목록 </h1>");
     out.println("<div style='margin:5px;'>");
     out.println("<a href='/schedule/form.html'>새 스케줄</a>\n");
+    out.println("<a href='/schedule/search.html'>스케줄 검색</a>\n");
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
@@ -41,16 +42,17 @@ public class ScheduleListServlet implements Servlet {
     out.println("<tbody>");
 
     out.println("<tr><th><소유한 스케줄></th></tr>");
-    for (Object obj : scheduleDao.findAllOwnedSchedule((Member) request.getAttribute("loginUser"))
+    for (Object obj : scheduleDao
+        .findAllOwnedSchedule((Member) request.getSession().getAttribute("loginUser"))
         .toArray()) {
       Schedule sch = (Schedule) obj;
       out.printf(
-          "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
-          sch.getNo(),
-          sch.getNo(),
-          sch.getScheduleTitle(),
-          sch.getStartTime().toString(),
-          sch.getEndTime().toString());
+        "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
+        sch.getNo(),
+        sch.getNo(),
+        sch.getScheduleTitle(),
+        sch.getStartTime().toString(),
+        sch.getEndTime().toString());
     }
 
     out.println("<tr><th><참가한 스케줄></th></tr>");
@@ -59,12 +61,18 @@ public class ScheduleListServlet implements Servlet {
         .toArray()) {
       Schedule sch = (Schedule) obj;
       out.printf(
-          "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
-          sch.getNo(),
-          sch.getNo(),
-          sch.getScheduleTitle(),
-          sch.getStartTime().toString(),
-          sch.getEndTime().toString());
+        "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
+        sch.getNo(),
+        sch.getNo(),
+        sch.getScheduleTitle(),
+        sch.getStartTime().toString(),
+        sch.getEndTime().toString());
     }
+
+    out.println("</tbody>");
+    out.println("</table>");
+    out.println("<a href='/'>메인</a>");
+    out.println("</body>");
+    out.println("</html>");
   }
 }
