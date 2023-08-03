@@ -36,7 +36,7 @@ public class MemberListServlet implements Servlet {
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
-    out.println("<tr><th>번호</th> <th>이름</th> <th>이메일</th></tr>");
+    out.println("<tr><th>번호</th> <th>이름</th> <th>이메일</th>");
     out.println("</thead>");
     out.println("<tbody>");
 
@@ -45,11 +45,11 @@ public class MemberListServlet implements Servlet {
 
     for (Member m : list) {
       out.printf(
-          "<tr><td>%d</td> <td><a href='/member/detail?no=%d'>%s</a></td> <td>%s</td></tr>\n",
-          m.getNo(),
-          m.getNo(),
-          m.getName(),
-          m.getEmail());
+        "<tr><td>%d</td> <td><a href='/member/detail?no=%d'>%s</a></td> <td>%s</td></tr>\n",
+        m.getNo(),
+        m.getNo(),
+        m.getName(),
+        m.getEmail());
     }
 
     out.println("</tbody>");

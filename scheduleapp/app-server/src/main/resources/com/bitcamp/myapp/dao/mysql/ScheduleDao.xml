@@ -105,14 +105,15 @@
       end_time=#{endTime}
     where
       schedule_no=#{scheduleNo}
+      and owner=#{ownerNo}
   </update>
 
   <delete id="delete" parameterType="map">
     delete from scheduleapp_schedule
     where
       schedule_no=#{scheduleNo}
-  </delete>
-    
+      and owner=#{ownerNo}
+  </delete>    
   
   <select id="checkParticipant" parameterType="map" resultMap="scheduleMap">
     select * 

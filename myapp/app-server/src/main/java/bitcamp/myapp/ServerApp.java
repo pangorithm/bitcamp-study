@@ -51,9 +51,9 @@ public class ServerApp {
   public void execute() throws Exception {
     DisposableServer server =
         HttpServer.create()
-          .port(8888)
-          .handle((request, response) -> processRequest(request, response))
-          .bindNow();
+            .port(8888)
+            .handle((request, response) -> processRequest(request, response))
+            .bindNow();
     System.out.println("서버 실행 됨!");
 
     server.onDispose().block();
@@ -104,26 +104,36 @@ public class ServerApp {
       if (servletPath.equals("/favicon.ico")) {
         response.addHeader("Content-Type", "image/vnd.microsoft.icon");
         return response
-          .sendFile(Path.of(ServerApp.class.getResource("/static/favicon.ico").toURI()));
+            .sendFile(Path.of(ServerApp.class.getResource("/static/favicon.ico").toURI()));
       }
 
       // welcome 파일 또는 HTML 파일을 요청할 때
       if (servletPath.endsWith("/") || servletPath.endsWith(".html")) {
         String resourcePath =
             String
-              .format("/static%s%s", servletPath, servletPath.endsWith("/") ? "index.html" : "");
+                .format("/static%s%s", servletPath, servletPath.endsWith("/") ? "index.html" : "");
 
         response.addHeader("Content-Type", "text/html;charset=UTF-8");
         return response.sendFile(Path.of(ServerApp.class.getResource(resourcePath).toURI()));
       }
 
-      dispatcherServlet.service(request2, response2);
+      if (request.isFormUrlencoded()) { // POST 방식으로 요청했다면,
+        return response.sendString(request.receive().aggregate().asString().map(body -> {
+          try {
+            request2.parseFormBody(body);
+            dispatcherServlet.service(request2, response2);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          response.addHeader("Content-Type", response2.getContentType());
+          return response2.getContent();
+        }));
 
-      // HTTP 응답 프로토콜의 헤더 설정
-      response.addHeader("Content-Type", response2.getContentType());
-
-      // 서블릿이 출력한 문자열을 꺼내 HTTP 프로토콜에 맞춰 응답한다.
-      return response.sendString(Mono.just(response2.getContent()));
+      } else { // GET 방식으로 요청 했다면,
+        dispatcherServlet.service(request2, response2);
+        response.addHeader("Content-Type", response2.getContentType());
+        return response.sendString(Mono.just(response2.getContent()));
+      }
 
     } catch (Exception e) {
       e.printStackTrace();

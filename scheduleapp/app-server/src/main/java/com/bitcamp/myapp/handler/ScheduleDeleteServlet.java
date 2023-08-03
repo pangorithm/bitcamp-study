@@ -3,6 +3,7 @@ package com.bitcamp.myapp.handler;
 import java.io.PrintWriter;
 import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.dao.ScheduleDao;
+import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
 import com.bitcamp.util.Component;
 import com.bitcamp.util.HttpServletRequest;
@@ -39,9 +40,14 @@ public class ScheduleDeleteServlet implements Servlet {
     if (sch == null) {
       out.println("<p>해당 번호의 스케줄이 없습니다!</p>");
     }
-    if (!sch.getOwner().equals(request.getAttribute("loginUser"))) {
+
+    sch.setOwner(((Member) request.getSession().getAttribute("loginUser")));
+
+    if (!sch.getOwner().equals(request.getSession().getAttribute("loginUser"))) {
       out.println("<p>삭제 권한이 없습니다.</p>");
+      return;
     }
+
     try {
       scheduleDao.delete(sch);
       sqlSessionFactory.openSession(false).commit();

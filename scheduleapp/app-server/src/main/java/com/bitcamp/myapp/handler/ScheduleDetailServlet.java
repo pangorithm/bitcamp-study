@@ -27,6 +27,8 @@ public class ScheduleDetailServlet implements Servlet {
   public void service(HttpServletRequest request, HttpServletResponse response) throws Exception {
     Schedule schedule = scheduleDao.findBy(Integer.parseInt((String) request.getParameter("no")));
 
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.println("<!DOCTYPE html>");
@@ -42,27 +44,30 @@ public class ScheduleDetailServlet implements Servlet {
       out.println("해당 번호의 스케줄이 없습니다!");
     } else {
 
-      out.println("<form action='/schedule/update'>");
+      out.println("<form action='/schedule/update' method='post'>");
       out.println("<table border='1'>");
       out.printf(
-          "<tr><th style='width:120px;'>번호</th> "
-              + "<td style='width:300px;'><input type='text' name='no' value='%d' readonly='readonly'></td></tr>\n",
-          schedule.getNo());
+        "<tr><th style='width:120px;'>번호</th> "
+            + "<td style='width:300px;'><input type='text' name='no' value='%d' readonly='readonly'></td></tr>\n",
+        schedule.getNo());
       out.printf(
-          "<tr><th>제목</th><td><input type='text' name='title' value='%s'></td></tr>\n",
-          schedule.getScheduleTitle());
+        "<tr><th>제목</th><td><input type='text' name='title' value='%s'></td></tr>\n",
+        schedule.getScheduleTitle());
       out.printf(
-          "<tr><th>시작</th> <td><input type='datetime-local' name='start-time' value='%s'></td></tr>\n",
-          schedule.getStartTime());
+        "<tr><th>시작</th> <td><input type='datetime-local' name='start-time' value='%s'></td></tr>\n",
+        schedule.getStartTime());
       out.printf(
-          "<tr><th>종료</th> <td><input type='datetime-local' name='end-time' value='%s'></td></tr>\n",
-          schedule.getEndTime());
+        "<tr><th>종료</th> <td><input type='datetime-local' name='end-time' value='%s'></td></tr>\n",
+        schedule.getEndTime());
       out.printf("<tr><th>스캐줄 매니저</th> <td>%s</td></tr>\n", schedule.getOwner().getName());
       out.println("</table>");
       out.println("<div>");
-      out.println("<button>변경</button>");
-      out.println("<button type='reset'>초기화</button>");
-      out.printf("<a href='/schedule/delete?no=%d'>삭제</a>\n", schedule.getNo());
+
+      if (loginUser.getNo() == schedule.getOwner().getNo()) {
+        out.println("<button>변경</button>");
+        out.println("<button type='reset'>초기화</button>");
+        out.printf("<a href='/schedule/delete?no=%d'>삭제</a>\n", schedule.getNo());
+      }
       out.printf("<a href='/schedule/list'>목록</a>\n");
       out.println("</div>");
       out.println("</form>");
@@ -131,10 +136,10 @@ public class ScheduleDetailServlet implements Servlet {
 
     for (Member m : participantList.toArray(new Member[0])) {
       out.printf(
-          "<tr><td>%d</td> <td><a href='/member/detail?no=%d'>%s</a></td></tr>\n",
-          m.getNo(),
-          m.getNo(),
-          m.getName());
+        "<tr><td>%d</td> <td><a href='/member/detail?no=%d'>%s</a></td></tr>\n",
+        m.getNo(),
+        m.getNo(),
+        m.getName());
     }
     out.println("</table>");
   }

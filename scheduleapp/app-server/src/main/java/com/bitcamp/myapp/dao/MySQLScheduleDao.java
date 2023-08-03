@@ -61,6 +61,7 @@ public class MySQLScheduleDao implements ScheduleDao {
     paramMap.put("startTime", schedule.getStartTime().toString());
     paramMap.put("endTime", schedule.getEndTime().toString());
     paramMap.put("scheduleNo", schedule.getNo());
+    paramMap.put("ownerNo", schedule.getOwner().getNo());
 
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
     return sqlSession.update("com.bitcamp.myapp.dao.ScheduleDao.update", paramMap);
@@ -68,9 +69,12 @@ public class MySQLScheduleDao implements ScheduleDao {
 
   @Override
   public int delete(Schedule schedule) {
+    Map<String, Object> paramMap = new HashMap<>();
+    paramMap.put("scheduleNo", schedule.getNo());
+    paramMap.put("ownerNo", schedule.getOwner().getNo());
 
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
-    return sqlSession.delete("com.bitcamp.myapp.dao.ScheduleDao.delete", schedule.getNo());
+    return sqlSession.delete("com.bitcamp.myapp.dao.ScheduleDao.delete", paramMap);
   }
 
   @Override

@@ -41,16 +41,17 @@ public class ScheduleListServlet implements Servlet {
     out.println("<tbody>");
 
     out.println("<tr><th><소유한 스케줄></th></tr>");
-    for (Object obj : scheduleDao.findAllOwnedSchedule((Member) request.getAttribute("loginUser"))
+    for (Object obj : scheduleDao
+        .findAllOwnedSchedule((Member) request.getSession().getAttribute("loginUser"))
         .toArray()) {
       Schedule sch = (Schedule) obj;
       out.printf(
-          "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
-          sch.getNo(),
-          sch.getNo(),
-          sch.getScheduleTitle(),
-          sch.getStartTime().toString(),
-          sch.getEndTime().toString());
+        "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
+        sch.getNo(),
+        sch.getNo(),
+        sch.getScheduleTitle(),
+        sch.getStartTime().toString(),
+        sch.getEndTime().toString());
     }
 
     out.println("<tr><th><참가한 스케줄></th></tr>");
@@ -59,12 +60,12 @@ public class ScheduleListServlet implements Servlet {
         .toArray()) {
       Schedule sch = (Schedule) obj;
       out.printf(
-          "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
-          sch.getNo(),
-          sch.getNo(),
-          sch.getScheduleTitle(),
-          sch.getStartTime().toString(),
-          sch.getEndTime().toString());
+        "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
+        sch.getNo(),
+        sch.getNo(),
+        sch.getScheduleTitle(),
+        sch.getStartTime().toString(),
+        sch.getEndTime().toString());
     }
   }
 }
