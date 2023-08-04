@@ -61,10 +61,10 @@ eclipse {
     wtp {
         facet {
             facet name: 'jst.java', version: '17'
-            facet name: 'jst.web', version: '4.0'
+            // facet name: 'jst.web', version: '4.0'
         }
         component {
-            //contextPath = '/web'
+            contextPath = '/'
             //deployName = 'web'
         }
     }
