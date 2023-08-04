@@ -18,7 +18,8 @@ public class BoardListServlet extends AbstractServlet {
 
   @Override
   public void service(ServletRequest request, ServletResponse response)
-      throws ServletException, IOException {
+      throws ServletException,
+      IOException {
 
     int category = Integer.parseInt(request.getParameter("category"));
 
