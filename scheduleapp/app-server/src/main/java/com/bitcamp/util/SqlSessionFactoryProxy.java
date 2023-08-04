@@ -18,22 +18,28 @@ public class SqlSessionFactoryProxy implements SqlSessionFactory {
   public void clean() {
     SqlSession sqlSession = sqlSessionBox.get();
     if (sqlSession != null) {
+      sqlSession.close();
       sqlSession.rollback();
       sqlSessionBox.remove();
+      System.out.println("스레드에서 SqlSession 제거");
     }
   }
 
   public SqlSession openSession() {
-    return this.openSession(true);
+    return openSession(true);
   }
 
   public SqlSession openSession(boolean autoCommit) {
+
     SqlSession sqlSession = sqlSessionBox.get();
+
     if (sqlSession == null) {
       sqlSession = original.openSession(autoCommit);
       sqlSessionBox.set(sqlSession);
     }
+
     return sqlSession;
+
   }
 
   public SqlSession openSession(Connection connection) {
@@ -48,15 +54,18 @@ public class SqlSessionFactoryProxy implements SqlSessionFactory {
     return original.openSession(execType);
   }
 
-  public SqlSession openSession(ExecutorType execType, boolean autoCommit) {
+  public SqlSession openSession(ExecutorType execType,
+                                boolean autoCommit) {
     return original.openSession(execType, autoCommit);
   }
 
-  public SqlSession openSession(ExecutorType execType, TransactionIsolationLevel level) {
+  public SqlSession openSession(ExecutorType execType,
+                                TransactionIsolationLevel level) {
     return original.openSession(execType, level);
   }
 
-  public SqlSession openSession(ExecutorType execType, Connection connection) {
+  public SqlSession openSession(ExecutorType execType,
+                                Connection connection) {
     return original.openSession(execType, connection);
   }
 
