@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -14,12 +15,14 @@ import com.bitcamp.myapp.dao.BoardDao;
 import com.bitcamp.myapp.dao.MemberDao;
 import com.bitcamp.myapp.dao.MySQLBoardDao;
 import com.bitcamp.myapp.dao.MySQLMemberDao;
+import com.bitcamp.myapp.dao.MySQLScheduleDao;
 import com.bitcamp.myapp.dao.ScheduleDao;
-import com.bitcamp.util.AbstractServlet;
 import com.bitcamp.util.SqlSessionFactoryProxy;
 
 @WebServlet(value = "/init", loadOnStartup = 1)
-public class InitServlet extends AbstractServlet {
+public class InitServlet extends HttpServlet {
+
+  private static final long serialVersionUID = 1L;
 
   public static SqlSessionFactory sqlSessionFactory;
   public static BoardDao boardDao;
@@ -41,6 +44,7 @@ public class InitServlet extends AbstractServlet {
 
       boardDao = new MySQLBoardDao(sqlSessionFactory);
       memberDao = new MySQLMemberDao(sqlSessionFactory);
+      scheduleDao = new MySQLScheduleDao(sqlSessionFactory);
 
 
     } catch (IOException e) {
@@ -51,11 +55,13 @@ public class InitServlet extends AbstractServlet {
   }
 
   @Override
-  public void service(ServletRequest reqest, ServletResponse response)
+  public void service(ServletRequest request, ServletResponse response)
       throws ServletException, IOException {
 
+    request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
+
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");

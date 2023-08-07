@@ -21,7 +21,7 @@
   </resultMap>
 
   <insert id="insert" parameterType="board">
-    insert into myapp_board(title, content, writer, category)
+    insert into scheduleapp_board(title, content, writer, category)
     values(#{title}, #{content}, #{writer.no}, #{category})
   </insert>
   
@@ -35,7 +35,7 @@
       m.member_no,
       m.name
     from
-      myapp_board as b inner join myapp_member as m on b.writer=m.member_no
+      scheduleapp_board as b inner join scheduleapp_member as m on b.writer=m.member_no
     where
       category=#{categoryNo}
     order by
@@ -53,7 +53,7 @@
       m.member_no,
       m.name
     from
-      myapp_board as b inner join myapp_member as m on b.writer=m.member_no
+      scheduleapp_board as b inner join scheduleapp_member as m on b.writer=m.member_no
     where
       category=#{categoryNo}
       and board_no=#{boardNo}
@@ -61,7 +61,7 @@
   </select>
   
   <update id="updateCount" parameterType="board">
-    update myapp_board set
+    update scheduleapp_board set
       view_count=#{viewCount}
     where
       category=#{category}
@@ -69,7 +69,7 @@
   </update>
     
   <update id="update" parameterType="board">
-    update myapp_board set
+    update scheduleapp_board set
       title=#{title},
       content=#{content},
       view_count=#{viewCount}
@@ -82,7 +82,7 @@
   <delete id="delete" parameterType="board">
     delete
     from
-      myapp_board 
+      scheduleapp_board 
     where 
       board_no=#{no}
       and category=#{category}

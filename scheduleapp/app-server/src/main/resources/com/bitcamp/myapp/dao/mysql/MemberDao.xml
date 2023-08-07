@@ -14,7 +14,7 @@
   </resultMap>
 
   <select id="insert" parameterType="member">
-    insert into myapp_member(name, email, password, gender)
+    insert into scheduleapp_member(name, email, password, gender)
       values(#{name}, #{email}, sha1(#{password}), #{gender})
   </select>
   
@@ -24,7 +24,7 @@
       name, email,
       gender
     from
-      myapp_member
+      scheduleapp_member
     order by name asc
   </select>  
   
@@ -36,7 +36,7 @@
       gender,
       created_date
     from
-      myapp_member
+      scheduleapp_member
     where
       member_no=#{memberNo}
   </select>
@@ -49,14 +49,14 @@
       gender,
       created_date
     from
-      myapp_member
+      scheduleapp_member
     where
       email=#{email}
       and password=sha1(#{password})
   </select>
   
   <update id="update" parameterType="member">
-    update myapp_member set
+    update scheduleapp_member set
       name=#{name},
       email=#{email},
       password=sha1(#{password}),
@@ -66,7 +66,7 @@
   </update>
   
   <delete id="delete" parameterType="int">
-    delete from myapp_member
+    delete from scheduleapp_member
     where
       member_no=#{no}
   </delete>

@@ -2,21 +2,18 @@ package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.myapp.vo.Board;
+import com.bitcamp.myapp.vo.Member;
 
-@WebServlet("/board/list")
-public class BoardListServlet extends HttpServlet {
+@WebServlet("/member/list")
+public class MemberListServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
-
-  SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -26,45 +23,40 @@ public class BoardListServlet extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
-    int category = Integer.parseInt(request.getParameter("category"));
-
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");
     out.println("<meta charset='UTF-8'>");
-    out.println("<title>게시글</title>");
+    out.println("<title>회원</title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글 목록 </h1>");
+    out.println("<h1>회원 목록 </h1>");
     out.println("<div style='margin:5px;'>");
-    out.printf("<a href='/board/form?category=%d'>새 글</a>\n", category);
+    out.println("<a href='/member/form.html'>새 회원</a>\n");
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
-    out.println("   <tr><th>번호</th> <th>제목</th> <th>작성자</th> <th>조회수</th> <th>등록일</th></tr>");
+    out.println("<tr><th>번호</th> <th>이름</th> <th>이메일</th>");
     out.println("</thead>");
-
     out.println("<tbody>");
-    List<Board> list = InitServlet.boardDao.findAll(category);
-    for (Board board : list) {
+
+    // 목록에서 데이터를 대신 꺼내주는 객체를 얻는다.
+    List<Member> list = InitServlet.memberDao.findAll();
+
+    for (Member m : list) {
       out
           .printf(
-              "<tr><td>%d</td> <td><a href='/board/detail?category=%d&no=%d'>%s</a></td> <td>%s</td> <td>%d</td> <td>%s</td></tr>\n",
-              board.getNo(),
-              board.getCategory(),
-              board.getNo(),
-              board.getTitle().length() > 0 ? board.getTitle() : "제목없음",
-              board.getWriter().getName(),
-              board.getViewCount(),
-              dateFormatter.format(board.getCreatedDate()));
+              "<tr><td>%d</td> <td><a href='/member/detail?no=%d'>%s</a></td> <td>%s</td></tr>\n",
+              m.getNo(),
+              m.getNo(),
+              m.getName(),
+              m.getEmail());
     }
+
     out.println("</tbody>");
     out.println("</table>");
     out.println("<a href='/'>메인</a>");
     out.println("</body>");
     out.println("</html>");
   }
-
 }
-
-
