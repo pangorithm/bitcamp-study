@@ -22,6 +22,10 @@ public class BoardUpdateServlet extends AbstractServlet {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) res;
 
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
 
     int category = Integer.parseInt((String) request.getParameter("category"));
@@ -32,8 +36,6 @@ public class BoardUpdateServlet extends AbstractServlet {
     board.setWriter(loginUser);
     board.setCategory(category);
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");

@@ -22,6 +22,10 @@ public class BoardAddServlet extends AbstractServlet {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) res;
 
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
       response.sendRedirect("/auth/form.html");
@@ -36,8 +40,6 @@ public class BoardAddServlet extends AbstractServlet {
     board.setWriter(loginUser);
     board.setCategory(category);
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");

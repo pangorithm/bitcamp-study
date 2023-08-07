@@ -20,6 +20,10 @@ public class MemberUpdateServlet extends AbstractServlet {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) res;
 
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+
     int memberNo = Integer.parseInt(request.getParameter("no"));
 
     Member m = InitServlet.memberDao.findBy(memberNo);
@@ -33,8 +37,6 @@ public class MemberUpdateServlet extends AbstractServlet {
     m.setPassword(request.getParameter("password"));
     m.setGender(request.getParameter("gender").charAt(0));
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");

@@ -21,10 +21,12 @@ public class MemberDetailServlet extends AbstractServlet {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) res;
 
-    Member m = InitServlet.memberDao.findBy(Integer.parseInt(request.getParameter("no")));
-
+    request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
+
+    Member m = InitServlet.memberDao.findBy(Integer.parseInt(request.getParameter("no")));
+
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");

@@ -20,10 +20,12 @@ public class BoardFormServlet extends AbstractServlet {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) res;
 
-    int category = Integer.parseInt((String) request.getParameter("category"));
-
+    request.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
+
+    int category = Integer.parseInt((String) request.getParameter("category"));
+
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");

@@ -21,13 +21,15 @@ public class MemberAddServlet extends AbstractServlet {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) res;
 
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html;charset=UTF-8");
+
     Member member = new Member();
     member.setName(request.getParameter("username"));
     member.setEmail(request.getParameter("email"));
     member.setPassword(request.getParameter("password"));
     member.setGender(request.getParameter("gender").charAt(0));
 
-    response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.println("<!DOCTYPE html>");
     out.println("<html>");
