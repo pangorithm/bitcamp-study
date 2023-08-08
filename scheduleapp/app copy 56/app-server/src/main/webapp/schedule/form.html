@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>비트캠프</title>
+</head>
+<body>
+<h1>스케줄</h1>
+<form action='/schedule/add' method='post'>
+<table border="1">
+<tr>
+  <th>제목</th> <td><input type='text' name='title'></td>
+</tr>
+<tr>
+  <th>시작</th> <td><input type='datetime-local' name='start-time' value='2023-01-01T01:01'></td>
+</tr>
+<tr>
+  <th>종료</th> <td><input type='datetime-local' name='end-time' value='2023-01-01T01:01'></td>
+</tr>
+</table>
+<button>등록</button>
+</form>
+</body>
+</html>
