@@ -21,6 +21,7 @@ public class MemberUpdateServlet extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     int memberNo = Integer.parseInt(request.getParameter("no"));
 
     Member m = InitServlet.memberDao.findBy(memberNo);
@@ -29,9 +30,9 @@ public class MemberUpdateServlet extends HttpServlet {
       return;
     }
 
-    m.setName(request.getParameter("username"));
-    m.setEmail(request.getParameter("email"));
-    m.setPassword(request.getParameter("password"));
+    m.setName(request.getParameter("username").replaceAll("<script", "<s c r i p t"));
+    m.setEmail(request.getParameter("email").replaceAll("<script", "<s c r i p t"));
+    m.setPassword(request.getParameter("password").replaceAll("<script", "<s c r i p t"));
     m.setGender(request.getParameter("gender").charAt(0));
 
     out.println("<!DOCTYPE html>");
@@ -45,8 +46,10 @@ public class MemberUpdateServlet extends HttpServlet {
     out.println("<h1>회원 변경</h1>");
 
     try {
-      if (InitServlet.memberDao.update(m) == 0) {
-        out.println("해당 회원이 없거나 변경 권한이 없습니다.");
+      if (memberNo != loginUser.getNo()) {
+        out.println("본인 계정만 수정 가능합니다.");
+      } else if (InitServlet.memberDao.update(m) == 0) {
+        out.println("해당 회원이 없습니다나.");
       } else {
         InitServlet.sqlSessionFactory.openSession(false).commit();
         out.println("변경했습니다!");

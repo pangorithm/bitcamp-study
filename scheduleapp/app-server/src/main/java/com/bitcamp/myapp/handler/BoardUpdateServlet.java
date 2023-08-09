@@ -27,7 +27,7 @@ public class BoardUpdateServlet extends HttpServlet {
     int category = Integer.parseInt((String) request.getParameter("category"));
     Board board = new Board();
     board.setNo(Integer.parseInt(request.getParameter("no")));
-    board.setTitle(request.getParameter("title"));
+    board.setTitle(request.getParameter("title").replaceAll("<script", "<s c r i p t"));
     board.setContent(request.getParameter("content"));
     board.setWriter(loginUser);
     board.setCategory(category);

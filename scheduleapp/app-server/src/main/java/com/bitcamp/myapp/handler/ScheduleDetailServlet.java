@@ -104,7 +104,7 @@ public class ScheduleDetailServlet extends HttpServlet {
 
         out.println("<form action='/schedule/detail' method='get'>");
         out.printf("<input type='hidden' name='no' value='%d'>", schedule.getNo());
-        out.println("<input type='text' name='addParticipantNo'>");
+        out.println("<input type='number' name='addParticipantNo' min='1'>");
         out.println("<button>추가</button>");
         out.println("</form>");
 

@@ -22,9 +22,9 @@ public class MemberAddServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
 
     Member member = new Member();
-    member.setName(request.getParameter("name"));
-    member.setEmail(request.getParameter("email"));
-    member.setPassword(request.getParameter("password"));
+    member.setName(request.getParameter("name").replaceAll("<script", "<s c r i p t"));
+    member.setEmail(request.getParameter("email").replaceAll("<script", "<s c r i p t"));
+    member.setPassword(request.getParameter("password").replaceAll("<script", "<s c r i p t"));
     member.setGender(request.getParameter("gender").charAt(0));
 
     out.println("<!DOCTYPE html>");
