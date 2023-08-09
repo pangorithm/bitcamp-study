@@ -30,9 +30,9 @@ public class MemberUpdateServlet extends HttpServlet {
       return;
     }
 
-    m.setName(request.getParameter("username").replaceAll("<script", "<s c r i p t"));
-    m.setEmail(request.getParameter("email").replaceAll("<script", "<s c r i p t"));
-    m.setPassword(request.getParameter("password").replaceAll("<script", "<s c r i p t"));
+    m.setName(request.getParameter("username").replaceAll("<script", "<scr!pt"));
+    m.setEmail(request.getParameter("email").replaceAll("<script", "<scr!pt"));
+    m.setPassword(request.getParameter("password").replaceAll("<script", "<scr!pt"));
     m.setGender(request.getParameter("gender").charAt(0));
 
     out.println("<!DOCTYPE html>");

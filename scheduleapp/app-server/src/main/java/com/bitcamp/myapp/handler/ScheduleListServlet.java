@@ -42,34 +42,36 @@ public class ScheduleListServlet extends HttpServlet {
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
-    out.println("<tr><th>번호</th> <th>제목</th> <th>시작</th> <th>종료</th></tr>");
+    out.println("<tr><th>번호</th> <th>제목</th> <th>시작</th> <th>종료</th> <th>스캐줄 매니저</th></tr>");
     out.println("</thead>");
     out.println("<tbody>");
 
-    out.println("<tr><th><소유한 스케줄></th></tr>");
+    out.println("<tr><th><관리 스케줄></th></tr>");
     for (Object obj : InitServlet.scheduleDao.findAllOwnedSchedule(loginUser).toArray()) {
       Schedule sch = (Schedule) obj;
       out
           .printf(
-              "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
+              "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td> <td>%s</td></tr>\n",
               sch.getNo(),
               sch.getNo(),
-              sch.getScheduleTitle(),
+              sch.getScheduleTitle().matches("^\\s+$") ? "제목없음" : sch.getScheduleTitle(),
               sch.getStartTime().toString(),
-              sch.getEndTime().toString());
+              sch.getEndTime().toString(),
+              sch.getOwner().getName());
     }
 
-    out.println("<tr><th><참가한 스케줄></th></tr>");
+    out.println("<tr><th><참가 스케줄></th></tr>");
     for (Object obj : InitServlet.scheduleDao.findAllParticipatedSchedule(loginUser).toArray()) {
       Schedule sch = (Schedule) obj;
       out
           .printf(
-              "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
+              "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td> <td>%s</td></tr>\n",
               sch.getNo(),
               sch.getNo(),
               sch.getScheduleTitle(),
               sch.getStartTime().toString(),
-              sch.getEndTime().toString());
+              sch.getEndTime().toString(),
+              sch.getOwner().getName());
     }
 
     out.println("</tbody>");

@@ -48,7 +48,7 @@ public class MemberListServlet extends HttpServlet {
               "<tr><td>%d</td> <td><a href='/member/detail?no=%d'>%s</a></td> <td>%s</td></tr>\n",
               m.getNo(),
               m.getNo(),
-              m.getName(),
+              m.getName().matches("^\\s+$") ? "이름없음" : m.getName(),
               m.getEmail());
     }
 

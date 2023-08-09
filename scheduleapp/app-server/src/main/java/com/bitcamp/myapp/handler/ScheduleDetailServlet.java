@@ -80,7 +80,11 @@ public class ScheduleDetailServlet extends HttpServlet {
           .printf(
               "<tr><th>종료</th> <td><input type='datetime-local' name='end-time' value='%s'></td></tr>\n",
               schedule.getEndTime());
-      out.printf("<tr><th>스캐줄 매니저</th> <td>%s</td></tr>\n", schedule.getOwner().getName());
+      out
+          .printf(
+              "<tr><th>스캐줄 매니저</th> <td><a href='../member/detail?no=%d'>%s</a></td></tr>\n",
+              schedule.getOwner().getNo(),
+              schedule.getOwner().getName());
       out.println("</table>");
       out.println("<div>");
       out.println("<button>변경</button>");

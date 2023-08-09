@@ -52,7 +52,7 @@ public class BoardListServlet extends HttpServlet {
               board.getNo(),
               board.getCategory(),
               board.getNo(),
-              board.getTitle().length() > 0 ? board.getTitle() : "제목없음",
+              board.getTitle().matches("^\\s+$") ? "제목없음" : board.getTitle(),
               board.getWriter().getName(),
               board.getViewCount(),
               dateFormatter.format(board.getCreatedDate()));

@@ -30,7 +30,9 @@ public class BoardAddServlet extends HttpServlet {
     int category = Integer.parseInt((String) request.getParameter("category"));
 
     Board board = new Board();
-    board.setTitle(request.getParameter("title").replaceAll("<script", "<s c r i p t"));
+    board
+        .setTitle(
+            request.getParameter("title").replaceAll("<script", "<scr!pt").replaceAll("<a", "<@"));
     board.setContent(request.getParameter("content"));
     board.setWriter(loginUser);
     board.setCategory(category);

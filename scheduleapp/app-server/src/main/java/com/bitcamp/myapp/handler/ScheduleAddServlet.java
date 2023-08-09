@@ -25,7 +25,9 @@ public class ScheduleAddServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
 
     Schedule sch = new Schedule();
-    sch.setScheduleTitle(request.getParameter("title").replaceAll("<script", "<s c r i p t"));
+    sch
+        .setScheduleTitle(
+            request.getParameter("title").replaceAll("<script", "<scr!pt").replaceAll("<a", "<@"));
     sch.setStartTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("start-time"))));
     sch.setEndTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("end-time"))));
     sch.setOwner((Member) request.getSession().getAttribute("loginUser"));

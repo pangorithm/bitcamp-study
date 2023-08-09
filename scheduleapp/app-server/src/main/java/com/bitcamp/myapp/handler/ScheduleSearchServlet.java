@@ -47,7 +47,7 @@ public class ScheduleSearchServlet extends HttpServlet {
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
-    out.println("<tr><th>번호</th> <th>제목</th> <th>시작</th> <th>종료</th></tr>");
+    out.println("<tr><th>번호</th> <th>제목</th> <th>시작</th> <th>종료</th> <th>스케줄 매니저</th></tr>");
     out.println("</thead>");
     out.println("<tbody>");
 
@@ -57,7 +57,6 @@ public class ScheduleSearchServlet extends HttpServlet {
     Schedule[] schedules = list.toArray(new Schedule[0]);
 
     for (Schedule sch : schedules) {
-      System.out.println(sch.getScheduleTitle());
       if ((searchTitle.length() > 0
           && sch.getScheduleTitle().matches(String.format(".*%s.*", searchTitle)))
           || (sch.getEndTime().getTime() > searchRangeStart
@@ -65,12 +64,13 @@ public class ScheduleSearchServlet extends HttpServlet {
 
         out
             .printf(
-                "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td></tr>\n",
+                "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td> <td>%s</td></tr>\n",
                 sch.getNo(),
                 sch.getNo(),
                 sch.getScheduleTitle(),
                 sch.getStartTime().toString(),
-                sch.getEndTime().toString());
+                sch.getEndTime().toString(),
+                sch.getOwner().getName());
       }
     }
 
