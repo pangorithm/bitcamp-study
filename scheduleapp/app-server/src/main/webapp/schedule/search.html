@@ -12,13 +12,18 @@
   <th>검색 제목</th> <td><input type='text' name='title'></td>
 </tr>
 <tr>
-  <th>검색 시작 시간</th> <td><input type='datetime-local' name='start-time' value='2023-01-01T01:01'></td>
+  <th>검색 시작 시간</th> <td><input type='datetime-local' name='start-time' class='currentDatetime'></td>
 </tr>
 <tr>
-  <th>검색 종료 시간</th> <td><input type='datetime-local' name='end-time' value='2023-01-01T01:01'></td>
+  <th>검색 종료 시간</th> <td><input type='datetime-local' name='end-time' class='currentDatetime'></td>
 </tr>
 </table>
 <button>검색</button>
 </form>
+<script>
+  document.getElementsByClassName('currentDatetime')[0].value= new Date().toISOString().slice(0, 16);
+  document.getElementsByClassName('currentDatetime')[1].value= new Date().toISOString().slice(0, 16);
+</script>
+
 </body>
 </html>

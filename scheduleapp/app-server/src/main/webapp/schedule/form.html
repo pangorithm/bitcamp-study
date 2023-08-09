@@ -12,13 +12,17 @@
   <th>제목</th> <td><input type='text' name='title'></td>
 </tr>
 <tr>
-  <th>시작</th> <td><input type='datetime-local' name='start-time' value='2023-01-01T01:01'></td>
+  <th>시작</th> <td><input type='datetime-local' name='start-time' class='currentDatetime'></td>
 </tr>
 <tr>
-  <th>종료</th> <td><input type='datetime-local' name='end-time' value='2023-01-01T01:01'></td>
+  <th>종료</th> <td><input type='datetime-local' name='end-time' class='currentDatetime'></td>
 </tr>
 </table>
 <button>등록</button>
 </form>
+<script>
+  document.getElementsByClassName('currentDatetime')[0].value= new Date().toISOString().slice(0, 16);
+  document.getElementsByClassName('currentDatetime')[1].value= new Date().toISOString().slice(0, 16);
+</script>
 </body>
 </html>
