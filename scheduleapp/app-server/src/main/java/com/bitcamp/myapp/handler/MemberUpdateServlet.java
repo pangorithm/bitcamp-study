@@ -46,8 +46,8 @@ public class MemberUpdateServlet extends HttpServlet {
     out.println("<h1>회원 변경</h1>");
 
     try {
-      if (memberNo != loginUser.getNo()) {
-        out.println("본인 계정만 수정 가능합니다.");
+      if (!m.equals(loginUser)) {
+        out.println("로그인한 계정만 수정 가능합니다.");
       } else if (InitServlet.memberDao.update(m) == 0) {
         out.println("해당 회원이 없습니다나.");
       } else {

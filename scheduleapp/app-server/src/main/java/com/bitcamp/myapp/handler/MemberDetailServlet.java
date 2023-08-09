@@ -54,8 +54,12 @@ public class MemberDetailServlet extends HttpServlet {
               m.getEmail());
       out
           .printf(
-              "<tr><th>성별(남자:M/여자:W)</th> <td><input type='text' name='gender' value='%s' maxlength='1'></td></tr>\n",
-              String.valueOf(m.getGender()));
+              "<tr><th>성별</th>\n"
+                  + " <td><select name='gender'>\n"
+                  + " <option value='M' %s>남자</option>\n"
+                  + " <option value='W' %s>여자</option></select></td></tr>\n",
+              (m.getGender() == 'M' ? "selected" : ""),
+              (m.getGender() == 'W' ? "selected" : ""));
       out.println("<tr><th>비밀번호</th> <td><input type='text' name='password' value=''></td></tr>\n");
 
       out.println("</table>");

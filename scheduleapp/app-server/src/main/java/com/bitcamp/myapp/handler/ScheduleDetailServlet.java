@@ -2,6 +2,7 @@ package com.bitcamp.myapp.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +35,14 @@ public class ScheduleDetailServlet extends HttpServlet {
       out.println("해당 번호의 스케줄이 없습니다!");
     } else {
 
+      List<Member> participantList =
+          InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
+      HashSet<Member> memberSet = new HashSet<>();
+      memberSet.add(schedule.getOwner());
+      for (Member p : participantList) {
+        memberSet.add(p);
+      }
+
       out.println("<!DOCTYPE html>");
       out.println("<html>");
       out.println("<head>");
@@ -47,72 +56,83 @@ public class ScheduleDetailServlet extends HttpServlet {
       if (loginUser.equals(schedule.getOwner())) {
         if (addParticipantNo != null) {
           addParticipant(schedule, addParticipantNo, out);
+          participantList = InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
         }
 
         if (deleteParticipantNo != null) {
           deleteParticipant(schedule, deleteParticipantNo, out);
+          participantList = InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
         }
       } else if (deleteParticipantNo != null
           && Integer.parseInt(deleteParticipantNo) == loginUser.getNo()) {
         deleteParticipant(schedule, deleteParticipantNo, out);
-      } else {
+        participantList = InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
+      } else if (addParticipantNo != null) {
         out.println("참가자 수정은 스캐줄 매니저 또는 본인만 가능합니다.");
       }
       out.println("</p>");
 
-
-      out.println("<form action='/schedule/update' method='post'>");
-      out.println("<table border='1'>");
-      out
-          .printf(
-              "<tr><th style='width:120px;'>번호</th> "
-                  + "<td style='width:300px;'><input type='text' name='no' value='%d' readonly='readonly'></td></tr>\n",
-              schedule.getNo());
-      out
-          .printf(
-              "<tr><th>제목</th><td><input type='text' name='title' value='%s'></td></tr>\n",
-              schedule.getScheduleTitle());
-      out
-          .printf(
-              "<tr><th>시작</th> <td><input type='datetime-local' name='start-time' value='%s'></td></tr>\n",
-              schedule.getStartTime());
-      out
-          .printf(
-              "<tr><th>종료</th> <td><input type='datetime-local' name='end-time' value='%s'></td></tr>\n",
-              schedule.getEndTime());
-      out
-          .printf(
-              "<tr><th>스캐줄 매니저</th> <td><a href='../member/detail?no=%d'>%s</a></td></tr>\n",
-              schedule.getOwner().getNo(),
-              schedule.getOwner().getName());
-      out.println("</table>");
-      out.println("<div>");
-      out.println("<button>변경</button>");
-      out.println("<button type='reset'>초기화</button>");
-      if (schedule.getOwner().equals(loginUser)) {
-        out.printf("<a href='/schedule/delete?no=%d'>삭제</a>\n", schedule.getNo());
-      }
-      out.printf("<a href='/schedule/list'>목록</a>\n");
-      out.println("</div>");
-      out.println("</form>");
-      out.println("<div>");
-      out.println("</div>");
-
-      printParticipants(schedule, out, loginUser);
-
-      if (loginUser.getNo() == schedule.getOwner().getNo()) {
-
-        out.println("<br>");
+      if (memberSet.contains(loginUser)) {
+        out.println("<form action='/schedule/update' method='post'>");
+        out.println("<table border='1'>");
+        out
+            .printf(
+                "<tr><th style='width:120px;'>번호</th> "
+                    + "<td style='width:300px;'><input type='text' name='no' value='%d' readonly='readonly'></td></tr>\n",
+                schedule.getNo());
+        out
+            .printf(
+                "<tr><th>제목</th><td><input type='text' name='title' value='%s'></td></tr>\n",
+                schedule.getScheduleTitle());
+        out
+            .printf(
+                "<tr><th>시작</th> <td><input type='datetime-local' name='start-time' value='%s'></td></tr>\n",
+                schedule.getStartTime());
+        out
+            .printf(
+                "<tr><th>종료</th> <td><input type='datetime-local' name='end-time' value='%s'></td></tr>\n",
+                schedule.getEndTime());
+        out
+            .printf(
+                "<tr><th>스캐줄 매니저</th> <td><a href='../member/detail?no=%d'>%s</a></td></tr>\n",
+                schedule.getOwner().getNo(),
+                schedule.getOwner().getName());
+        out.println("</table>");
         out.println("<div>");
-        out.println("추가할 참가자 번호 입력");
-
-        out.println("<form action='/schedule/detail' method='get'>");
-        out.printf("<input type='hidden' name='no' value='%d'>", schedule.getNo());
-        out.println("<input type='number' name='addParticipantNo' min='1'>");
-        out.println("<button>추가</button>");
-        out.println("</form>");
-
+        out.println("<button>변경</button>");
+        out.println("<button type='reset'>초기화</button>");
+        if (schedule.getOwner().equals(loginUser)) {
+          out.printf("<a href='/schedule/delete?no=%d'>삭제</a>\n", schedule.getNo());
+        }
+        out.printf("<a href='/schedule/list'>목록</a>\n");
         out.println("</div>");
+        out.println("</form>");
+        out.println("<div>");
+        out.println("</div>");
+
+        printParticipants(participantList, schedule, out, loginUser);
+
+        if (loginUser.getNo() == schedule.getOwner().getNo()) {
+
+          out.println("<br>");
+          out.println("<div>");
+          out.println("추가할 참가자 번호 입력");
+
+          out.println("<form action='/schedule/detail' method='get'>");
+          out.printf("<input type='hidden' name='no' value='%d'>", schedule.getNo());
+          out.println("<input type='number' name='addParticipantNo' min='1'>");
+          out.println("<button>추가</button>");
+          out.println("</form>");
+
+          out.println("</div>");
+        }
+      } else {
+        out.println("<div>");
+        out.println("스캐줄 매니저 또는 참가자만 조회 가능합니다.");
+        out.println("</div>");
+
+        response.sendRedirect("/schedule/list");
+        return;
       }
 
       out.println("</body>");
@@ -121,11 +141,11 @@ public class ScheduleDetailServlet extends HttpServlet {
 
   }
 
-  private void printParticipants(Schedule schedule, PrintWriter out, Member loginUser)
-      throws IOException {
-
-    List<Member> participantList =
-        InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
+  private void printParticipants(
+      List<Member> participantList,
+      Schedule schedule,
+      PrintWriter out,
+      Member loginUser) throws IOException {
 
     out.println("<br>");
     out.println("<p1>스케줄 참가자 명단</p1><br>");
