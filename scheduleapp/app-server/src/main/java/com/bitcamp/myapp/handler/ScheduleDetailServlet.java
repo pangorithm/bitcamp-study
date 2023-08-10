@@ -179,7 +179,7 @@ public class ScheduleDetailServlet extends HttpServlet {
     out.println("</table>");
   }
 
-  void addParticipant(Schedule schedule, String addParticipantNo, PrintWriter out) {
+  private void addParticipant(Schedule schedule, String addParticipantNo, PrintWriter out) {
     try {
       int result =
           InitServlet.scheduleDao
@@ -199,7 +199,7 @@ public class ScheduleDetailServlet extends HttpServlet {
     }
   }
 
-  void deleteParticipant(Schedule schedule, String deleteParticipantNo, PrintWriter out) {
+  private void deleteParticipant(Schedule schedule, String deleteParticipantNo, PrintWriter out) {
     try {
       int result =
           InitServlet.scheduleDao
