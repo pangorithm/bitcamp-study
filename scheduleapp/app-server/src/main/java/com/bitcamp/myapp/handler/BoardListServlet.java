@@ -40,7 +40,11 @@ public class BoardListServlet extends HttpServlet {
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
-    out.println("   <tr><th>번호</th> <th>제목</th> <th>작성자</th> <th>조회수</th> <th>등록일</th></tr>");
+    out
+        .println(
+            "<tr>"
+                + "<th>번호</th> <th>제목</th> <th>작성자</th> <th>조회수</th> <th>등록일</th> <th>수정일</th>"
+                + "</tr>");
     out.println("</thead>");
 
     out.println("<tbody>");
@@ -48,14 +52,16 @@ public class BoardListServlet extends HttpServlet {
     for (Board board : list) {
       out
           .printf(
-              "<tr><td>%d</td> <td><a href='/board/detail?category=%d&no=%d'>%s</a></td> <td>%s</td> <td>%d</td> <td>%s</td></tr>\n",
+              "<tr><td>%d</td> <td><a href='/board/detail?category=%d&no=%d'>%s</a>"
+                  + "</td> <td>%s</td> <td>%d</td> <td>%s</td> <td>%s</td></tr>\n",
               board.getNo(),
               board.getCategory(),
               board.getNo(),
               board.getTitle().matches("^\\s+$") ? "제목없음" : board.getTitle(),
               board.getWriter().getName(),
               board.getViewCount(),
-              dateFormatter.format(board.getCreatedAt()));
+              dateFormatter.format(board.getCreatedAt()),
+              board.getUpdatedAt() == null ? "-" : dateFormatter.format(board.getUpdatedAt()));
     }
     out.println("</tbody>");
     out.println("</table>");

@@ -66,8 +66,12 @@ public class BoardDetailServlet extends HttpServlet {
       out.printf("<tr><th>조회수</th> <td>%s</td></tr>\n", board.getViewCount());
       out
           .printf(
-              "<tr><th>등록일</th> <td>%s</td></tr>\n",
+              "<tr><th>등록일시</th> <td>%s</td></tr>\n",
               dateFormatter.format(board.getCreatedAt()));
+      out
+          .printf(
+              "<tr><th>수정일시</th> <td>%s</td></tr>\n",
+              board.getUpdatedAt() == null ? "-" : dateFormatter.format(board.getUpdatedAt()));
       out.println("</table>");
       out.println("<div>");
 

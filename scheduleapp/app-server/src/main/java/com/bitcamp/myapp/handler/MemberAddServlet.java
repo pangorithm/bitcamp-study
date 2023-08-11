@@ -26,6 +26,7 @@ public class MemberAddServlet extends HttpServlet {
     member.setEmail(request.getParameter("email").replaceAll("<script", "<scr!pt"));
     member.setPassword(request.getParameter("password").replaceAll("<script", "<scr!pt"));
     member.setGender(request.getParameter("gender").charAt(0));
+    member.setTel(request.getParameter("tel"));
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");

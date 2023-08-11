@@ -54,6 +54,10 @@ public class MemberDetailServlet extends HttpServlet {
               m.getEmail());
       out
           .printf(
+              "<tr><th>전화번호</th> <td><input type='text' name='tel' value='%s'></td></tr>\n",
+              m.getTel());
+      out
+          .printf(
               "<tr><th>성별</th>\n"
                   + " <td><select name='gender'>\n"
                   + " <option value='M' %s>남자</option>\n"

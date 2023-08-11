@@ -86,6 +86,10 @@ public class ScheduleDetailServlet extends HttpServlet {
                 schedule.getTitle());
         out
             .printf(
+                "<tr><th>제목</th><td><input type='text' name='content' value='%s'></td></tr>\n",
+                schedule.getContent());
+        out
+            .printf(
                 "<tr><th>시작</th> <td><input type='datetime-local' name='start-time' value='%s'></td></tr>\n",
                 schedule.getStartTime());
         out

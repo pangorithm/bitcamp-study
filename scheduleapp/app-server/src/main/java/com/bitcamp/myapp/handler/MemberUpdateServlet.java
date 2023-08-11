@@ -32,7 +32,11 @@ public class MemberUpdateServlet extends HttpServlet {
 
     m.setName(request.getParameter("username").replaceAll("<script", "<scr!pt"));
     m.setEmail(request.getParameter("email").replaceAll("<script", "<scr!pt"));
-    m.setPassword(request.getParameter("password").replaceAll("<script", "<scr!pt"));
+    m.setTel(request.getParameter("tel").replaceAll("<script", "<scr!pt"));
+    String newPassword = request.getParameter("password");
+    if (newPassword != null && newPassword.length() > 0) {
+      m.setPassword(newPassword);
+    }
     m.setGender(request.getParameter("gender").charAt(0));
 
     out.println("<!DOCTYPE html>");
