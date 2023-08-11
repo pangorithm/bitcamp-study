@@ -13,6 +13,14 @@
     <result column="gender"         property="gender"/>
     <result column="created_at"   property="createdAt"/>    
   </resultMap>
+  
+  <resultMap type="memberAddress" id="addressMap">
+    <id     column="mano"      property="no"/>
+    <result column="type"           property="addressType"/>
+    <result column="post_addr"          property="postAddress"/>
+    <result column="basic_addr"       property="basicAddress"/>
+    <result column="detail_addr"            property="detailAddress"/>
+  </resultMap>
 
   <select id="insert" parameterType="member">
     insert into sch_member(name, email, password, tel, gender)
@@ -75,5 +83,21 @@
     where
       mno=#{no}
   </delete>
+      
+  <select id ="findAllAddress" parameterType="int" resultMap="addressMap">
+    select
+      addr.mano,
+      addr.mno,
+      addr.post_addr,
+      addr.basic_addr,
+      addr.detail_addr,
+      t.type
+    from
+      sch_member_addr as addr
+        inner join sch_addr_type as t
+        on addr.atno = t.atno
+    where
+      addr.mno=#{memberNo}
+  </select> 
   
 </mapper>

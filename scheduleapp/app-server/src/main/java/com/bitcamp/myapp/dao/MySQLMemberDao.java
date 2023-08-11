@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import com.bitcamp.myapp.vo.Member;
+import com.bitcamp.myapp.vo.MemberAddress;
 
 public class MySQLMemberDao implements MemberDao {
 
@@ -48,6 +49,13 @@ public class MySQLMemberDao implements MemberDao {
     SqlSession sqlSession = sqlSessionFactory.openSession(false);
     return sqlSession.update("com.bitcamp.myapp.dao.MemberDao.delete", no);
   }
+
+  @Override
+  public List<MemberAddress> getMembersAddressList(int memberNo) {
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    return sqlSession.selectList("com.bitcamp.myapp.dao.MemberDao.findAllAddress", memberNo);
+  }
+
 
 
 }
