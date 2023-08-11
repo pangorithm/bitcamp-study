@@ -11,7 +11,8 @@ public class Schedule implements Serializable {
   public static int scheduleId = 1;
 
   private int no;
-  private String scheduleTitle;
+  private String title;
+  private String content;
   private Timestamp startTime;
   private Timestamp endTime;
   private Member owner;
@@ -43,12 +44,12 @@ public class Schedule implements Serializable {
     this.no = no;
   }
 
-  public String getScheduleTitle() {
-    return scheduleTitle;
+  public String getTitle() {
+    return title;
   }
 
-  public void setScheduleTitle(String scheduleTitle) {
-    this.scheduleTitle = scheduleTitle;
+  public void setTitle(String scheduleTitle) {
+    this.title = scheduleTitle;
   }
 
   public Timestamp getStartTime() {
@@ -73,6 +74,14 @@ public class Schedule implements Serializable {
 
   public void setOwner(Member owner) {
     this.owner = owner;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
   }
 
 }

@@ -1,16 +1,16 @@
 -- 회원 데이터 삽입
-INSERT INTO sch_member (name, email, password, tel)
+INSERT INTO sch_member (name, email, password, tel, gender)
 VALUES
-  ('홍길동', 'hong@example.com', 'password1', '123-4567'),
-  ('John Doe', 'john@example.com', 'password2', '987-6543'),
-  ('김영희', 'younghee@example.com', 'password3', '555-1234'),
-  ('Jane Smith', 'jane@example.com', 'password4', '777-8888'),
-  ('이철수', 'chulsoo@example.com', 'password5', '111-2222'),
-  ('Michael Johnson', 'michael@example.com', 'password6', '333-4444'),
-  ('박미영', 'miyoung@example.com', 'password7', '999-0000'),
-  ('Emily Brown', 'emily@example.com', 'password8', '666-7777'),
-  ('정재호', 'jaeho@example.com', 'password9', '222-3333'),
-  ('William Lee', 'william@example.com', 'password10', '444-5555');
+  ('홍길동', 'hong@example.com', sha1('1111'), '123-4567', 'M'),
+  ('aaa', 'aaa@test.com', sha1('1111'), '987-6543', 'M'),
+  ('김영희', 'younghee@example.com', sha1('1111'), '555-1234', 'W'),
+  ('Jane Smith', 'jane@example.com', sha1('1111'), '777-8888', 'W'),
+  ('이철수', 'chulsoo@example.com', sha1('1111'), '111-2222', 'M'),
+  ('Michael Johnson', 'michael@example.com', sha1('1111'), '333-4444', 'M'),
+  ('박미영', 'miyoung@example.com', sha1('1111'), '999-0000', 'W'),
+  ('Emily Brown', 'emily@example.com', sha1('1111'), '666-7777', 'W'),
+  ('정재호', 'jaeho@example.com', sha1('1111'), '222-3333', 'M'),
+  ('William Lee', 'william@example.com', sha1('1111'), '444-5555', 'M');
 
 -- 일정 데이터 삽입
 INSERT INTO sch_schedule (title, content, start_time, end_time, mno)
@@ -29,16 +29,16 @@ VALUES
 -- 게시글 데이터 삽입
 INSERT INTO sch_board (mno, title, content, created_at, category)
 VALUES
-  (1, '첫 번째 게시글', '안녕하세요. 첫 번째 게시글입니다.', '2023-08-11 09:00:00', '공지사항'),
-  (2, 'Hello World', 'This is my first post.', '2023-08-11 10:00:00', 'News'),
-  (3, '동호회 소식', '이번 주 동호회 소식을 안내합니다.', '2023-08-11 11:00:00', '소식'),
-  (4, 'Project Update', 'Here is the latest project update.', '2023-08-11 12:00:00', 'Projects'),
-  (5, '질문', '무엇을 물어볼까요?', '2023-08-11 13:00:00', 'Q&A'),
-  (6, 'Meeting Minutes', 'Minutes of the recent meeting.', '2023-08-11 14:00:00', 'Meetings'),
-  (7, '일정 공유', '다음 주 일정을 공유합니다.', '2023-08-11 15:00:00', '일정'),
-  (8, 'New Product Launch', 'Introducing our latest product.', '2023-08-11 16:00:00', 'Products'),
-  (9, '한국어 게시글', '안녕하세요. 한국어 게시글입니다.', '2023-08-11 17:00:00', '공지사항'),
-  (10, 'English Post', 'Greetings from the English blog.', '2023-08-11 18:00:00', 'News');
+  (1, '첫 번째 게시글', '안녕하세요. 첫 번째 게시글입니다.', '2023-08-11 09:00:00', '1'),
+  (2, 'Hello World', 'This is my first post.', '2023-08-11 10:00:00', '1'),
+  (3, '동호회 소식', '이번 주 동호회 소식을 안내합니다.', '2023-08-11 11:00:00', '2'),
+  (4, 'Project Update', 'Here is the latest project update.', '2023-08-11 12:00:00', '2'),
+  (5, '질문', '무엇을 물어볼까요?', '2023-08-11 13:00:00', '1'),
+  (6, 'Meeting Minutes', 'Minutes of the recent meeting.', '2023-08-11 14:00:00', '1'),
+  (7, '일정 공유', '다음 주 일정을 공유합니다.', '2023-08-11 15:00:00', '1'),
+  (8, 'New Product Launch', 'Introducing our latest product.', '2023-08-11 16:00:00', '2'),
+  (9, '한국어 게시글', '안녕하세요. 한국어 게시글입니다.', '2023-08-11 17:00:00', '2'),
+  (10, 'English Post', 'Greetings from the English blog.', '2023-08-11 18:00:00', '1');
 
 -- 댓글 데이터 삽입
 INSERT INTO sch_comment (bno, mno, content, created_at)
@@ -68,6 +68,12 @@ VALUES
   (9, 8),
   (10, 10);
 
+-- 주소 유형 데이터 삽입
+INSERT INTO sch_addr_type (type)
+VALUES
+  ('Home'),
+  ('Work');
+
 -- 회원주소 데이터 삽입
 INSERT INTO sch_member_addr (mno, atno, post_addr, basic_addr, detail_addr)
 VALUES
@@ -81,12 +87,6 @@ VALUES
   (8, 2, '44444', 'San Francisco', '101 Pine St'),
   (9, 1, '55555', '서울시 영등포구', '여의도동 555-666'),
   (10, 2, '66666', 'Houston', '222 Maple St');
-
--- 주소 유형 데이터 삽입
-INSERT INTO sch_addr_type (type)
-VALUES
-  ('Home'),
-  ('Work');
 
 -- 게시글첨부파일 데이터 삽입
 INSERT INTO sch_board_file (bno, filepath)

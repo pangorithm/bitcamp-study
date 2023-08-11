@@ -5,70 +5,75 @@
 <mapper namespace="com.bitcamp.myapp.dao.MemberDao">
 
   <resultMap type="member" id="memberMap">
-    <id     column="member_no"      property="no"/>
+    <id     column="mno"      property="no"/>
     <result column="name"           property="name"/>
     <result column="email"          property="email"/>
     <result column="password"       property="password"/>
+    <result column="tel"            property="tel"/>
     <result column="gender"         property="gender"/>
-    <result column="created_date"   property="createdDate"/>    
+    <result column="created_at"   property="createdAt"/>    
   </resultMap>
 
   <select id="insert" parameterType="member">
-    insert into scheduleapp_member(name, email, password, gender)
-      values(#{name}, #{email}, sha1(#{password}), #{gender})
+    insert into sch_member(name, email, password, tel, gender)
+      values(#{name}, #{email}, sha1(#{password}), #{tel}, #{gender})
   </select>
   
   <select id ="findAll"  resultMap="memberMap">
     select
-      member_no,
-      name, email,
+      mno,
+      name,
+      email,
       gender
     from
-      scheduleapp_member
+      sch_member
     order by name asc
   </select>  
   
   <select id ="findBy" parameterType="int" resultMap="memberMap">
     select
-      member_no,
+      mno,
       name,
       email,
+      tel,
       gender,
-      created_date
+      created_at
     from
-      scheduleapp_member
+      sch_member
     where
-      member_no=#{memberNo}
+      mno=#{memberNo}
   </select>
     
   <select id ="findByEmailAndPassword" parameterType="member" resultMap="memberMap">
     select
-      member_no,
+      mno,
       name,
       email,
+      tel,
       gender,
-      created_date
+      created_at
     from
-      scheduleapp_member
+      sch_member
     where
       email=#{email}
       and password=sha1(#{password})
   </select>
   
   <update id="update" parameterType="member">
-    update scheduleapp_member set
+    update sch_member set
       name=#{name},
       email=#{email},
       password=sha1(#{password}),
-      gender=#{gender}
+      gender=#{gender},
+      tel=#{tel}
     where
-      member_no=#{no}
+      mno=#{no}
   </update>
   
   <delete id="delete" parameterType="int">
-    delete from scheduleapp_member
+    delete from sch_member
     where
-      member_no=#{no}
+      mno=#{no}
   </delete>
   
 </mapper>

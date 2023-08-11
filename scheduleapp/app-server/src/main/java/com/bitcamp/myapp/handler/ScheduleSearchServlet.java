@@ -58,7 +58,7 @@ public class ScheduleSearchServlet extends HttpServlet {
 
     for (Schedule sch : schedules) {
       if ((searchTitle.length() > 0
-          && sch.getScheduleTitle().matches(String.format(".*%s.*", searchTitle)))
+          && sch.getTitle().matches(String.format(".*%s.*", searchTitle)))
           || (sch.getEndTime().getTime() > searchRangeStart
               && sch.getStartTime().getTime() < searchRangeEnd)) {
 
@@ -67,7 +67,7 @@ public class ScheduleSearchServlet extends HttpServlet {
                 "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td> <td>%s</td></tr>\n",
                 sch.getNo(),
                 sch.getNo(),
-                sch.getScheduleTitle(),
+                sch.getTitle(),
                 sch.getStartTime().toString(),
                 sch.getEndTime().toString(),
                 sch.getOwner().getName());

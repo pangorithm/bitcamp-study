@@ -15,8 +15,9 @@ public class Member implements Serializable {
   private String name;
   private String email;
   private String password;
+  private String tel;
   private char gender;
-  private Date createdDate;
+  private Date createdAt;
 
   @Override
   public int hashCode() {
@@ -75,12 +76,20 @@ public class Member implements Serializable {
     this.gender = gender;
   }
 
-  public Date getCreatedDate() {
-    return createdDate;
+  public Date getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedDate(Date createdDate) {
-    this.createdDate = createdDate;
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public String getTel() {
+    return tel;
+  }
+
+  public void setTel(String tel) {
+    this.tel = tel;
   }
 
 }

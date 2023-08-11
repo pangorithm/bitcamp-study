@@ -54,7 +54,7 @@ public class ScheduleListServlet extends HttpServlet {
               "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td> <td>%s</td></tr>\n",
               sch.getNo(),
               sch.getNo(),
-              sch.getScheduleTitle().matches("^\\s+$") ? "제목없음" : sch.getScheduleTitle(),
+              sch.getTitle().matches("^\\s+$") ? "제목없음" : sch.getTitle(),
               sch.getStartTime().toString(),
               sch.getEndTime().toString(),
               sch.getOwner().getName());
@@ -68,7 +68,7 @@ public class ScheduleListServlet extends HttpServlet {
               "<tr><td>%d</td> <td><a href='/schedule/detail?no=%d'>%s</a></td> <td>%s</td> <td>%s</td> <td>%s</td></tr>\n",
               sch.getNo(),
               sch.getNo(),
-              sch.getScheduleTitle(),
+              sch.getTitle(),
               sch.getStartTime().toString(),
               sch.getEndTime().toString(),
               sch.getOwner().getName());

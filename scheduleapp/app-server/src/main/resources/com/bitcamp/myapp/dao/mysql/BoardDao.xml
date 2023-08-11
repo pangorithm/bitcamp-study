@@ -6,86 +6,89 @@
 
   <!-- 결과 레코드의 컬럼 값을 자바 객체에 어떻게 담을 것인지 설정한다. -->
   <resultMap type="board" id="boardMap">
-    <id     column="board_no"       property="no"/>
+    <id     column="bno"            property="no"/>
     <result column="title"          property="title"/>
     <result column="content"        property="content"/>
     <result column="view_count"     property="viewCount"/>
-    <result column="created_date"   property="createdDate"/>
+    <result column="created_at"     property="createdAt"/>
+    <result column="updated_at"     property="updatedAt"/>
     <result column="category"       property="category"/>
     
     <association property="writer" javaType="member">
-      <id     column="member_no"    property="no"/>
+      <id     column="mno"          property="no"/>
       <result column="name"         property="name"/>
     </association>
     
   </resultMap>
 
   <insert id="insert" parameterType="board">
-    insert into scheduleapp_board(title, content, writer, category)
+    insert into sch_board(title, content, mno, category)
     values(#{title}, #{content}, #{writer.no}, #{category})
   </insert>
   
   <select id="findAll" parameterType="int" resultMap="boardMap">
     select
-      b.board_no,
+      b.bno,
       b.title,
       b.view_count,
-      b.created_date,
+      b.created_at,
+      b.updated_at,
       b.category,
-      m.member_no,
+      m.mno,
       m.name
     from
-      scheduleapp_board as b inner join scheduleapp_member as m on b.writer=m.member_no
+      sch_board as b inner join sch_member as m on b.mno=m.mno
     where
       category=#{categoryNo}
     order by
-      board_no desc
+      bno desc
   </select>
   
   <select id="findBy" parameterType="map" resultMap="boardMap">
     select
-      b.board_no,
+      b.bno,
       b.title,
       b.content,
       b.view_count,
-      b.created_date,
+      b.created_at,
+      b.updated_at,
       b.category,
-      m.member_no,
+      m.mno,
       m.name
     from
-      scheduleapp_board as b inner join scheduleapp_member as m on b.writer=m.member_no
+      sch_board as b inner join sch_member as m on b.mno=m.mno
     where
       category=#{categoryNo}
-      and board_no=#{boardNo}
+      and bno=#{boardNo}
 
   </select>
   
   <update id="updateCount" parameterType="board">
-    update scheduleapp_board set
+    update sch_board set
       view_count=#{viewCount}
     where
       category=#{category}
-      and board_no=#{no}
+      and bno=#{no}
   </update>
     
   <update id="update" parameterType="board">
-    update scheduleapp_board set
+    update sch_board set
       title=#{title},
       content=#{content}
     where
-      board_no=#{no}
+      bno=#{no}
       and category=#{category}
-      and writer=#{writer.no}
+      and mno=#{writer.no}
   </update>
   
   <delete id="delete" parameterType="board">
     delete
     from
-      scheduleapp_board 
+      sch_board 
     where 
-      board_no=#{no}
+      bno=#{no}
       and category=#{category}
-      and writer=#{writer.no}
+      and mno=#{writer.no}
   </delete>
   
 </mapper>

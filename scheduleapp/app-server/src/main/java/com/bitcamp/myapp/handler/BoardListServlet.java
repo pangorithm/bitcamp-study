@@ -55,7 +55,7 @@ public class BoardListServlet extends HttpServlet {
               board.getTitle().matches("^\\s+$") ? "제목없음" : board.getTitle(),
               board.getWriter().getName(),
               board.getViewCount(),
-              dateFormatter.format(board.getCreatedDate()));
+              dateFormatter.format(board.getCreatedAt()));
     }
     out.println("</tbody>");
     out.println("</table>");

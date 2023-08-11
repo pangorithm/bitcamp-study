@@ -26,7 +26,7 @@ public class ScheduleAddServlet extends HttpServlet {
 
     Schedule sch = new Schedule();
     sch
-        .setScheduleTitle(
+        .setTitle(
             request.getParameter("title").replaceAll("<script", "<scr!pt").replaceAll("<a", "<@"));
     sch.setStartTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("start-time"))));
     sch.setEndTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("end-time"))));

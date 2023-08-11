@@ -55,7 +55,8 @@ public class MySQLScheduleDao implements ScheduleDao {
   @Override
   public int update(Schedule schedule) {
     Map<String, Object> paramMap = new HashMap<>();
-    paramMap.put("scheduleTitle", schedule.getScheduleTitle());
+    paramMap.put("title", schedule.getTitle());
+    paramMap.put("content", schedule.getContent());
     paramMap.put("startTime", schedule.getStartTime().toString());
     paramMap.put("endTime", schedule.getEndTime().toString());
     paramMap.put("scheduleNo", schedule.getNo());

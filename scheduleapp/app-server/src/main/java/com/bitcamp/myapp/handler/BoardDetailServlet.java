@@ -67,7 +67,7 @@ public class BoardDetailServlet extends HttpServlet {
       out
           .printf(
               "<tr><th>등록일</th> <td>%s</td></tr>\n",
-              dateFormatter.format(board.getCreatedDate()));
+              dateFormatter.format(board.getCreatedAt()));
       out.println("</table>");
       out.println("<div>");
 

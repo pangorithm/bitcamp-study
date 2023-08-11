@@ -39,11 +39,13 @@ DROP TABLE IF EXISTS sch_comment_file RESTRICT;
 
 -- 회원
 CREATE TABLE sch_member (
-  mno      INTEGER     NOT NULL COMMENT '회원번호', -- 회원번호
-  name     VARCHAR(50) NOT NULL COMMENT '이름', -- 이름
-  email    VARCHAR(40) NOT NULL COMMENT '이메일', -- 이메일
-  password VARCHAR(40) NOT NULL COMMENT '비밀번호', -- 비밀번호
-  tel      VARCHAR(30) NULL     COMMENT '전화번호' -- 전화번호
+  mno        INTEGER     NOT NULL COMMENT '회원번호', -- 회원번호
+  name       VARCHAR(50) NOT NULL COMMENT '이름', -- 이름
+  email      VARCHAR(40) NOT NULL COMMENT '이메일', -- 이메일
+  password   VARCHAR(40) NOT NULL COMMENT '비밀번호', -- 비밀번호
+  tel        VARCHAR(30) NULL     COMMENT '전화번호', -- 전화번호
+  gender     VARCHAR(10) NULL     COMMENT '성별', -- 성별
+  created_at DATE        NOT NULL DEFAULT (current_date()) COMMENT '가입일' -- 가입일
 )
 COMMENT '회원';
 
@@ -114,6 +116,7 @@ CREATE TABLE sch_board (
   mno        INTEGER     NOT NULL COMMENT '작성자번호', -- 작성자번호
   title      VARCHAR(50) NOT NULL COMMENT '제목', -- 제목
   content    MEDIUMTEXT  NOT NULL COMMENT '내용', -- 내용
+  view_count INTEGER     NOT NULL DEFAULT 0 COMMENT '조회수', -- 조회수
   created_at DATETIME    NOT NULL DEFAULT (current_date()) COMMENT '작성일시', -- 작성일시
   updated_at DATETIME    NULL     COMMENT '수정일시', -- 수정일시
   category   VARCHAR(10) NOT NULL COMMENT '게시판 분류' -- 카테고리

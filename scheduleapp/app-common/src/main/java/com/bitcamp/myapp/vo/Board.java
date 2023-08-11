@@ -11,13 +11,12 @@ public class Board implements Serializable {
   public static int boardId = 1;
 
   private int no;
+  private Member writer;
   private String title;
   private String content;
-  private Member writer;
-  private String password;
-
   private int viewCount;
-  private Timestamp createdDate;
+  private Timestamp createdAt;
+  private Timestamp updatedAt;
   private int category;
 
   @Override
@@ -69,14 +68,6 @@ public class Board implements Serializable {
     this.writer = writer;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
   public int getViewCount() {
     return viewCount;
   }
@@ -85,12 +76,12 @@ public class Board implements Serializable {
     this.viewCount = viewCount;
   }
 
-  public Timestamp getCreatedDate() {
-    return createdDate;
+  public Timestamp getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedDate(Timestamp createdDate) {
-    this.createdDate = createdDate;
+  public void setCreatedAt(Timestamp createdAt) {
+    this.createdAt = createdAt;
   }
 
   public int getCategory() {
@@ -99,6 +90,14 @@ public class Board implements Serializable {
 
   public void setCategory(int category) {
     this.category = category;
+  }
+
+  public Timestamp getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(Timestamp updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
 }
