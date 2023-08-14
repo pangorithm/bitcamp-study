@@ -5,7 +5,8 @@ import java.util.Objects;
 public class MemberAddress {
 
   private int no;
-  private String addressType;
+  private int mno;
+  private AddressType addressType;
   private String postAddress;
   private String basicAddress;
   private String detailAddress;
@@ -35,11 +36,19 @@ public class MemberAddress {
     this.no = no;
   }
 
-  public String getAddressType() {
+  public int getMno() {
+    return mno;
+  }
+
+  public void setMno(int mno) {
+    this.mno = mno;
+  }
+
+  public AddressType getAddressType() {
     return addressType;
   }
 
-  public void setAddressType(String addressType) {
+  public void setAddressType(AddressType addressType) {
     this.addressType = addressType;
   }
 

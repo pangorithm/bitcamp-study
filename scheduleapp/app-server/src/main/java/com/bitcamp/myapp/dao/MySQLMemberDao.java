@@ -1,8 +1,10 @@
 package com.bitcamp.myapp.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import com.bitcamp.myapp.vo.AddressType;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.MemberAddress;
 
@@ -56,6 +58,27 @@ public class MySQLMemberDao implements MemberDao {
     return sqlSession.selectList("com.bitcamp.myapp.dao.MemberDao.findAllAddress", memberNo);
   }
 
+  @Override
+  public List<AddressType> findAllAddressType() {
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    return sqlSession.selectList("com.bitcamp.myapp.dao.MemberDao.findAllAddressType");
+  }
 
+  @Override
+  public void insertMemberAddress(MemberAddress memberAddress) {
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    sqlSession.insert("com.bitcamp.myapp.dao.MemberDao.insertMemberAddress", memberAddress);
+
+  }
+
+  @Override
+  public int deleteMemberAddress(int loginUserNo, int mano) {
+    HashMap<String, Object> map = new HashMap<>();
+    map.put("loginUserNo", loginUserNo);
+    map.put("mano", mano);
+    SqlSession sqlSession = sqlSessionFactory.openSession(false);
+    return sqlSession.update("com.bitcamp.myapp.dao.MemberDao.deleteMemberAddress", map);
+
+  }
 
 }

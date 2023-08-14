@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.bitcamp.myapp.vo.AddressType;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.MemberAddress;
 
@@ -92,12 +93,14 @@ public class MemberDetailServlet extends HttpServlet {
       List<MemberAddress> adressList = InitServlet.memberDao.getMembersAddressList(m.getNo());
       out.println("<tr> <th>유형</th> <th>우편번호</th> <th>기본주소</th> <th>상세주소</th></tr>");
       for (MemberAddress maddr : adressList) {
-        out.println("<form action='/member/몰루?' method='post'>");
+        out.println("<form action='/member/address/delete' method='post'>");
+        out.printf("<input type='hidden' name='memberNo' value='%d'>\n", m.getNo());
+        out.printf("<input type='hidden' name='mano' value='%d'>\n", maddr.getNo());
         out
             .printf(
                 "<tr> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> "
                     + "<td><button>삭제</button></td>\n",
-                maddr.getAddressType(),
+                maddr.getAddressType().getType(),
                 maddr.getPostAddress(),
                 maddr.getBasicAddress(),
                 maddr.getDetailAddress());
@@ -105,8 +108,19 @@ public class MemberDetailServlet extends HttpServlet {
       }
     }
     out.println("</table>");
-    out.println("<form action='/member/몰루?' method='post'>");
+
+    out.println("<form action='/member/address/add' method='post'><br>");
+    out.printf("<input type='hidden' name='memberNo' value='%d'>\n", m.getNo());
+    out.println("<select name='addressType'>");
+    List<AddressType> addressTypeList = InitServlet.memberDao.findAllAddressType();
+    for (AddressType t : addressTypeList) {
+      out.printf("<option value='%d'>%s</option>\n", t.getNo(), t.getType());
+    }
+    out.println("</select><br>");
     out.println("우편번호 <input type='text' name='postAddress'><br>");
+    out.println("기본주소 <input type='text' name='basicAddr'><br>");
+    out.println("상세주소 <input type='text' name='detailAddr'><br>");
+    out.println("<button>추가</button><br>");
     out.println("</form>");
     out.println("</div>");
 
