@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 
@@ -68,7 +69,15 @@ public class BoardDetailServlet extends HttpServlet {
           .printf(
               "<tr><th>등록일</th> <td>%s</td></tr>\n",
               dateFormatter.format(board.getCreatedDate()));
+      out.println("<tr><th>첨부파일</th><td>\n");
+
+      for (AttachedFile file : board.getAttachedFiles()) {
+        out.printf("<a href='/upload/board/%s'>%1$s</a><br>\n", file.getFilePath());
+      }
+      out.println("</td></tr>\n");
+
       out.println("</table>");
+
       out.println("<div>");
 
       if (loginUser.getNo() == board.getWriter().getNo()) {

@@ -7,9 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import bitcamp.myapp.vo.Member;
 
-@WebServlet("/board/form")
-public class BoardFormServlet extends HttpServlet {
+@WebServlet("/index.html")
+public class HomeServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
 
@@ -19,28 +20,29 @@ public class BoardFormServlet extends HttpServlet {
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
-
-    int category = Integer.parseInt((String) request.getParameter("category"));
-
+    out.println("<!DOCTYPE html>");
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");
-    out.println("<meta charset='EUC-KR'>");
+    out.println("<meta charset='UTF-8'>");
     out.println("<title>비트캠프</title>");
     out.println("</head>");
     out.println("<body>");
-    out.println("<h1>게시글</h1>");
-    out.println("<form action='/board/add' method='post' enctype='multipart/form-data'>");
-    out.println("제목 <input type='text' name='title'><br>");
-    out.println("내용 <textarea name='content'></textarea><br>");
-    out.println("파일 <input type='file' name='files' multiple><br>");
-    out.printf("<input type='hidden' name='category' value='%d'>\n", category);
-    out.println("<button>등록</button>");
-    out.println("</form>");
+    out.println("<h1>myApp</h1>");
+    out.println("<ul>");
+    out.println("  <li><a href='/member/list'>회원</a></li>");
+    out.println("  <li><a href='/board/list?category=1'>게시판</a></li>");
+    out.println("  <li><a href='/board/list?category=2'>독서록</a></li>");
+
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    if (loginUser == null) {
+      out.println("  <li><a href='/auth/form.html'>로그인</a></li>");
+    } else {
+      out.printf("  <li>%s <a href='/auth/logout'>로그아웃</a></li>", loginUser.getName());
+    }
+    out.println("</ul>");
     out.println("</body>");
     out.println("</html>");
+
   }
-
 }
-
-
