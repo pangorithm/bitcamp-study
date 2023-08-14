@@ -87,7 +87,6 @@
   <select id ="findAllAddress" parameterType="int" resultMap="addressMap">
     select
       addr.mano,
-      addr.mno,
       addr.post_addr,
       addr.basic_addr,
       addr.detail_addr,

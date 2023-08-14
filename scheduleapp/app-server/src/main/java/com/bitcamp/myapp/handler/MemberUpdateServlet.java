@@ -23,6 +23,7 @@ public class MemberUpdateServlet extends HttpServlet {
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     int memberNo = Integer.parseInt(request.getParameter("no"));
+    String newPassword = request.getParameter("password");
 
     Member m = InitServlet.memberDao.findBy(memberNo);
     if (m == null) {
@@ -33,10 +34,7 @@ public class MemberUpdateServlet extends HttpServlet {
     m.setName(request.getParameter("username").replaceAll("<script", "<scr!pt"));
     m.setEmail(request.getParameter("email").replaceAll("<script", "<scr!pt"));
     m.setTel(request.getParameter("tel").replaceAll("<script", "<scr!pt"));
-    String newPassword = request.getParameter("password");
-    if (newPassword != null && newPassword.length() > 0) {
-      m.setPassword(newPassword);
-    }
+    m.setPassword(newPassword);
     m.setGender(request.getParameter("gender").charAt(0));
 
     out.println("<!DOCTYPE html>");
@@ -50,13 +48,17 @@ public class MemberUpdateServlet extends HttpServlet {
     out.println("<h1>회원 변경</h1>");
 
     try {
-      if (!m.equals(loginUser)) {
-        out.println("로그인한 계정만 수정 가능합니다.");
-      } else if (InitServlet.memberDao.update(m) == 0) {
-        out.println("해당 회원이 없습니다나.");
+      if (newPassword == null || newPassword.length() == 0) {
+        out.println("변경할 비밀번호를 입력해주세요.");
       } else {
-        InitServlet.sqlSessionFactory.openSession(false).commit();
-        out.println("변경했습니다!");
+        if (!m.equals(loginUser)) {
+          out.println("로그인한 계정만 수정 가능합니다.");
+        } else if (InitServlet.memberDao.update(m) == 0) {
+          out.println("해당 회원이 없습니다나.");
+        } else {
+          InitServlet.sqlSessionFactory.openSession(false).commit();
+          out.println("변경했습니다!");
+        }
       }
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
