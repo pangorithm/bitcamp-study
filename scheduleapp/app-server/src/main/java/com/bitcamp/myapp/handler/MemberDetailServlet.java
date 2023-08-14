@@ -73,6 +73,7 @@ public class MemberDetailServlet extends HttpServlet {
 
 
       out.println("<div>");
+      out.println("<a href='/member/list'>목록</a>\n");
       out.println("<button type='reset'>초기화</button>");
       if (loginUser.equals(m)) {
         out.println("<button>변경</button>");
@@ -82,7 +83,6 @@ public class MemberDetailServlet extends HttpServlet {
                 m.getNo(),
                 m.getPassword());
       }
-      out.println("<a href='/member/list'>목록</a>\n");
       out.println("</div>");
       out.println("</form>");
     }
@@ -106,23 +106,23 @@ public class MemberDetailServlet extends HttpServlet {
                 maddr.getDetailAddress());
         out.println("</form>");
       }
-    }
-    out.println("</table>");
+      out.println("</table>");
 
-    out.println("<form action='/member/address/add' method='post'><br>");
-    out.printf("<input type='hidden' name='memberNo' value='%d'>\n", m.getNo());
-    out.println("<select name='addressType'>");
-    List<AddressType> addressTypeList = InitServlet.memberDao.findAllAddressType();
-    for (AddressType t : addressTypeList) {
-      out.printf("<option value='%d'>%s</option>\n", t.getNo(), t.getType());
+      out.println("<form action='/member/address/add' method='post'><br>");
+      out.printf("<input type='hidden' name='memberNo' value='%d'>\n", m.getNo());
+      out.println("<select name='addressType'>");
+      List<AddressType> addressTypeList = InitServlet.memberDao.findAllAddressType();
+      for (AddressType t : addressTypeList) {
+        out.printf("<option value='%d'>%s</option>\n", t.getNo(), t.getType());
+      }
+      out.println("</select><br>");
+      out.println("우편번호 <input type='text' name='postAddress'><br>");
+      out.println("기본주소 <input type='text' name='basicAddr'><br>");
+      out.println("상세주소 <input type='text' name='detailAddr'><br>");
+      out.println("<button>추가</button><br>");
+      out.println("</form>");
+      out.println("</div>");
     }
-    out.println("</select><br>");
-    out.println("우편번호 <input type='text' name='postAddress'><br>");
-    out.println("기본주소 <input type='text' name='basicAddr'><br>");
-    out.println("상세주소 <input type='text' name='detailAddr'><br>");
-    out.println("<button>추가</button><br>");
-    out.println("</form>");
-    out.println("</div>");
 
     out.println("</body>");
     out.println("</html>");

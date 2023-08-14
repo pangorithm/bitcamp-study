@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.myapp.vo.AddressType;
+import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.MemberAddress;
 
 @WebServlet("/member/address/add")
@@ -22,10 +23,12 @@ public class MemberAddressAddServlet extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
+    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     MemberAddress memberAddress = new MemberAddress();
     int memberNo = Integer.parseInt(request.getParameter("memberNo"));
-    memberAddress.setMno(memberNo);
     AddressType addressType = new AddressType();
+
+    memberAddress.setMno(memberNo);
     addressType.setNo(Integer.parseInt(request.getParameter("addressType")));
     memberAddress.setAddressType(addressType);
     memberAddress
@@ -46,9 +49,13 @@ public class MemberAddressAddServlet extends HttpServlet {
     out.println("<h1>주소 등록</h1>");
 
     try {
-      InitServlet.memberDao.insertMemberAddress(memberAddress);
-      InitServlet.sqlSessionFactory.openSession(false).commit();
-      out.println("<p>등록 성공입니다</p>");
+      if (memberNo == loginUser.getNo()) {
+        InitServlet.memberDao.insertMemberAddress(memberAddress);
+        InitServlet.sqlSessionFactory.openSession(false).commit();
+        out.println("<p>등록 성공입니다</p>");
+      } else {
+        out.println("<p>로그인한 계정만 주소 추가 가능합니다</p>");
+      }
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
       out.println("<p>등록 실패입니다</p>");
