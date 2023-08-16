@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bitcamp.myapp.dao.ScheduleDao">
+
+  <!-- 결과 레코드의 컬럼 값을 자바 객체에 어떻게 담을 것인지 설정한다. -->
+  <resultMap type="schedule" id="scheduleMap">
+    <id     column="sno"      property="no"/>
+    <result column="title"   property="title"/>
+    <result column="content"   property="content"/>
+    <result column="start_time"       property="startTime"/>
+    <result column="end_time"         property="endTime"/>
+    
+    <association property="owner" javaType="member">
+      <id     column="mno"      property="no"/>
+      <result column="name"           property="name"/>
+    </association>    
+  </resultMap>
+
+  <insert id="insert" parameterType="schedule">
+    insert into sch_schedule(title, content, start_time, end_time, mno)
+    values(#{title}, #{content}, #{startTime}, #{endTime}, #{owner.no})
+  </insert>
+  
+  <select id="findAllOwnedSchedule" parameterType="member" resultMap="scheduleMap">
+    select
+      sno,
+      title,
+      start_time,
+      end_time,
+      m.mno,
+      m.name
+    from
+      sch_schedule sch inner join sch_member m 
+        on sch.mno=m.mno
+    where
+      sch.mno=#{no}
+    order by
+      start_time
+  </select>
+  
+  <select id="findAllParticipatedSchedule" parameterType="member" resultMap="scheduleMap">
+    select
+      sch.sno,
+      sch.title,
+      sch.start_time,
+      sch.end_time,
+      m.mno,
+      m.name
+    from
+      sch_schedule sch
+        inner join 
+          (
+          select
+            sno
+          from
+            sch_part_schedule
+          where
+            pmno=#{no}
+          ) sp
+        on sch.sno=sp.sno
+        inner join
+          sch_member m
+        on sch.mno=m.mno
+    order by
+      start_time
+  </select>
+  
+  <select id="findAllParticipatedMember" parameterType="int" resultType="member">
+    select
+      m.mno as no,
+      m.name
+    from
+      sch_part_schedule as sp
+        inner join sch_member as m
+        on sp.pmno=m.mno
+    where
+      sno=#{scheduleNo}
+    order by m.name
+  </select>
+  
+  <select id="findBy" parameterType="int" resultMap="scheduleMap">
+    select
+      sch.sno,
+      sch.title,
+      sch.content,
+      sch.start_time,
+      sch.end_time,
+      m.mno,
+      m.name
+    from
+      sch_schedule as sch
+        inner join sch_member as m
+        on sch.mno=m.mno
+     where
+       sno=#{scheduleNo}
+  </select>
+    
+  <update id="update" parameterType="map">
+    update sch_schedule set
+      title=#{title},
+      content=#{content},
+      start_time=#{startTime},
+      end_time=#{endTime}
+    where
+      sno=#{scheduleNo}
+      and mno=#{ownerNo}
+  </update>
+
+  <delete id="delete" parameterType="map">
+    delete from sch_schedule
+    where
+      sno=#{scheduleNo}
+      and mno=#{ownerNo}
+  </delete>    
+  
+  <select id="checkParticipant" parameterType="map" resultMap="scheduleMap">
+    select * 
+    from
+      sch_part_schedule
+    where
+      sno=#{scheduleNo}
+      and pmno=#{memberNo}
+  </select>
+  
+  <insert id="addScheduleParticipant" parameterType="map">
+    insert into sch_part_schedule(sno, pmno)
+    values(#{scheduleNo}, #{memberNo})
+  </insert>
+  
+  <delete id="deleteScheduleParticipant" parameterType="map">
+    delete from sch_part_schedule
+    where
+      sno=#{scheduleNo}
+      and pmno=#{memberNo}
+  </delete>  
+  
+  <delete id="deleteAllScheduleParticipant" parameterType="int">
+    delete from sch_part_schedule
+    where
+      sno=#{schedulseNo}
+  </delete>
+  
+</mapper>
