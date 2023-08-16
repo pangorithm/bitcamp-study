@@ -26,11 +26,9 @@ public class BoardDetailServlet extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
-    Board board =
-        InitServlet.boardDao
-            .findBy(
-                Integer.parseInt((String) request.getParameter("category")),
-                Integer.parseInt((String) request.getParameter("no")));
+    int category = Integer.parseInt((String) request.getParameter("category"));
+    int no = Integer.parseInt((String) request.getParameter("no"));
+    Board board = InitServlet.boardDao.findBy(category, no);
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
 
@@ -47,7 +45,7 @@ public class BoardDetailServlet extends HttpServlet {
       out.println("<p>해당 번호의 게시글이 없습니다!</p>");
 
     } else {
-      out.println("<form action='/board/update' method='post'>");
+      out.println("<form action='/board/update' method='post' enctype='multipart/form-data'>");
       out.printf("<input type='hidden' name='category' value='%d'>\n", board.getCategory());
       out.println("<table border='1'>");
       out
@@ -72,10 +70,19 @@ public class BoardDetailServlet extends HttpServlet {
       out.println("<tr><th>첨부파일</th><td>\n");
 
       for (AttachedFile file : board.getAttachedFiles()) {
-        out.printf("<a href='/upload/board/%s'>%1$s</a><br>\n", file.getFilePath());
+        out
+            .printf(
+                "<a href='/upload/board/%s'>%1$s</a>"
+                    + " [<a href='/board/file/delete?category=%d&no=%d'>삭제</a>]"
+                    + "<br>\n",
+                file.getFilePath(),
+                category,
+                file.getNo());
       }
-      out.println("</td></tr>\n");
 
+      out.println("<input type='file' name='files' multiple>");
+
+      out.println("</td></tr>\n");
       out.println("</table>");
 
       out.println("<div>");
