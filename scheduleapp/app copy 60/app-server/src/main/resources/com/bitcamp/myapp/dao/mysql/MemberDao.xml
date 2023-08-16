@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bitcamp.myapp.dao.MemberDao">
+
+  <resultMap type="member" id="memberMap">
+    <id     column="mno"      property="no"/>
+    <result column="name"           property="name"/>
+    <result column="email"          property="email"/>
+    <result column="password"       property="password"/>
+    <result column="tel"            property="tel"/>
+    <result column="gender"         property="gender"/>
+    <result column="created_at"     property="createdAt"/>    
+  </resultMap>  
+  
+  <resultMap type="memberAddress" id="addressMap">
+    <id     column="mano"           property="no"/>
+    <result column="post_addr"      property="postAddress"/>
+    <result column="basic_addr"     property="basicAddress"/>
+    <result column="detail_addr"    property="detailAddress"/>
+    
+    <association property="addressType" javaType="addressType">
+      <id     column="atno"          property="no"/>
+      <result column="type"         property="type"/>
+    </association>
+  </resultMap>
+  
+  <resultMap type="addressType" id="addressTypeMap">
+    <id     column="atno"           property="no"/>
+    <result column="type"           property="type"/>
+  </resultMap>
+
+  <insert id="insert" parameterType="member">
+    insert into sch_member(name, email, password, tel, gender)
+      values(#{name}, #{email}, sha1(#{password}), #{tel}, #{gender})
+  </insert>
+  
+  <select id ="findAll"  resultMap="memberMap">
+    select
+      mno,
+      name,
+      email,
+      gender
+    from
+      sch_member
+    order by name asc
+  </select>  
+  
+  <select id ="findBy" parameterType="int" resultMap="memberMap">
+    select
+      mno,
+      name,
+      email,
+      tel,
+      gender,
+      created_at
+    from
+      sch_member
+    where
+      mno=#{memberNo}
+  </select>
+    
+  <select id ="findByEmailAndPassword" parameterType="member" resultMap="memberMap">
+    select
+      mno,
+      name,
+      email,
+      tel,
+      gender,
+      created_at
+    from
+      sch_member
+    where
+      email=#{email}
+      and password=sha1(#{password})
+  </select>
+  
+  <update id="update" parameterType="member">
+    update sch_member set
+      name=#{name},
+      email=#{email},
+      password=sha1(#{password}),
+      gender=#{gender},
+      tel=#{tel}
+    where
+      mno=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from sch_member
+    where
+      mno=#{no}
+  </delete>
+  
+  <select id ="findAllAddress" parameterType="int" resultMap="addressMap">
+    select
+      addr.mano,
+      addr.post_addr,
+      addr.basic_addr,
+      addr.detail_addr,
+      t.atno,
+      t.type
+    from
+      sch_member_addr as addr
+        inner join sch_addr_type as t
+        on addr.atno = t.atno
+    where
+      addr.mno=#{memberNo}
+  </select>
+  
+  <select id="findAllAddressType" resultMap="addressTypeMap">
+    select
+      atno,
+      type
+    from sch_addr_type
+  </select>
+  
+  <insert id="insertMemberAddress" parameterType="memberAddress">
+    insert into sch_member_addr(mno, atno, post_addr, basic_addr, detail_addr)
+      values(#{mno}, #{addressType.no}, #{postAddress}, #{basicAddress}, #{detailAddress})
+  </insert>
+    
+  <delete id="deleteMemberAddress" parameterType="map">
+    delete from sch_member_addr
+    where
+      mano=#{mano}
+      and mno=#{loginUserNo}
+  </delete>
+  
+</mapper>
