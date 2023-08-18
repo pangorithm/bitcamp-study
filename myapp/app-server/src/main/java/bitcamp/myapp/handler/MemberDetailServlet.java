@@ -36,9 +36,21 @@ public class MemberDetailServlet extends HttpServlet {
       out.println("해당 번호의 회원이 없습니다!");
     } else {
 
-      out.println("<form action='/member/update' method='post'>");
+      out.println("<form action='/member/update' method='post' enctype='multipart/form-data'>");
       out.println("<table border='1'>");
-
+      out
+          .printf(
+              "<tr><th style='width:200px;'>사진</th> "
+                  + "<td style='width:300px;'>"
+                  + (m.getPhoto() == null
+                      ? "<img style='height:80px' src='/images/avatar.png'>"
+                      : "<a href='https://kr.object.ncloudstorage.com/bitcamp-nc7-bucket-14/member/%s\n"
+                          + "'>"
+                          + "<img src='http://gjoxpfbmymto19010706.cdn.ntruss.com/member/%1$s?type=f&w=60&h=80&faceopt=true&ttype=jpg'>"
+                          + "</a>")
+                  + "<input type='file' name='photo'>"
+                  + "</td></tr>\n",
+              m.getPhoto());
       out
           .printf(
               "<tr><th style='width:200px;'>번호</th> "

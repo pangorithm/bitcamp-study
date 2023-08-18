@@ -3,13 +3,16 @@ package bitcamp.myapp.handler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import bitcamp.myapp.vo.Member;
 
 @WebServlet("/member/update")
+@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class MemberUpdateServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
@@ -33,6 +36,15 @@ public class MemberUpdateServlet extends HttpServlet {
     m.setEmail(request.getParameter("email"));
     m.setPassword(request.getParameter("password"));
     m.setGender(request.getParameter("gender").charAt(0));
+
+    Part photoPart = request.getPart("photo");
+
+    if (photoPart.getSize() > 0) {
+      String uploadFileUrl =
+          InitServlet.ncpObjectStorageService
+              .uploadFile("bitcamp-nc7-bucket-14", "member/", photoPart);
+      m.setPhoto(uploadFileUrl);
+    }
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");
