@@ -13,6 +13,6 @@ plugins {
 }
 
 rootProject.name = 'scheduleapp'
-include('app-client')
+//include('app-client')
 include('app-common')
 include('app-server')

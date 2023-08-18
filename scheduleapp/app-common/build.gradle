@@ -9,7 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'java-library'
-    id 'eclipse-wtp'
+//    id 'eclipse-wtp'
 }
 
 repositories {
@@ -56,13 +56,13 @@ tasks.withType(JavaCompile) {
 }
 
 // eclipse 프로젝트 이름을 설정하기
-eclipse {
-    project {
-        name = "scheduleapp-common"
-    }
-    jdt {
-      sourceCompatibility = 17
-      targetCompatibility = 17
-      javaRuntimeName = "JavaSE-17"
-    }
-}
+//eclipse {
+//    project {
+//        name = "scheduleapp-common"
+//    }
+//    jdt {
+//      sourceCompatibility = 17
+//      targetCompatibility = 17
+//      javaRuntimeName = "JavaSE-17"
+//    }
+//}
