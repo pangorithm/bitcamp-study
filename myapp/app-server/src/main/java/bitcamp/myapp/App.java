@@ -41,7 +41,7 @@ public class App {
     // 웹 애플리케이션 기타 정보 설정
     WebResourceRoot resources = new StandardRoot(ctx);
 
-    // 웹 애플리케이션의 서블릿 클래스 파일 ㄹ및 기타 파일의 위치 정보 등록
+    // 웹 애플리케이션의 서블릿 클래스 파일 및 기타 파일의 위치 정보 등록
     resources
         .addPreResources(
             new DirResourceSet(
