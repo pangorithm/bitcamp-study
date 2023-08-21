@@ -35,7 +35,7 @@ public class Servlet01 implements Servlet {
       throws ServletException, IOException {
     HttpServletRequest req2 = (HttpServletRequest) req;
     HttpServletResponse res2 = (HttpServletResponse) res;
-    // 클라이언트가 이 서블릿의 실행을 요청할 때마다 호출된다.
+    // 클라이언트가 이 서블릿의 실행을 요청할 때마다 호출된다. `
     // 클라이언트가 요청한 작업을 수행한다.
     System.out.println("Servlet01.service(ServletRequest,ServletResponse)");
   }
