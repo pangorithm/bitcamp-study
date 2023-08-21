@@ -2,7 +2,6 @@ package eomcs.servlet.ex02;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 
 // 리스너 만들기
@@ -30,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 //    - 요청이 들어 올 때 로그 남기기
 //
 //
-@WebListener
+//@WebListener
 public class Listener02 implements ServletRequestListener {
 
   public Listener02() {

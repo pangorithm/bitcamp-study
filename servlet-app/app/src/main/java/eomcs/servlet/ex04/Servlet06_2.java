@@ -3,6 +3,7 @@ package eomcs.servlet.ex04;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -31,6 +32,7 @@ public class Servlet06_2 extends GenericServlet {
     // => 예) genre=1&genre=2&genre=4
     // => 다음과 같이 한 번에 값을 리턴 받는다.
     String[] genres = req.getParameterValues("genre");
+    System.out.println(Arrays.toString(genres));
     String[] genreData = {"", "로맨틱", "스릴러", "호러", "드라마", "액션", "SF"};
 
     res.setContentType("text/plain;charset=UTF-8");

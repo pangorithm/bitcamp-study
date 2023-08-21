@@ -195,7 +195,6 @@ public class Servlet01 extends GenericServlet {
 // Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,la;q=0.6
 // 빈 줄
 
-
 // HTTP 응답 프로토콜
 // => 형식
 // status-line(HTTP프로토콜 상태코드 간단한문구) CRLF
@@ -220,7 +219,7 @@ public class Servlet01 extends GenericServlet {
 // => 웹 자원의 위치를 가리키는 식별자
 // => 종류
 // URL(Uniform Resource Locator)
-// scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
+// scheme:[//[user:password@]host[:port]][/]path[?query string][#fragment]
 // 예) http://localhost:8080/ex04/s1?name=홍길동&age=20
 //
 // URN(Uniform Resource Name)
