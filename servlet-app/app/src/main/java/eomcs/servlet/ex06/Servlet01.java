@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 //    웹 애플리케이션을 시작시킬 때 미리 서블릿 객체를 준비한다.
 //    예) DB 연결, 소켓 연결, 필요한 환경 변수 로딩, 스프링 IoC 컨테이너 준비 등
 //
-//@WebServlet(value="/ex06/s1", loadOnStartup=1)
+//@WebServlet(value = "/ex06/s1", loadOnStartup = 1)
 @SuppressWarnings("serial")
 public class Servlet01 extends HttpServlet {
 

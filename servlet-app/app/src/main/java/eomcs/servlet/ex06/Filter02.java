@@ -10,10 +10,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 //@WebFilter(
-//    value="/ex05/*",
-//    initParams={
-//        @WebInitParam(name="encoding", value="UTF-8"),
-//        @WebInitParam(name="aaa", value="nono")
+//    value = "/ex06/*",
+//    initParams = {
+//        @WebInitParam(name = "encoding", value = "UTF-8"),
+//        @WebInitParam(name = "aaa", value = "nono")
 //    })
 public class Filter02 implements Filter {
 
