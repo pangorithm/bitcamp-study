@@ -18,35 +18,22 @@ public class MemberAddressDeleteServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     int mano = Integer.parseInt((String) request.getParameter("mano"));
     int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-    out.printf("<meta http-equiv='refresh' content='1;url=/member/detail?no=%d'>\n", memberNo);
-    out.println("<title>주소</title>");
-    out.println("</head>");
-    out.println("<body>");
-    out.println("<h1>주소 삭제</h1>");
-
     try {
       InitServlet.memberDao.deleteMemberAddress(loginUser.getNo(), mano);
       InitServlet.sqlSessionFactory.openSession(false).commit();
-      out.println("<p>삭제 성공입니다</p>");
+      response.sendRedirect("/member/detail?no=" + memberNo);
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
-      out.println("<p>삭제 실패입니다</p>");
-      e.printStackTrace();
-    }
+      request.setAttribute("error", e);
+      request.setAttribute("message", e.getMessage());
+      request.setAttribute("refresh", "2;url=/member/detail?no=" + memberNo);
 
-    out.println("</body>");
-    out.println("</html>");
+      request.getRequestDispatcher("/error").forward(request, response);
+    }
   }
 
 }

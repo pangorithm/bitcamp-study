@@ -20,9 +20,6 @@ public class MemberAddressAddServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     MemberAddress memberAddress = new MemberAddress();
     int memberNo = Integer.parseInt(request.getParameter("memberNo"));
@@ -38,31 +35,21 @@ public class MemberAddressAddServlet extends HttpServlet {
     memberAddress
         .setDetailAddress(request.getParameter("detailAddr").replaceAll("<script", "<scr!pt"));
 
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-    out.printf("<meta http-equiv='refresh' content='1;url=/member/detail?no=%d'>\n", memberNo);
-    out.println("<title>주소</title>");
-    out.println("</head>");
-    out.println("<body>");
-    out.println("<h1>주소 등록</h1>");
-
     try {
       if (memberNo == loginUser.getNo()) {
         InitServlet.memberDao.insertMemberAddress(memberAddress);
         InitServlet.sqlSessionFactory.openSession(false).commit();
-        out.println("<p>등록 성공입니다</p>");
+        response.sendRedirect("/member/detail?no=" + memberNo);
       } else {
-        out.println("<p>로그인한 계정만 주소 추가 가능합니다</p>");
+        throw new Exception("<p>로그인한 계정만 주소 추가 가능합니다</p>");
       }
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
-      out.println("<p>등록 실패입니다</p>");
-      e.printStackTrace();
-    }
+      request.setAttribute("error", e);
+      request.setAttribute("message", e.getMessage());
+      request.setAttribute("refresh", "2;url=/member/detail?no=" + memberNo);
 
-    out.println("</body>");
-    out.println("</html>");
+      request.getRequestDispatcher("/error").forward(request, response);
+    }
   }
 }

@@ -21,9 +21,6 @@ public class ScheduleUpdateServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
     Schedule sch = new Schedule();
     sch.setNo(Integer.parseInt(request.getParameter("no")));
     sch
@@ -39,30 +36,21 @@ public class ScheduleUpdateServlet extends HttpServlet {
     sch.setEndTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("end-time"))));
     sch.setOwner((Member) request.getSession().getAttribute("loginUser"));
 
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-    out.printf("<meta http-equiv='refresh' content='1;url=/schedule/list'>\n");
-    out.println("<title>스케줄</title>");
-    out.println("</head>");
-    out.println("<body>");
-    out.println("<h1>스케줄 변경</h1>");
-
     try {
       if (InitServlet.scheduleDao.update(sch) == 0) {
-        out.println("스케줄이 없거나 변경 권한이 없습니다.");
+        throw new Exception("스케줄이 없거나 변경 권한이 없습니다.");
       } else {
         InitServlet.sqlSessionFactory.openSession(false).commit();
-        out.println("변경했습니다!");
+        response.sendRedirect("list");
       }
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
-      out.println("스케줄 변경 실패입니다!");
-      e.printStackTrace();
+      request.setAttribute("error", e);
+      request.setAttribute("message", e.getMessage());
+      request.setAttribute("refresh", "2;url=detail?no=" + sch.getNo());
+
+      request.getRequestDispatcher("/error").forward(request, response);
     }
-    out.println("</body>");
-    out.println("</html>");
   }
 }
 

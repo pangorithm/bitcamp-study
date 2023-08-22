@@ -40,6 +40,9 @@ public class ScheduleSearchServlet extends HttpServlet {
     out.println("<title>스케줄</title>");
     out.println("</head>");
     out.println("<body>");
+
+    request.getRequestDispatcher("/header").include(request, response);
+
     out.println("<h1>스케줄 검색 결과 </h1>");
     out.println("<div style='margin:5px;'>");
     out.println("<a href='/schedule/form.html'>새 스케줄</a>\n");
@@ -60,7 +63,7 @@ public class ScheduleSearchServlet extends HttpServlet {
       if ((searchTitle.length() > 0
           && sch.getTitle().matches(String.format(".*%s.*", searchTitle)))
           || (sch.getEndTime().getTime() > searchRangeStart
-              && sch.getStartTime().getTime() < searchRangeEnd)) {
+          && sch.getStartTime().getTime() < searchRangeEnd)) {
 
         out
             .printf(
@@ -77,6 +80,9 @@ public class ScheduleSearchServlet extends HttpServlet {
     out.println("</tbody>");
     out.println("</table>");
     out.println("<a href='/schedule/list'>스케줄 목록</a>");
+
+    request.getRequestDispatcher("/footer").include(request, response);
+
     out.println("</body>");
     out.println("</html>");
   }

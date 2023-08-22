@@ -35,6 +35,9 @@ public class ScheduleListServlet extends HttpServlet {
     out.println("<title>스케줄</title>");
     out.println("</head>");
     out.println("<body>");
+
+    request.getRequestDispatcher("/header").include(request, response);
+
     out.println("<h1>스케줄 목록 </h1>");
     out.println("<div style='margin:5px;'>");
     out.println("<a href='/schedule/form.html'>새 스케줄</a>\n");
@@ -77,6 +80,9 @@ public class ScheduleListServlet extends HttpServlet {
     out.println("</tbody>");
     out.println("</table>");
     out.println("<a href='/'>메인</a>");
+
+    request.getRequestDispatcher("/footer").include(request, response);
+
     out.println("</body>");
     out.println("</html>");
   }

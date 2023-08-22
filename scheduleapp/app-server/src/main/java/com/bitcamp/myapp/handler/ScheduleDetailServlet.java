@@ -32,7 +32,10 @@ public class ScheduleDetailServlet extends HttpServlet {
     String deleteParticipantNo = (String) request.getParameter("deleteParticipantNo");
 
     if (schedule == null) {
-      out.println("해당 번호의 스케줄이 없습니다!");
+      request.setAttribute("message", "해당 번호의 스케줄이 없습니다!");
+      request.setAttribute("refresh", "2;url=list");
+
+      request.getRequestDispatcher("/error").forward(request, response);
     } else {
 
       List<Member> participantList =
@@ -50,22 +53,25 @@ public class ScheduleDetailServlet extends HttpServlet {
       out.println("<title>스케줄</title>");
       out.println("</head>");
       out.println("<body>");
+
+      request.getRequestDispatcher("/header").include(request, response);
+
       out.println("<h1>스케줄</h1>");
 
       out.println("<p>");
       if (loginUser.equals(schedule.getOwner())) {
         if (addParticipantNo != null) {
-          addParticipant(schedule, addParticipantNo, out);
+          addParticipant(schedule, addParticipantNo, request, response);
           participantList = InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
         }
 
         if (deleteParticipantNo != null) {
-          deleteParticipant(schedule, deleteParticipantNo, out);
+          deleteParticipant(schedule, deleteParticipantNo, request, response);
           participantList = InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
         }
       } else if (deleteParticipantNo != null
           && Integer.parseInt(deleteParticipantNo) == loginUser.getNo()) {
-        deleteParticipant(schedule, deleteParticipantNo, out);
+        deleteParticipant(schedule, deleteParticipantNo, request, response);
         participantList = InitServlet.scheduleDao.findAllParticipatedMember(schedule.getNo());
       } else if (addParticipantNo != null) {
         out.println("참가자 수정은 스캐줄 매니저 또는 본인만 가능합니다.");
@@ -139,6 +145,8 @@ public class ScheduleDetailServlet extends HttpServlet {
         return;
       }
 
+      request.getRequestDispatcher("/footer").include(request, response);
+
       out.println("</body>");
       out.println("</html>");
     }
@@ -183,43 +191,61 @@ public class ScheduleDetailServlet extends HttpServlet {
     out.println("</table>");
   }
 
-  private void addParticipant(Schedule schedule, String addParticipantNo, PrintWriter out) {
+  private void addParticipant(Schedule schedule, String addParticipantNo,
+      HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+
     try {
       int result =
           InitServlet.scheduleDao
               .addScheduleParticipant(schedule.getNo(), Integer.parseInt(addParticipantNo));
 
       if (result == -1) {
-        out.println("이미 참가중인 멤버입니다.");
+        throw new Exception("이미 참가중인 멤버입니다.");
       } else if (result == -2) {
-        out.println("존재하지 않는 멤버입니다.");
+        throw new Exception("존재하지 않는 멤버입니다.");
       } else {
         InitServlet.sqlSessionFactory.openSession(false).commit();
-        out.println("참가자를 추가했습니다.");
       }
 
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
+      request.setAttribute("error", e);
+      request.setAttribute("message", e.getMessage());
+      request.setAttribute("refresh", "2;url=detail?no=" + schedule.getNo());
+
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 
-  private void deleteParticipant(Schedule schedule, String deleteParticipantNo, PrintWriter out) {
+  private void deleteParticipant(Schedule schedule, String deleteParticipantNo,
+      HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
+
     try {
       int result =
           InitServlet.scheduleDao
               .deleteScheduleParticipant(schedule.getNo(), Integer.parseInt(deleteParticipantNo));
 
       if (result == -1) {
-        out.println("참여하지 않는 멤버입니다.");
+        throw new Exception("참여하지 않는 멤버입니다.");
       } else if (result == -2) {
-        out.println("존재하지 않는 멤버입니다.");
+        throw new Exception("존재하지 않는 멤버입니다.");
       } else {
         InitServlet.sqlSessionFactory.openSession(false).commit();
-        out.println("참가자를 삭제했습니다.");
       }
 
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
+      request.setAttribute("error", e);
+      request.setAttribute("message", e.getMessage());
+      request.setAttribute("refresh", "2;url=detail?no=" + schedule.getNo());
+
+      request.getRequestDispatcher("/error").forward(request, response);
     }
   }
 }

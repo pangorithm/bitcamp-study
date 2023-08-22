@@ -34,9 +34,12 @@ public class BoardListServlet extends HttpServlet {
     out.println("<title>게시글</title>");
     out.println("</head>");
     out.println("<body>");
+
+    request.getRequestDispatcher("/header").include(request, response);
+
     out.println("<h1>게시글 목록 </h1>");
     out.println("<div style='margin:5px;'>");
-    out.printf("<a href='/board/form.jsp?category=%d'>새 글</a>\n", category);
+    out.printf("<a href='/board/form?category=%d'>새 글</a>\n", category);
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");
@@ -66,6 +69,9 @@ public class BoardListServlet extends HttpServlet {
     out.println("</tbody>");
     out.println("</table>");
     out.println("<a href='/'>메인</a>");
+
+    request.getRequestDispatcher("/footer").include(request, response);
+
     out.println("</body>");
     out.println("</html>");
   }

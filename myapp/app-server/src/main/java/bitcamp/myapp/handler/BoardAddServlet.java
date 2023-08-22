@@ -1,8 +1,5 @@
 package bitcamp.myapp.handler;
 
-import bitcamp.myapp.vo.AttachedFile;
-import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.Member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import bitcamp.myapp.vo.AttachedFile;
+import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Member;
+
 @WebServlet("/board/add")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class BoardAddServlet extends HttpServlet {
@@ -22,10 +23,7 @@ public class BoardAddServlet extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
+          throws ServletException, IOException {
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
@@ -40,15 +38,11 @@ public class BoardAddServlet extends HttpServlet {
       board.setContent(request.getParameter("content"));
       board.setCategory(Integer.parseInt(request.getParameter("category")));
 
-      String uploadDir = request.getServletContext().getRealPath("/upload/board/");
-
       ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-
       for (Part part : request.getParts()) {
         if (part.getName().equals("files") && part.getSize() > 0) {
-          String uploadFileUrl =
-              InitServlet.ncpObjectStorageService
-                  .uploadFile("bitcamp-nc7-bucket-14", "board/", part);
+          String uploadFileUrl = InitServlet.ncpObjectStorageService.uploadFile(
+                  "bitcamp-nc7-bucket-14", "board/", part);
           AttachedFile attachedFile = new AttachedFile();
           attachedFile.setFilePath(uploadFileUrl);
           attachedFiles.add(attachedFile);
@@ -58,16 +52,16 @@ public class BoardAddServlet extends HttpServlet {
 
       InitServlet.boardDao.insert(board);
       if (attachedFiles.size() > 0) {
-        int count = InitServlet.boardDao.insertFiles(board);
+        InitServlet.boardDao.insertFiles(board);
       }
 
       InitServlet.sqlSessionFactory.openSession(false).commit();
-      response.sendRedirect("/list?category=" + board.getCategory());
+      response.sendRedirect("list?category=" + request.getParameter("category"));
 
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
 
-      // ErrorServlet으로 포워딩 하기 전에 ErrorServlet이 사용할 데이터를
+      // ErrorServlet 으로 포워딩 하기 전에 ErrorServlet이 사용할 데이터를
       // ServletRequest 보관소에 저장한다.
       request.setAttribute("error", e);
       request.setAttribute("message", "게시글 등록 오류!");
@@ -76,7 +70,15 @@ public class BoardAddServlet extends HttpServlet {
       request.getRequestDispatcher("/error").forward(request, response);
     }
   }
-
 }
+
+
+
+
+
+
+
+
+
 
 

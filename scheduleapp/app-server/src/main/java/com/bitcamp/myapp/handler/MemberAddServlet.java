@@ -21,16 +21,13 @@ public class MemberAddServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
     Member member = new Member();
     member.setName(request.getParameter("name").replaceAll("<script", "<scr!pt"));
     member.setEmail(request.getParameter("email").replaceAll("<script", "<scr!pt"));
     member.setPassword(request.getParameter("password").replaceAll("<script", "<scr!pt"));
     member.setGender(request.getParameter("gender").charAt(0));
     member.setTel(request.getParameter("tel"));
-    
+
     Part photoPart = request.getPart("photo");
     if (photoPart.getSize() > 0) {
       String uploadFileUrl =
@@ -39,28 +36,21 @@ public class MemberAddServlet extends HttpServlet {
       member.setPhoto(uploadFileUrl);
     }
 
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta charset='UTF-8'>");
-    out.println("<meta http-equiv='refresh' content='1;url=/member/list'>");
-    out.println("<title>회원</title>");
-    out.println("</head>");
-    out.println("<body>");
-    out.println("<h1>회원 등록</h1>");
-
     try {
       InitServlet.memberDao.insert(member);
       InitServlet.sqlSessionFactory.openSession(false).commit();
-      out.println("<p>등록 성공입니다</p>");
+      response.sendRedirect("list");
+      
     } catch (Exception e) {
       InitServlet.sqlSessionFactory.openSession(false).rollback();
-      out.println("<p>등록 실패입니다</p>");
-      e.printStackTrace();
+
+      request.setAttribute("error", e);
+      request.setAttribute("message", "회원 등록 오류!");
+      request.setAttribute("refresh", "2;url=list");
+
+      request.getRequestDispatcher("/error").forward(request, response);
     }
 
-    out.println("</body>");
-    out.println("</html>");
   }
 
 }
