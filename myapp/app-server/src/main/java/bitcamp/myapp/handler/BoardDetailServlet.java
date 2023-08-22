@@ -1,5 +1,8 @@
 package bitcamp.myapp.handler;
 
+import bitcamp.myapp.vo.AttachedFile;
+import bitcamp.myapp.vo.Board;
+import bitcamp.myapp.vo.Member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -8,9 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import bitcamp.myapp.vo.AttachedFile;
-import bitcamp.myapp.vo.Board;
-import bitcamp.myapp.vo.Member;
 
 @WebServlet("/board/detail")
 public class BoardDetailServlet extends HttpServlet {
@@ -39,6 +39,9 @@ public class BoardDetailServlet extends HttpServlet {
     out.println("<title>게시글</title>");
     out.println("</head>");
     out.println("<body>");
+
+    request.getRequestDispatcher("/header").include(request, response);
+
     out.println("<h1>게시글</h1>");
 
     if (board == null) {
@@ -100,8 +103,6 @@ public class BoardDetailServlet extends HttpServlet {
       out.println("</div>");
       out.println("</form>");
 
-
-
       try {
         board.setViewCount(board.getViewCount() + 1);
         InitServlet.boardDao.updateCount(board);
@@ -110,6 +111,8 @@ public class BoardDetailServlet extends HttpServlet {
       } catch (Exception e) {
         InitServlet.sqlSessionFactory.openSession(false).rollback();
       }
+
+      request.getRequestDispatcher("/footer").include(request, response);
 
       out.println("</body>");
       out.println("</html>");
