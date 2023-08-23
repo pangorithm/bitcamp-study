@@ -1,5 +1,6 @@
 package bitcamp.myapp.handler;
 
+import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +19,9 @@ public class MemberDetailServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    Member member = InitServlet.memberDao.findBy(Integer.parseInt(request.getParameter("no")));
+    MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
+
+    Member member = memberDao.findBy(Integer.parseInt(request.getParameter("no")));
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();

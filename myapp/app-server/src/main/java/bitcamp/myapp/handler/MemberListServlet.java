@@ -1,5 +1,6 @@
 package bitcamp.myapp.handler;
 
+import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.vo.Member;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +19,8 @@ public class MemberListServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+
+    MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -40,15 +43,16 @@ public class MemberListServlet extends HttpServlet {
     out.println("  <tr><th>번호</th> <th>이름</th> <th>이메일</th></tr>");
     out.println("</thead>");
 
-    List<Member> list = InitServlet.memberDao.findAll();
+    List<Member> list = memberDao.findAll();
     for (Member m : list) {
       out.printf("<tr>"
               + " <td>%d</td>"
               + " <td>"
+              + "<a href='/member/detail?no=%d'>"
               + "<img src='http://gjoxpfbmymto19010706.cdn.ntruss.com/member/%s?type=f&w=30&h=40&faceopt=true&ttype=jpg'>"
-              + "<a href='/member/detail?no=%d'>%s</a></td>"
+              + "%s</a></td>"
               + " <td>%s</td></tr>\n",
-          m.getNo(), m.getPhoto(), m.getNo(), m.getName(), m.getEmail());
+          m.getNo(), m.getNo(), m.getPhoto(), m.getName(), m.getEmail());
     }
 
     out.println("</tbody>");

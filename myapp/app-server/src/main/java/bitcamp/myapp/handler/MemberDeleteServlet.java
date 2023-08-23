@@ -1,11 +1,13 @@
 package bitcamp.myapp.handler;
 
+import bitcamp.myapp.dao.MemberDao;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 @WebServlet("/member/delete")
 public class MemberDeleteServlet extends HttpServlet {
@@ -14,18 +16,22 @@ public class MemberDeleteServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException {
+      throws ServletException, IOException {
+
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
+        .getAttribute("sqlSessionFactory");
+    MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
 
     try {
-      if (InitServlet.memberDao.delete(Integer.parseInt(request.getParameter("no"))) == 0) {
+      if (memberDao.delete(Integer.parseInt(request.getParameter("no"))) == 0) {
         throw new Exception("해당 번호의 회원이 없습니다.");
       } else {
-        InitServlet.sqlSessionFactory.openSession(false).commit();
+        sqlSessionFactory.openSession(false).commit();
         response.sendRedirect("/member/list");
       }
 
     } catch (Exception e) {
-      InitServlet.sqlSessionFactory.openSession(false).rollback();
+      sqlSessionFactory.openSession(false).rollback();
 
       request.setAttribute("error", e);
       request.setAttribute("message", e.getMessage());

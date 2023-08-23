@@ -1,5 +1,6 @@
 package bitcamp.myapp.handler;
 
+import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 @WebServlet("/board/detail")
 public class BoardDetailServlet extends HttpServlet {
@@ -19,10 +21,14 @@ public class BoardDetailServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
+        .getAttribute("sqlSessionFactory");
+    BoardDao boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+
     int category = Integer.parseInt(request.getParameter("category"));
     int no = Integer.parseInt(request.getParameter("no"));
 
-    Board board = InitServlet.boardDao.findBy(category, no);
+    Board board = boardDao.findBy(category, no);
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -80,11 +86,11 @@ public class BoardDetailServlet extends HttpServlet {
       out.println("</form>");
       try {
         board.setViewCount(board.getViewCount() + 1);
-        InitServlet.boardDao.updateCount(board);
-        InitServlet.sqlSessionFactory.openSession(false).commit();
+        boardDao.updateCount(board);
+        sqlSessionFactory.openSession(false).commit();
 
       } catch (Exception e) {
-        InitServlet.sqlSessionFactory.openSession(false).rollback();
+        sqlSessionFactory.openSession(false).rollback();
       }
     }
 
