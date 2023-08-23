@@ -33,7 +33,7 @@ public class MemberListServlet extends HttpServlet {
 
     out.println("<h1>회원 목록</h1>");
     out.println("<div style='margin:5px;'>");
-    out.println("<a href='/member/form.html'>새 회원</a>");
+    out.println("<a href='/member/form'>새 회원</a>");
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");

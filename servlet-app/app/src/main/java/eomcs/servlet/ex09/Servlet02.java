@@ -20,7 +20,7 @@ public class Servlet02 extends HttpServlet {
       throws ServletException, IOException {
 
     // 테스트 방법:
-    // => http://localhost:8080/java-web/ex09/s2
+    // => http://localhost:8080/ex09/s2
     //
 
     // 1) ServletContext 보관소에 저장된 값 꺼내기

@@ -602,6 +602,14 @@ https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
 - 프로젝트 실습
   - 62. forward/include/refresh/redirect 다루기
 
+### 64일(8/23,수)
+
+- 서블릿 프로그래밍
+  - 보관소 사용법: ServletContext, HttpSession, ServletRequest, JspContext
+  - 쿠키 사용법
+- 프로젝트 실습
+  - 62. forward/include/refresh/redirect 다루기(계속)
+
 ## 웨일즈 화상회의
 
 https://whaleon.us/o/CSrtk1/001aa759f29c46b985e32dd8562f594a
