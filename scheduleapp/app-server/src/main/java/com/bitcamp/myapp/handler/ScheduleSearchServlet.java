@@ -52,8 +52,8 @@ public class ScheduleSearchServlet extends HttpServlet {
 
     out.println("<h1>스케줄 검색 결과 </h1>");
     out.println("<div style='margin:5px;'>");
-    out.println("<a href='/schedule/form.html'>새 스케줄</a>\n");
-    out.println("<a href='/schedule/search.html'>스케줄 검색</a>\n");
+    out.println("<a href='/schedule/form.jsp'>새 스케줄</a>\n");
+    out.println("<a href='/schedule/search.jsp'>스케줄 검색</a>\n");
     out.println("</div>");
     out.println("<table border='1'>");
     out.println("<thead>");

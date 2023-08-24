@@ -6,7 +6,7 @@
 
 <div style='height:50px;background-color:orange;'>
   <a href='/'><img src='https://www.ncloud.com/public/img/logo-m.png' style='height:40px'></a>
-  <a href='/member/list'>회원</a>
+  <a href='/member/list.jsp'>회원</a>
   <a href='/schedule/list.jsp'>스케줄</a>
   <a href='/board/list.jsp?category=1'>게시글</a>
   <a href='/board/list.jsp?category=2'>독서록</a>
