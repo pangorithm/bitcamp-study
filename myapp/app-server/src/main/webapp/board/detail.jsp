@@ -79,8 +79,8 @@
 
 <div>
 <button>변경</button>
-<button type='reset'>초기화</button>");
- <a href='/board/delete.jsp?category=<%=board.getCategory()%>>&no=<%=board.getNo()%>'>삭제</a>
+<button type='reset'>초기화</button>
+<a href='/board/delete.jsp?category=<%=board.getCategory()%>&no=<%=board.getNo()%>'>삭제</a>
 <a href='/board/list.jsp?category=<%=board.getCategory()%>'>목록</a>
 </div>
 </form>
