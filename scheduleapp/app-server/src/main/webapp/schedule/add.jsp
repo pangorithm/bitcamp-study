@@ -1,9 +1,10 @@
 <%@ page
-    language="java"
-    pageEncoding="utf-8"
-    contentType="text/html;charset=utf-8"
-    errorPage="/error.jsp"
-    %>
+  language="java"
+  pageEncoding="utf-8"
+  contentType="text/html;charset=utf-8"
+  trimDirectiveWhitespaces="true"
+  errorPage="/error.jsp"
+  %>
 
 <%@ page import="java.sql.Timestamp"%>
 <%@ page import="java.time.LocalDateTime"%>
@@ -16,16 +17,12 @@
 <%@ page import="org.apache.ibatis.session.SqlSessionFactory"%>
 
 <jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
+<jsp:useBean id="ncpObjectStorageService" type="com.bitcamp.util.NcpObjectStorageService" scope="application"/>
 <jsp:useBean id="scheduleDao" type="com.bitcamp.myapp.dao.ScheduleDao" scope="application"/>
 <jsp:useBean id="loginUser" class="com.bitcamp.myapp.vo.Member" scope="session"/>
 
 <%
     request.setAttribute("refresh", "2;url=list.jsp");
-
-    if (loginUser.getNo() == 0) {
-      response.sendRedirect("/auth/form.jsp");
-      return;
-    }
 
     Schedule sch = new Schedule();
     sch.setTitle(request.getParameter("title"));
@@ -36,8 +33,8 @@
 
       scheduleDao.insert(sch);
       // 새로 생성된 스케줄 번호를 알아야함
-      // scheduleDao.scheduleAddParticipant(0, ((Member) prompt.getAttribute("loginUser")).getNo());
+      System.out.println(sch.getNo()+" "+ loginUser.getNo());
+      scheduleDao.addScheduleParticipant(sch.getNo(), loginUser.getNo());
       sqlSessionFactory.openSession(false).commit();
       response.sendRedirect("list.jsp");
 %>
-

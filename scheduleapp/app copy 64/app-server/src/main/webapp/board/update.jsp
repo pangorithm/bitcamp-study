@@ -29,16 +29,18 @@
       return;
     }
 
+
       Board board = new Board();
       board.setWriter(loginUser);
+      board.setNo(Integer.parseInt(request.getParameter("no")));
       board.setTitle(request.getParameter("title"));
       board.setContent(request.getParameter("content"));
       board.setCategory(Integer.parseInt(request.getParameter("category")));
 
+      String uploadDir = request.getServletContext().getRealPath("/upload/board/");
       ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
 
       for (Part part : request.getParts()) {
-        // System.out.println(part.getName());
         if (part.getName().equals("files") && part.getSize() > 0) {
           String uploadFileUrl =
               ncpObjectStorageService
@@ -49,15 +51,24 @@
         }
       }
       board.setAttachedFiles(attachedFiles);
-      // System.out.println(board.getNo());
-      boardDao.insert(board);
-      // System.out.println(board.getNo());
-      if (attachedFiles.size() > 0) {
-        // 게시글을 정상적으로 변경했으면, 그 게시글의 첨부파일을 추가한다.
-        int count = boardDao.insertFiles(board);
-      }
+      if (boardDao.update(board) == 0) {
+        throw new Exception("게시글이 없거나 변경 권한이 없습니다.");
+      } else {
+        if (attachedFiles.size() > 0) {
+          // 게시글을 정상적으로 변경했으면, 그 게시글의 첨부파일을 추가한다.
+          boardDao.insertFiles(board);
+        }
 
-      sqlSessionFactory.openSession(false).commit();
-      response.sendRedirect("list?category=" + board.getCategory());
+        sqlSessionFactory.openSession(false).commit();
+        response.sendRedirect(String.format("list.jsp?category=%s",
+            request.getParameter("category")));
+      }
 %>
+
+
+
+
+
+
+
 
