@@ -12,11 +12,15 @@
 <%@ page import="bitcamp.util.NcpObjectStorageService"%>
 <%@ page import="org.apache.ibatis.session.SqlSessionFactory"%>
 
+<jsp:useBean id="boardDao" type="bitcamp.myapp.dao.BoardDao" scope="application"/>
+<jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
+<jsp:useBean id="loginUser" class="bitcamp.myapp.vo.Member" scope="session"/>
+
 <%
     request.setAttribute("refresh", "2;url=list.jsp?category=" + request.getParameter("category"));
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
+    if (loginUser.getNo() == 0) {
       response.sendRedirect("/auth/form.jsp");
       return;
     }
@@ -27,9 +31,6 @@
     b.setNo(Integer.parseInt(request.getParameter("no")));
     b.setWriter(loginUser);
     b.setCategory(category);
-
-    BoardDao boardDao = (BoardDao) application.getAttribute("boardDao");
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application.getAttribute("sqlSessionFactory");
 
     boardDao.deleteFiles(b.getNo());
 

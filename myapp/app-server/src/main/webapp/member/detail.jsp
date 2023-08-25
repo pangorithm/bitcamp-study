@@ -4,14 +4,12 @@
     contentType="text/html;charset=utf-8"
     trimDirectiveWhitespaces="true" %>
 
-<%@ page import="java.io.IOException"%>
 <%@ page import="java.text.SimpleDateFormat"%>
-<%@ page import="bitcamp.myapp.dao.MemberDao"%>
 <%@ page import="bitcamp.myapp.vo.Member"%>
 
-<%
-    MemberDao memberDao = (MemberDao) application.getAttribute("memberDao");
+<jsp:useBean id="memberDao" type="bitcamp.myapp.dao.MemberDao" scope="application"/>
 
+<%
     Member member = memberDao.findBy(Integer.parseInt(request.getParameter("no")));
 %>
 

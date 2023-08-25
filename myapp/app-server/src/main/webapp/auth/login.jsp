@@ -24,9 +24,12 @@
       response.addCookie(cookie);
     }
 %>
-<jsp:useBean id="memberDao" class
+
+<jsp:useBean id="memberDao"
+             type="bitcamp.myapp.dao.MemberDao"
+             scope="application"/>
+
 <%
-    MemberDao memberDao = (MemberDao) application.getAttribute("memberDao");
     Member loginUser = memberDao.findByEmailAndPassword(m);
     if (loginUser == null) {
       throw new Exception("회원 정보가 일치하지 않습니다.");

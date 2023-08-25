@@ -5,21 +5,14 @@
     trimDirectiveWhitespaces="true"
     errorPage="/error.jsp" %>
 
-<%@ page import="java.io.IOException"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="bitcamp.myapp.dao.MemberDao"%>
 <%@ page import="bitcamp.myapp.vo.Member"%>
-<%@ page import="bitcamp.util.NcpObjectStorageService"%>
-<%@ page import="org.apache.ibatis.session.SqlSessionFactory"%>
+
+<jsp:useBean id="memberDao" type="bitcamp.myapp.dao.MemberDao" scope="application"/>
+<jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
+<jsp:useBean id="ncpObjectStorageService" type="bitcamp.util.NcpObjectStorageService" scope="application"/>
 
 <%
     request.setAttribute("refresh", "2;url=list.jsp");
-
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application
-        .getAttribute("sqlSessionFactory");
-    MemberDao memberDao = (MemberDao) application.getAttribute("memberDao");
-    NcpObjectStorageService ncpObjectStorageService = (NcpObjectStorageService) application
-        .getAttribute("ncpObjectStorageService");
 
     Member member = new Member();
     member.setNo(Integer.parseInt(request.getParameter("no")));

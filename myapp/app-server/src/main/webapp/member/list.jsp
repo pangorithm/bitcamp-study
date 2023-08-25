@@ -3,12 +3,11 @@
     pageEncoding="utf-8"
     contentType="text/html;charset=utf-8"%>
 
-
-<%@ page import="java.io.IOException"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.List"%>
-<%@ page import="bitcamp.myapp.dao.MemberDao"%>
 <%@ page import="bitcamp.myapp.vo.Member"%>
+
+<jsp:useBean id="memberDao" type="bitcamp.myapp.dao.MemberDao" scope="application"/>
 
 <!DOCTYPE html>
 <html>
@@ -35,8 +34,6 @@
   <tbody>
 
   <%
-    MemberDao memberDao = (MemberDao) application.getAttribute("memberDao");
-
     List<Member> list = memberDao.findAll();
     for (Member m : list) {
       out.println(String.format("<tr>"

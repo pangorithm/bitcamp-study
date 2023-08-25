@@ -5,22 +5,15 @@
     trimDirectiveWhitespaces="true"
     errorPage="/error.jsp" %>
 
-<%@ page import="java.io.IOException"%>
-<%@ page import="bitcamp.myapp.dao.BoardDao"%>
 <%@ page import="bitcamp.myapp.vo.Board"%>
-<%@ page import="bitcamp.myapp.vo.Member"%>
 <%@ page import="bitcamp.myapp.vo.AttachedFile"%>
-<%@ page import="bitcamp.util.NcpObjectStorageService"%>
-<%@ page import="org.apache.ibatis.session.SqlSessionFactory"%>
+
+<jsp:useBean id="boardDao" type="bitcamp.myapp.dao.BoardDao" scope="application"/>
+<jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
+<jsp:useBean id="loginUser" class="bitcamp.myapp.vo.Member" scope="session"/>
 
 <%
-
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application
-        .getAttribute("sqlSessionFactory");
-    BoardDao boardDao = (BoardDao) application.getAttribute("boardDao");
-
-    Member loginUser = (Member) application.getAttribute("loginUser");
-    if (loginUser == null) {
+    if (loginUser.getNo() == 0) {
       response.sendRedirect("/auth/form.jsp");
       return;
     }

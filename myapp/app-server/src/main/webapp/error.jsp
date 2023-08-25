@@ -4,12 +4,9 @@
     contentType="text/html;charset=utf-8"
     isErrorPage="true" %>
 
-<%@ page import="org.apache.ibatis.session.SqlSessionFactory"%>
+<jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
 
 <%
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application
-        .getAttribute("sqlSessionFactory");
-
     sqlSessionFactory.openSession(false).rollback();
 
     if (request.getAttribute("refresh") != null) {

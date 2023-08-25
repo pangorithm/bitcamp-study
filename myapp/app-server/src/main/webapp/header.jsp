@@ -2,17 +2,17 @@
     language="java"
     pageEncoding="utf-8"
     contentType="text/html;charset=utf-8"%>
-<%@ page import="bitcamp.myapp.vo.Member"%>
+
+<jsp:useBean id="loginUser" class="bitcamp.myapp.vo.Member" scope="session"/>
 
 <div style='height:50px;background-color:orange;'>
   <img src='https://www.ncloud.com/public/img/logo-m.png' style='height:40px'>
-  <a href='/member/list'>회원</a>
+  <a href='/member/list.jsp'>회원</a>
   <a href='/board/list.jsp?category=1'>게시글</a>
   <a href='/board/list.jsp?category=2'>독서록</a>
 
   <%
-    Member loginUser = (Member) session.getAttribute("loginUser");
-      if (loginUser == null) {
+      if (loginUser.getNo() == 0) {
         out.println("<a href='/auth/form.jsp'>로그인</a>");
       } else {
         if(loginUser.getPhoto() == null){
