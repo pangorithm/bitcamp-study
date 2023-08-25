@@ -13,9 +13,9 @@
 <%
     request.setAttribute("refresh", "2;url=list.jsp");
 
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application
         .getAttribute("sqlSessionFactory");
-    MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
+    MemberDao memberDao = (MemberDao) application.getAttribute("memberDao");
 
       if (memberDao.delete(Integer.parseInt(request.getParameter("no"))) == 0) {
         throw new Exception("해당 번호의 회원이 없습니다.");

@@ -15,11 +15,11 @@
 
 <%
 
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application
         .getAttribute("sqlSessionFactory");
-    BoardDao boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    BoardDao boardDao = (BoardDao) application.getAttribute("boardDao");
 
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    Member loginUser = (Member) application.getAttribute("loginUser");
     if (loginUser == null) {
       response.sendRedirect("/auth/form.jsp");
       return;

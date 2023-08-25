@@ -17,13 +17,13 @@
 <%
     request.setAttribute("refresh", "2;url=list.jsp?category=" + request.getParameter("category"));
 
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application
         .getAttribute("sqlSessionFactory");
-    BoardDao boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
-    NcpObjectStorageService ncpObjectStorageService = (NcpObjectStorageService) this.getServletContext()
+    BoardDao boardDao = (BoardDao) application.getAttribute("boardDao");
+    NcpObjectStorageService ncpObjectStorageService = (NcpObjectStorageService) application
         .getAttribute("ncpObjectStorageService");
 
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       response.sendRedirect("/auth/form.html");
       return;

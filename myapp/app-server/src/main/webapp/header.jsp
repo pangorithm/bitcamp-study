@@ -11,7 +11,7 @@
   <a href='/board/list.jsp?category=2'>독서록</a>
 
   <%
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    Member loginUser = (Member) session.getAttribute("loginUser");
       if (loginUser == null) {
         out.println("<a href='/auth/form.jsp'>로그인</a>");
       } else {

@@ -23,13 +23,15 @@
       cookie.setMaxAge(0);
       response.addCookie(cookie);
     }
-
-    MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
+%>
+<jsp:useBean id="memberDao" class
+<%
+    MemberDao memberDao = (MemberDao) application.getAttribute("memberDao");
     Member loginUser = memberDao.findByEmailAndPassword(m);
     if (loginUser == null) {
       throw new Exception("회원 정보가 일치하지 않습니다.");
     }
 
-      request.getSession().setAttribute("loginUser", loginUser);
+      session.setAttribute("loginUser", loginUser);
       response.sendRedirect("/");
 %>

@@ -14,9 +14,9 @@
 
 
 <%
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application
         .getAttribute("sqlSessionFactory");
-    BoardDao boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    BoardDao boardDao = (BoardDao) application.getAttribute("boardDao");
 
     int category = Integer.parseInt(request.getParameter("category"));
     int no = Integer.parseInt(request.getParameter("no"));

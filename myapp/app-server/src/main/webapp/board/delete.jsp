@@ -15,7 +15,7 @@
 <%
     request.setAttribute("refresh", "2;url=list.jsp?category=" + request.getParameter("category"));
 
-    Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+    Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       response.sendRedirect("/auth/form.jsp");
       return;
@@ -28,8 +28,8 @@
     b.setWriter(loginUser);
     b.setCategory(category);
 
-    BoardDao boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
+    BoardDao boardDao = (BoardDao) application.getAttribute("boardDao");
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) application.getAttribute("sqlSessionFactory");
 
     boardDao.deleteFiles(b.getNo());
 

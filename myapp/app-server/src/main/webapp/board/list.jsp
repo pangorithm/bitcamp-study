@@ -16,7 +16,7 @@
 
 <%
   // scriptlet (scripting element)
-    BoardDao boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
+    BoardDao boardDao = (BoardDao) application.getAttribute("boardDao");
 
     int category = Integer.parseInt(request.getParameter("category"));
 %>
