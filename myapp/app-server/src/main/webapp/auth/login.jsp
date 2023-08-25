@@ -3,8 +3,7 @@
     pageEncoding="UTF-8"
     contentType="text/html;charset=UTF-8"
     trimDirectiveWhitespaces="true"
-    errorPage="/error.jsp" %>
-
+    errorPage="/error.jsp"%>
 <%@ page import="bitcamp.myapp.dao.MemberDao"%>
 <%@ page import="bitcamp.myapp.vo.Member"%>
 
@@ -25,9 +24,7 @@
     }
 %>
 
-<jsp:useBean id="memberDao"
-             type="bitcamp.myapp.dao.MemberDao"
-             scope="application"/>
+<jsp:useBean id="memberDao" type="bitcamp.myapp.dao.MemberDao" scope="application"/>
 
 <%
     Member loginUser = memberDao.findByEmailAndPassword(m);
@@ -35,6 +32,6 @@
       throw new Exception("회원 정보가 일치하지 않습니다.");
     }
 
-      session.setAttribute("loginUser", loginUser);
-      response.sendRedirect("/");
+    session.setAttribute("loginUser", loginUser);
+    response.sendRedirect("/");
 %>

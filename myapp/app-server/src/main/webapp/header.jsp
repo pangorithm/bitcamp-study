@@ -19,7 +19,7 @@
           out.println("<img style='height:40px' src='http://gjoxpfbmymto19010706.cdn.ntruss.com/icon/avatar.png?type=f&w=30&h=40&faceopt=true&ttype=jpg'>");
         }else{
           out.println(String.format(
-              "<img src='http://mvsenqskbqzl19010704.cdn.ntruss.com/member/%s?type=f&w=30&h=40&faceopt=true&ttype=jpg'>",
+              "<img src='http://gjoxpfbmymto19010706.cdn.ntruss.com/member/%s?type=f&w=30&h=40&faceopt=true&ttype=jpg'>",
               loginUser.getPhoto()));
         }
         out.println(String.format("%s <a href='/auth/logout.jsp'>로그아웃</a>", loginUser.getName()));

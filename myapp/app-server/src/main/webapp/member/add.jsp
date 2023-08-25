@@ -3,16 +3,12 @@
     pageEncoding="UTF-8"
     contentType="text/html;charset=UTF-8"
     trimDirectiveWhitespaces="true"
-    errorPage="/error.jsp" %>
-
-<%@ page import="java.io.IOException"%>
-<%@ page import="java.util.ArrayList"%>
+    errorPage="/error.jsp"%>
 <%@ page import="bitcamp.myapp.vo.Member"%>
 
 <jsp:useBean id="memberDao" type="bitcamp.myapp.dao.MemberDao" scope="application"/>
 <jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
 <jsp:useBean id="ncpObjectStorageService" type="bitcamp.util.NcpObjectStorageService" scope="application"/>
-
 <%
     request.setAttribute("refresh", "2;url=list.jsp");
 
@@ -29,8 +25,8 @@
       m.setPhoto(uploadFileUrl);
     }
 
-      memberDao.insert(m);
-      sqlSessionFactory.openSession(false).commit();
-      response.sendRedirect("list.jsp");
+    memberDao.insert(m);
+    sqlSessionFactory.openSession(false).commit();
+    response.sendRedirect("list.jsp");
 
 %>

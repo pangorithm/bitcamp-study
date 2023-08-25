@@ -7,6 +7,7 @@ import bitcamp.myapp.dao.MySQLMemberDao;
 import bitcamp.util.NcpConfig;
 import bitcamp.util.NcpObjectStorageService;
 import bitcamp.util.SqlSessionFactoryProxy;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -43,7 +44,7 @@ public class ContextLoaderListener implements ServletContextListener {
       ctx.setAttribute("boardDao", boardDao);
       ctx.setAttribute("memberDao", memberDao);
       ctx.setAttribute("ncpObjectStorageService", ncpObjectStorageService);
-
+      ctx.setAttribute("simpleDateFormatter", new SimpleDateFormat("yyyy-MM-dd"));
       System.out.println("ContextLoaderListener.contextInitialized() - 공통 객체 준비 완료!");
 
     } catch (Exception e) {
