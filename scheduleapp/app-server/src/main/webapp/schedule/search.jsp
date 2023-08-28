@@ -8,8 +8,7 @@
 <%@ page import="java.sql.Timestamp"%>
 <%@ page import="java.time.LocalDateTime"%>
 <%@ page import="java.time.ZoneId"%>
-<%@ page import="java.util.List"%>
-<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.HashSet"%>
 <%@ page import="com.bitcamp.util.NcpObjectStorageService"%>
 <%@ page import="com.bitcamp.myapp.dao.MemberDao"%>
 <%@ page import="com.bitcamp.myapp.vo.Member"%>
@@ -52,10 +51,10 @@
     long searchRangeEnd =
         localDateTimeToLong(LocalDateTime.parse(request.getParameter("end-time")));
 
-    List<Schedule> list = scheduleDao.findAllOwnedSchedule(loginUser);
-    list.addAll(scheduleDao.findAllParticipatedSchedule(loginUser));
+    HashSet<Schedule> set = new HashSet<>(scheduleDao.findAllParticipatedSchedule(loginUser));
+    set.addAll(scheduleDao.findAllOwnedSchedule(loginUser));
 
-    Schedule[] schedules = list.toArray(new Schedule[0]);
+    Schedule[] schedules = set.toArray(new Schedule[0]);
 
     for (Schedule sch : schedules) {
       if ((searchTitle.length() > 0
@@ -67,7 +66,8 @@
                 "<tr><td>%d</td> <td><a href='/schedule/detail.jsp?no=%d'>%s</a></td> <td>%s</td> <td>%s</td> <td>%s</td></tr>\n",
                 sch.getNo(),
                 sch.getNo(),
-                sch.getTitle(),
+                (sch.getTitle() == null || sch.getTitle().length() == 0
+                                || sch.getTitle().matches("^\\s+$")) ? "제목없음" : sch.getTitle(),
                 sch.getStartTime().toString(),
                 sch.getEndTime().toString(),
                 sch.getOwner().getName()));
