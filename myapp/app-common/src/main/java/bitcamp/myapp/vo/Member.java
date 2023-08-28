@@ -6,11 +6,9 @@ import java.util.Objects;
 
 public class Member implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-
   public static final char MALE = 'M';
   public static final char FEMALE = 'W';
-
+  private static final long serialVersionUID = 1L;
   private int no;
   private String name;
   private String email;
@@ -20,18 +18,34 @@ public class Member implements Serializable {
   private String photo;
 
   @Override
+  public String toString() {
+    return "Member{" +
+        "no=" + no +
+        ", name='" + name + '\'' +
+        ", email='" + email + '\'' +
+        ", password='" + password + '\'' +
+        ", gender=" + gender +
+        ", createdDate=" + createdDate +
+        ", photo='" + photo + '\'' +
+        '}';
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hash(no);
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     Member other = (Member) obj;
     return no == other.no;
   }

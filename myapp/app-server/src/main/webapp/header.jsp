@@ -3,7 +3,7 @@
     pageEncoding="utf-8"
     contentType="text/html;charset=utf-8"%>
 
-<jsp:useBean id="loginUser" class="bitcamp.myapp.vo.Member" scope="session"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div style='height:50px;background-color:orange;'>
   <img src='https://www.ncloud.com/public/img/logo-m.png' style='height:40px'>
@@ -11,19 +11,19 @@
   <a href='/board/list.jsp?category=1'>게시글</a>
   <a href='/board/list.jsp?category=2'>독서록</a>
 
-  <%
-      if (loginUser.getNo() == 0) {
-        out.println("<a href='/auth/form.jsp'>로그인</a>");
-      } else {
-        if(loginUser.getPhoto() == null){
-          out.println("<img style='height:40px' src='http://gjoxpfbmymto19010706.cdn.ntruss.com/icon/avatar.png?type=f&w=30&h=40&faceopt=true&ttype=jpg'>");
-        }else{
-          out.println(String.format(
-              "<img src='http://gjoxpfbmymto19010706.cdn.ntruss.com/member/%s?type=f&w=30&h=40&faceopt=true&ttype=jpg'>",
-              loginUser.getPhoto()));
-        }
-        out.println(String.format("%s <a href='/auth/logout.jsp'>로그아웃</a>", loginUser.getName()));
+  <c:choose>
+    <c:when test="${empty sessionScope.loginUser}">
+      <a href='/auth/form.jsp'>로그인</a>
+    </c:when>
+    <c:otherwise>
+      <c:if test="${empty sessionScope.loginUser.photo}">
+        <img style='height:40px' src='http://gjoxpfbmymto19010706.cdn.ntruss.com/icon/avatar.png?type=f&w=30&h=40&faceopt=true&ttype=jpg'>
+      </c:if>
 
-      }
-  %>
+      <c:if test="${not empty sessionScope.loginUser.photo}">
+        <img style='height:40px' src='http://gjoxpfbmymto19010706.cdn.ntruss.com/member/${loginUser.photo}?type=f&w=30&h=40&faceopt=true&ttype=jpg'>
+      </c:if>
+        ${loginUser.name}<a href='/auth/logout.jsp'>로그아웃</a>
+    </c:otherwise>
+  </c:choose>
 </div>

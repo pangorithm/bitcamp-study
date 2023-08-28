@@ -6,10 +6,9 @@
 
 <%@ page import="org.apache.ibatis.session.SqlSessionFactory"%>
 
-<%
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
-        .getAttribute("sqlSessionFactory");
+<jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
 
+<%
     sqlSessionFactory.openSession(false).rollback();
 
     if (request.getAttribute("refresh") != null) {

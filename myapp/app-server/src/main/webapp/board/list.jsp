@@ -4,14 +4,14 @@
     contentType="text/html;charset=UTF-8"
     trimDirectiveWhitespaces="true"
     errorPage="/error.jsp"%>
-<%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.List"%>
 <%@ page import="bitcamp.myapp.vo.Board"%>
 
-<%
-  request.setAttribute("refresh", "2;url=list.jsp?category=" + request.getParameter("category"));
-  int category = Integer.parseInt(request.getParameter("category"));
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:set var="refresh" value="2;url=list.jsp?category=${param.category}" scope="request"/>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,28 +32,21 @@
 </thead>
 
 <jsp:useBean id="boardDao" type="bitcamp.myapp.dao.BoardDao" scope="application"/>
+<c:set var="list" value="${boardDao.findAll(param.category)}" scope="page"/>
 
-<%
-  List<Board> list = boardDao.findAll(category);
-%>
 <tbody>
-<%
-  for (Board board : list) {
-    pageContext.setAttribute("board", board);
-%>
-    <tr>
-      <td>${board.no}</td>
-      <td><a href='/board/detail.jsp?category=${board.category}&no=${board.no}'>
-        ${board.title.length() > 0 ? board.title : "제목없음"}
-        </a>
-      </td>
-      <td>${board.writer.name}</td>
-      <td>${board.viewCount}</td>
-      <td>${simpleDateFormatter.format(board.createdDate)}</td>
-    </tr>
-<%
-  }
-%>
+<c:forEach items="${list}" var="board">
+  <tr>
+    <td>${board.no}</td>
+    <td><a href='/board/detail.jsp?category=${board.category}&no=${board.no}'>
+      ${board.title.length() > 0 ? board.title : "제목없음"}
+      </a>
+    </td>
+    <td>${board.writer.name}</td>
+    <td>${board.viewCount}</td>
+    <td><fmt:formatDate value="${board.createdDate}" pattern="yyyy-MM-dd"/>
+  </tr>
+</c:forEach>
 </tbody>
 </table>
 <a href='/'>메인</a>
