@@ -4,8 +4,8 @@
     contentType="text/html;charset=utf-8"%>
 <%@ page import="com.bitcamp.myapp.vo.Member"%>
 
-<div style='height:50px;background-color:orange;'>
-  <a href='/'><img src='https://www.ncloud.com/public/img/logo-m.png' style='height:40px'></a>
+<div style='height:50px;background-color:skyblue;padding:10px;'>
+  <a href='/'><img src='https://www.ncloud.com/public/img/logo-m.png' style='height:40px;background-color:white;padding:5px'></a>
   <a href='/member/list.jsp'>회원</a>
   <a href='/schedule/list.jsp'>스케줄</a>
   <a href='/board/list.jsp?category=1'>게시글</a>

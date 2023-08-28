@@ -52,7 +52,8 @@
         <td>${sch.getNo()}</td>
         <td>
           <a href='/schedule/detail.jsp?no=${sch.getNo()}'>
-            ${sch.getTitle().matches("^\\s+$") ? "제목없음" : sch.getTitle()}
+            ${(sch.getTitle() == null || sch.getTitle().length() == 0
+                || sch.getTitle().matches("^\\s+$")) ? "제목없음" : sch.getTitle()}
           </a>
         </td>
         <td>${sch.getStartTime().toString()}</td>
@@ -73,7 +74,8 @@
         <td>${sch.getNo()}</td>
         <td>
           <a href='/schedule/detail.jsp?no=${sch.getNo()}'>
-            ${sch.getTitle().matches("^\\s+$") ? "제목없음" : sch.getTitle()}
+            ${(sch.getTitle() == null || sch.getTitle().length() == 0
+                || sch.getTitle().matches("^\\s+$")) ? "제목없음" : sch.getTitle()}
           </a>
         </td>
         <td>${sch.getStartTime().toString()}</td>

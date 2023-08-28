@@ -51,7 +51,8 @@
               board.getNo(),
               board.getCategory(),
               board.getNo(),
-              board.getTitle().matches("^\\s+$") ? "제목없음" : board.getTitle(),
+              (board.getTitle() == null || board.getTitle().length() == 0
+                || board.getTitle().matches("^\\s+$")) ? "제목없음" : board.getTitle(),
               board.getWriter().getName(),
               board.getViewCount(),
               dateFormatter.format(board.getCreatedAt()),

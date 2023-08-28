@@ -10,7 +10,7 @@
     </head>
     <body>
     <h1>게시글(JSP)</h1>
-    <form action='/board/add' method='post' enctype='multipart/form-data'>
+    <form action='/board/add.jsp' method='post' enctype='multipart/form-data'>
     제목 <input type='text' name='title'><br>
     내용 <textarea name='content'></textarea><br>
     파일 <input type='file' name='files' multiple><br>

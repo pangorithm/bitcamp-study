@@ -25,7 +25,7 @@
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
-      response.sendRedirect("/auth/form");
+      response.sendRedirect("/auth/form.jsp");
       return;
     }
 
@@ -58,6 +58,6 @@
       }
 
       sqlSessionFactory.openSession(false).commit();
-      response.sendRedirect("list?category=" + board.getCategory());
+      response.sendRedirect("list.jsp?category=" + board.getCategory());
 %>
 
