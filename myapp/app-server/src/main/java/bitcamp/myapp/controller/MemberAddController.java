@@ -22,7 +22,6 @@ public class MemberAddController extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
     response.setContentType("text/html;charset=UTF-8");
     request.getRequestDispatcher("/member/form.jsp").include(request, response);
   }
@@ -37,32 +36,28 @@ public class MemberAddController extends HttpServlet {
     NcpObjectStorageService ncpObjectStorageService = (NcpObjectStorageService) this.getServletContext()
         .getAttribute("ncpObjectStorageService");
 
-    Member m = new Member();
-    m.setName(request.getParameter("name"));
-    m.setEmail(request.getParameter("email"));
-    m.setPassword(request.getParameter("password"));
-    m.setGender(request.getParameter("gender").charAt(0));
-
-    Part photoPart = request.getPart("photo");
-    if (photoPart.getSize() > 0) {
-      String uploadFileUrl = ncpObjectStorageService.uploadFile(
-          "bitcamp-nc7-bucket-14", "member/", photoPart);
-      m.setPhoto(uploadFileUrl);
-    }
-
     try {
+      Member m = new Member();
+      m.setName(request.getParameter("name"));
+      m.setEmail(request.getParameter("email"));
+      m.setPassword(request.getParameter("password"));
+      m.setGender(request.getParameter("gender").charAt(0));
+
+      Part photoPart = request.getPart("photo");
+      if (photoPart.getSize() > 0) {
+        String uploadFileUrl = ncpObjectStorageService.uploadFile(
+            "bitcamp-nc7-bucket-14", "member/", photoPart);
+        m.setPhoto(uploadFileUrl);
+      }
       memberDao.insert(m);
       sqlSessionFactory.openSession(false).commit();
       response.sendRedirect("list");
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
-
-      request.setAttribute("error", e);
       request.setAttribute("message", "회원 등록 오류!");
       request.setAttribute("refresh", "2;url=list");
-
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
+      throw new ServletException(e);
     }
   }
 }

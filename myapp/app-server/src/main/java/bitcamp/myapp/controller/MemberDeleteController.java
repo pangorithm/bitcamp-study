@@ -1,13 +1,14 @@
 package bitcamp.myapp.controller;
 
 import bitcamp.myapp.dao.MemberDao;
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 @WebServlet("/member/delete")
 public class MemberDeleteController extends HttpServlet {
@@ -16,11 +17,10 @@ public class MemberDeleteController extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
 
     MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
-        .getAttribute("sqlSessionFactory");
+    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext().getAttribute("sqlSessionFactory");
 
     try {
       if (memberDao.delete(Integer.parseInt(request.getParameter("no"))) == 0) {
@@ -32,12 +32,8 @@ public class MemberDeleteController extends HttpServlet {
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
-
-      request.setAttribute("error", e);
-      request.setAttribute("message", e.getMessage());
       request.setAttribute("refresh", "2;url=list");
-
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
+      throw new ServletException(e);
     }
   }
 

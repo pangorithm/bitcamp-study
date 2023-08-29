@@ -1,7 +1,5 @@
 package bitcamp.myapp.controller;
 
-import bitcamp.myapp.dao.MemberDao;
-import bitcamp.myapp.vo.Member;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bitcamp.myapp.dao.MemberDao;
+import bitcamp.myapp.vo.Member;
+
 @WebServlet("/auth/login")
 public class LoginController extends HttpServlet {
 
@@ -17,9 +18,13 @@ public class LoginController extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+          throws ServletException, IOException {
 
+    // 인클루딩 하는 경우,
+    // 여기서 콘텐트 타입을 미리 설정해야 한다.
     response.setContentType("text/html;charset=UTF-8");
+
+    // View 컴포넌트를 인클루딩 한다.
     request.getRequestDispatcher("/auth/form.jsp").include(request, response);
   }
 
@@ -48,10 +53,7 @@ public class LoginController extends HttpServlet {
       response.sendRedirect("/");
       return;
     }
-
-    request.setAttribute("message", "회원 정보가 일치하지 않습니다.");
-    request.setAttribute("refresh", "1;url=/auth/form.html");
-
-    request.getRequestDispatcher("/error.jsp").forward(request, response);
+    request.setAttribute("refresh", "2;url=/auth/login");
+    throw new ServletException("회원 정보가 일치하지 않습니다.");
   }
 }
