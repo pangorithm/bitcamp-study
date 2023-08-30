@@ -4,8 +4,7 @@
     contentType="text/html;charset=UTF-8"
     trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:useBean id="memberDao" type="bitcamp.myapp.dao.MemberDao" scope="application"/>
-<c:set var="member" value="${memberDao.findBy(param.no)}"/>
+
 <!DOCTYPE html>
 <html>
 <head>

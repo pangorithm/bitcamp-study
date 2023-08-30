@@ -22,8 +22,6 @@
   <tr><th>번호</th> <th>이름</th> <th>이메일</th></tr>
 </thead>
 <tbody>
-<jsp:useBean id="memberDao" type="bitcamp.myapp.dao.MemberDao" scope="application"/>
-<c:set var="list" value="${memberDao.findAll()}" scope="page"/>
 <c:forEach items="${list}" var="member">
     <tr>
         <td>${member.no}</td>

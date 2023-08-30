@@ -4,7 +4,9 @@ import bitcamp.myapp.dao.MemberDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Component;
 
+@Component("/member/delete")
 public class MemberDeleteController implements PageController {
 
   private static final long serialVersionUID = 1L;

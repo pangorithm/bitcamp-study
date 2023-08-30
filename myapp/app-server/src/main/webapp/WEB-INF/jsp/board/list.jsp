@@ -31,9 +31,6 @@
   <tr><th>번호</th> <th>제목</th> <th>작성자</th> <th>조회수</th> <th>등록일</th></tr>
 </thead>
 
-<jsp:useBean id="boardDao" type="bitcamp.myapp.dao.BoardDao" scope="application"/>
-<c:set var="list" value="${boardDao.findAll(param.category)}" scope="page"/>
-
 <tbody>
 <c:forEach items="${list}" var="board">
   <tr>

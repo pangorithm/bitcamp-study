@@ -3,7 +3,9 @@ package bitcamp.myapp.controller;
 import bitcamp.myapp.dao.MemberDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
+@Component("/member/detail")
 public class MemberDetailController implements PageController {
 
   private static final long serialVersionUID = 1L;

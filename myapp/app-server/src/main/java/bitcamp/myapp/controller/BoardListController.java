@@ -3,7 +3,9 @@ package bitcamp.myapp.controller;
 import bitcamp.myapp.dao.BoardDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
+@Component("/board/list")
 public class BoardListController implements PageController {
 
   BoardDao boardDao;

@@ -5,7 +5,9 @@ import bitcamp.myapp.vo.Board;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Component;
 
+@Component("/board/detail")
 public class BoardDetailController implements PageController {
 
   BoardDao boardDao;

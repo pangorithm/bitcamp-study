@@ -1,13 +1,15 @@
 package bitcamp.myapp.controller;
 
 import bitcamp.myapp.dao.MemberDao;
+import bitcamp.myapp.service.NcpObjectStorageService;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.NcpObjectStorageService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Component;
 
+@Component("/member/add")
 public class MemberAddController implements PageController {
 
   private static final long serialVersionUID = 1L;

@@ -9,11 +9,6 @@
 
 <c:set var="refresh" value="2;url=list.jsp?category=${param.category}" scope="request"/>
 
-<jsp:useBean id="boardDao" type="bitcamp.myapp.dao.BoardDao" scope="application"/>
-<jsp:useBean id="sqlSessionFactory" type="org.apache.ibatis.session.SqlSessionFactory" scope="application"/>
-<c:set var="board" value="${boardDao.findBy(param.category, param.no)}"/>
-
-
 <%--
     Board board = boardDao.findBy(
       Integer.parseInt(request.getParameter("category")),

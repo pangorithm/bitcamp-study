@@ -5,7 +5,9 @@ import bitcamp.myapp.vo.Member;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
+@Component("/auth/login")
 public class LoginController implements PageController {
 
   MemberDao memberDao;

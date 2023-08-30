@@ -7,7 +7,9 @@ import bitcamp.myapp.vo.Member;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Component;
 
+@Component("/board/fileDelete")
 public class BoardFileDeleteController implements PageController {
 
   BoardDao boardDao;
