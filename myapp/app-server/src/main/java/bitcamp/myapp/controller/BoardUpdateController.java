@@ -5,38 +5,34 @@ import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Member;
 import bitcamp.util.NcpObjectStorageService;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-@WebServlet("/board/update")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
-public class BoardUpdateController extends HttpServlet {
+public class BoardUpdateController implements PageController {
 
-  private static final long serialVersionUID = 1L;
+  BoardDao boardDao;
+  SqlSessionFactory sqlSessionFactory;
+  NcpObjectStorageService ncpObjectStorageService;
+
+  public BoardUpdateController(BoardDao boardDao, SqlSessionFactory sqlSessionFactory,
+      NcpObjectStorageService ncpObjectStorageService) {
+    this.boardDao = boardDao;
+    this.sqlSessionFactory = sqlSessionFactory;
+    this.ncpObjectStorageService = ncpObjectStorageService;
+  }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
-      request.setAttribute("viewUrl", "redirect:../auth/login");
-      return;
+      return "redirect:../auth/login";
     }
-
-    BoardDao boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
-    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) this.getServletContext()
-        .getAttribute("sqlSessionFactory");
-    NcpObjectStorageService ncpObjectStorageService = (NcpObjectStorageService) this.getServletContext()
-        .getAttribute("ncpObjectStorageService");
 
     try {
       Board board = new Board();
@@ -67,15 +63,14 @@ public class BoardUpdateController extends HttpServlet {
         }
 
         sqlSessionFactory.openSession(false).commit();
-        request.setAttribute("viewUrl",
-            "redirect:list?category=" + request.getParameter("category"));
+        return "redirect:list?category=" + request.getParameter("category");
       }
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
       request.setAttribute("refresh", "2;url=detail?category=" + request.getParameter("category") +
           "&no=" + request.getParameter("no"));
-      request.setAttribute("exception", e);
+      throw e;
     }
   }
 }

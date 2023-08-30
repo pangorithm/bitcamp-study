@@ -17,6 +17,8 @@ public class HomeController extends HttpServlet {
       throws ServletException, IOException {
 
     response.setContentType("text/html;charset=UTF-8");
+
     request.getRequestDispatcher("/WEB-INF/jsp/index.jsp").include(request, response);
   }
 }
+
