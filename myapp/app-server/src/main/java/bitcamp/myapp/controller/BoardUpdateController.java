@@ -28,7 +28,7 @@ public class BoardUpdateController extends HttpServlet {
 
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (loginUser == null) {
-      response.sendRedirect("/auth/login");
+      request.setAttribute("viewUrl", "redirect:../auth/login");
       return;
     }
 
@@ -67,14 +67,15 @@ public class BoardUpdateController extends HttpServlet {
         }
 
         sqlSessionFactory.openSession(false).commit();
-        response.sendRedirect("list?category=" + request.getParameter("category"));
+        request.setAttribute("viewUrl",
+            "redirect:list?category=" + request.getParameter("category"));
       }
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
       request.setAttribute("refresh", "2;url=detail?category=" + request.getParameter("category") +
           "&no=" + request.getParameter("no"));
-      throw new ServletException(e);
+      request.setAttribute("exception", e);
     }
   }
 }

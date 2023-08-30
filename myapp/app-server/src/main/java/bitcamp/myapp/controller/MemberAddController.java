@@ -23,7 +23,7 @@ public class MemberAddController extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
-    request.getRequestDispatcher("/WEB-INF/jsp/member/form.jsp").include(request, response);
+    request.setAttribute("viewUrl", "/WEB-INF/jsp/member/form.jsp");
   }
 
   @Override
@@ -51,13 +51,13 @@ public class MemberAddController extends HttpServlet {
       }
       memberDao.insert(m);
       sqlSessionFactory.openSession(false).commit();
-      response.sendRedirect("list");
+      request.setAttribute("viewUrl", "redirect:list");
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
       request.setAttribute("message", "회원 등록 오류!");
       request.setAttribute("refresh", "2;url=list");
-      throw new ServletException(e);
+      request.setAttribute("exception", e);
     }
   }
 }

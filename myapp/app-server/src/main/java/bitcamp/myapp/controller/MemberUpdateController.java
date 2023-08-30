@@ -48,13 +48,13 @@ public class MemberUpdateController extends HttpServlet {
         throw new Exception("회원이 없습니다.");
       } else {
         sqlSessionFactory.openSession(false).commit();
-        response.sendRedirect("list");
+        request.setAttribute("viewUrl", "redirect:list");
       }
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
       request.setAttribute("refresh", "2;url=list");
-      throw new ServletException(e);
+      request.setAttribute("exception", e);
     }
   }
 }

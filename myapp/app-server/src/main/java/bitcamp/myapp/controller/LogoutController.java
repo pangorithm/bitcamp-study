@@ -17,6 +17,6 @@ public class LogoutController extends HttpServlet {
       throws ServletException, IOException {
 
     request.getSession().invalidate();
-    response.sendRedirect("/");
+    request.setAttribute("viewUrl", "redirect:/");
   }
 }

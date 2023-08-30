@@ -37,7 +37,7 @@
 </c:if>
 
 <c:if test="${not empty board}">
-  <form action='/board/update.jsp' method='post' enctype='multipart/form-data'>
+  <form action='update' method='post' enctype='multipart/form-data'>
   <input type='hidden' name='category' value='${board.category}'>
   <table border='1'>
   <tr><th style='width:120px;'>번호</th>
@@ -53,7 +53,7 @@
 
   <c:forEach items="${board.attachedFiles}" var="file">
     <a href='https://kr.object.ncloudstorage.com/bitcamp-nc7-bucket-14/board/${file.filePath}'>${file.filePath}</a>
-    [<a href='/board/fileDelete?category=${param.category}&no=${file.no}'>삭제</a>]
+    [<a href='fileDelete?category=${param.category}&no=${file.no}'>삭제</a>]
     <br>
   </c:forEach>
   <input type='file' name='files' multiple>
@@ -63,8 +63,8 @@
   <div>
   <button>변경</button>
   <button type='reset'>초기화</button>
-  <a href='/board/delete.jsp?category=${param.category}&no=${param.no}'>삭제</a>
-  <a href='/board/list.jsp?category=${param.category}'>목록</a>
+  <a href='delete?category=${param.category}&no=${param.no}'>삭제</a>
+  <a href='list?category=${param.category}'>목록</a>
   </div>
   </form>
   <c:set target="${pageScope.board}" property="viewCount" value="${board.viewCount + 1}"/>

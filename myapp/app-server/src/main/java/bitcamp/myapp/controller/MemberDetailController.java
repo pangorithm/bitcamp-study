@@ -20,6 +20,6 @@ public class MemberDetailController extends HttpServlet {
     MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
     request.setAttribute("member", memberDao.findBy(Integer.parseInt(request.getParameter("no"))));
     response.setContentType("text/html;charset=UTF-8");
-    request.getRequestDispatcher("/WEB-INF/jsp/member/detail.jsp").include(request, response);
+    request.setAttribute("viewUrl", "/WEB-INF/jsp/member/detail.jsp");
   }
 }

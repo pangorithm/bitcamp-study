@@ -35,13 +35,13 @@ public class BoardDetailController extends HttpServlet {
         request.setAttribute("board", board);
       }
       response.setContentType("text/html;charset=UTF-8");
-      request.getRequestDispatcher("/WEB-INF/jsp/board/detail.jsp").include(request, response);
+      request.setAttribute("viewUrl", "/WEB-INF/jsp/board/detail.jsp");
 
     } catch (Exception e) {
       sqlSessionFactory.openSession(false).rollback();
       request.setAttribute("refresh",
           "5;url=/board/list?category=" + request.getParameter("category"));
-      throw new ServletException(e);
+      request.setAttribute("exception", e);
     }
   }
 }
