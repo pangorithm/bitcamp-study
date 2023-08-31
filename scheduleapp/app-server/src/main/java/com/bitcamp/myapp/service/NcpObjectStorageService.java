@@ -1,5 +1,6 @@
-package com.bitcamp.util;
+package com.bitcamp.myapp.service;
 
+import com.bitcamp.myapp.config.NcpConfig;
 import java.io.InputStream;
 import java.util.UUID;
 import javax.servlet.http.Part;
@@ -11,8 +12,11 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NcpObjectStorageService {
+
   final AmazonS3 s3;
 
   public NcpObjectStorageService(NcpConfig ncpConfig) {
