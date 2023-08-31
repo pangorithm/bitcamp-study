@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         version="4.0"
+         metadata-complete="false"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+  
+  <display-name>scheduleapp-server</display-name>
+
+  <context-param>
+    <param-name>mybatis-config</param-name>
+    <param-value>com/bitcamp/myapp/config/mybatis-config.xml</param-value>
+  </context-param>
+
+
+  <servlet>
+    <servlet-name>/board/add.jsp</servlet-name>
+    <jsp-file>/board/add.jsp</jsp-file>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size>
+      <max-request-size>52428800</max-request-size>
+      <file-size-threshold>1048576</file-size-threshold>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>/board/add.jsp</servlet-name>
+    <url-pattern>/board/add.jsp</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>/board/update.jsp</servlet-name>
+    <jsp-file>/board/update.jsp</jsp-file>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size>
+      <max-request-size>52428800</max-request-size>
+      <file-size-threshold>1048576</file-size-threshold>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>/board/update.jsp</servlet-name>
+    <url-pattern>/board/update.jsp</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>/member/add.jsp</servlet-name>
+    <jsp-file>/member/add.jsp</jsp-file>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size>
+      <max-request-size>52428800</max-request-size>
+      <file-size-threshold>1048576</file-size-threshold>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>/member/add.jsp</servlet-name>
+    <url-pattern>/member/add.jsp</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>/member/update.jsp</servlet-name>
+    <jsp-file>/member/update.jsp</jsp-file>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size>
+      <max-request-size>52428800</max-request-size>
+      <file-size-threshold>1048576</file-size-threshold>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>/member/update.jsp</servlet-name>
+    <url-pattern>/member/update.jsp</url-pattern>
+  </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
