@@ -9,20 +9,23 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Component("/board/add")
 public class BoardAddController implements PageController {
 
   BoardDao boardDao;
-  SqlSessionFactory sqlSessionFactory;
+  PlatformTransactionManager txManager;
   NcpObjectStorageService ncpObjectStorageService;
 
-  public BoardAddController(BoardDao boardDao, SqlSessionFactory sqlSessionFactory,
+  public BoardAddController(BoardDao boardDao, PlatformTransactionManager txManager,
       NcpObjectStorageService ncpObjectStorageService) {
     this.boardDao = boardDao;
-    this.sqlSessionFactory = sqlSessionFactory;
+    this.txManager = txManager;
     this.ncpObjectStorageService = ncpObjectStorageService;
   }
 
@@ -38,6 +41,13 @@ public class BoardAddController implements PageController {
       request.getParts();
       return "redirect:../auth/login";
     }
+
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+    TransactionStatus status = txManager.getTransaction(def);
+
     try {
       Board board = new Board();
       board.setWriter(loginUser);
@@ -62,11 +72,11 @@ public class BoardAddController implements PageController {
         boardDao.insertFiles(board);
       }
 
-      sqlSessionFactory.openSession(false).commit();
+      txManager.commit(status);
       return "redirect:list?category=" + request.getParameter("category");
 
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
+      txManager.rollback(status);
       request.setAttribute("message", "게시글 등록 오류!");
       request.setAttribute("refresh", "2;url=list?category=" + request.getParameter("category"));
       throw e;

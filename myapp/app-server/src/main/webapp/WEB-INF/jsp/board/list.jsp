@@ -22,7 +22,7 @@
 
 <jsp:include page="../header.jsp"/>
 
-<h1>게시글 목록-2</h1>
+<h1>게시글 목록</h1>
 <div style='margin:5px;'>
 <a href='add?category=${param.category}'>새 글</a>
 </div>
