@@ -81,7 +81,7 @@
     board_no=#{no}
   </update>
 
-  <update id="update" parameterType="int">
+  <update id="update" parameterType="board">
     update myapp_board set
     title=#{title},
     content=#{content}
