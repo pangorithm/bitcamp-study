@@ -18,7 +18,7 @@
 제목 <input type='text' name='title'><br>
 내용 <textarea name='content'></textarea><br>
 파일 <input type='file' name='files' multiple><br>
-<input type='hidden' name='category' value='1'>
+<input type='hidden' name='category' value='${param.category}'>
 <button>등록</button>
 </form>
 

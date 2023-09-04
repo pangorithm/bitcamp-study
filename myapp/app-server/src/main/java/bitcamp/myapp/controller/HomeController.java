@@ -2,9 +2,9 @@ package bitcamp.myapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component("/")
+@Controller("/")
 public class HomeController implements PageController {
 
   private static final long serialVersionUID = 1L;

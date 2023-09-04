@@ -70,15 +70,15 @@
     myapp_board as b inner join myapp_member as m on b.writer=m.member_no
     left outer join myapp_board_file f on b.board_no=f.board_no
     where
-    and b.board_no=#{boardNo}
+    b.board_no=#{boardNo}
 
   </select>
 
   <update id="updateCount" parameterType="int">
     update myapp_board set
-    view_count=viewCount + 1
+    view_count=view_count + 1
     where
-    and board_no=#{no}
+    board_no=#{no}
   </update>
 
   <update id="update" parameterType="int">
