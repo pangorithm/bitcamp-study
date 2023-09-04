@@ -1,32 +1,35 @@
 package com.bitcamp.myapp.controller;
 
 import com.bitcamp.myapp.dao.ScheduleDao;
-import com.bitcamp.myapp.vo.Schedule;
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Component("/schedule/participantDelete")
 public class ScheduleParticipantDelete implements PageController {
 
   ScheduleDao scheduleDao;
-  SqlSessionFactory sqlSessionFactory;
+  PlatformTransactionManager txManager;
 
-  public ScheduleParticipantDelete(ScheduleDao scheduleDao, SqlSessionFactory sqlSessionFactory) {
+  public ScheduleParticipantDelete(ScheduleDao scheduleDao, PlatformTransactionManager txManager) {
     this.scheduleDao = scheduleDao;
-    this.sqlSessionFactory = sqlSessionFactory;
+    this.txManager = txManager;
   }
 
   @Override
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     int scheduleNo = Integer.parseInt(request.getParameter("no"));
     int deleteParticipantNo = Integer.parseInt(request.getParameter("deleteParticipantNo"));
+
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
     try {
       int result = scheduleDao.deleteScheduleParticipant(scheduleNo, deleteParticipantNo);
 
@@ -35,12 +38,12 @@ public class ScheduleParticipantDelete implements PageController {
       } else if (result == -2) {
         throw new Exception("존재하지 않는 멤버입니다.");
       } else {
-        sqlSessionFactory.openSession(false).commit();
+        txManager.commit(status);
         return "redirect:detail?no=" + scheduleNo;
       }
 
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
+      txManager.rollback(status);
       request.setAttribute("message", e.getMessage());
       request.setAttribute("refresh", "2;url=detail?no=" + scheduleNo);
       throw e;

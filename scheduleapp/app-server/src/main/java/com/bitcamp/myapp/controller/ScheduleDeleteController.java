@@ -1,26 +1,25 @@
 package com.bitcamp.myapp.controller;
 
 import com.bitcamp.myapp.dao.ScheduleDao;
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
-import org.apache.ibatis.session.SqlSessionFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Component("/schedule/delete")
 public class ScheduleDeleteController implements PageController {
 
   ScheduleDao scheduleDao;
-  SqlSessionFactory sqlSessionFactory;
+  PlatformTransactionManager txManager;
 
-  public ScheduleDeleteController(ScheduleDao scheduleDao, SqlSessionFactory sqlSessionFactory) {
+  public ScheduleDeleteController(ScheduleDao scheduleDao, PlatformTransactionManager txManager) {
     this.scheduleDao = scheduleDao;
-    this.sqlSessionFactory = sqlSessionFactory;
+    this.txManager = txManager;
   }
 
   @Override
@@ -28,6 +27,11 @@ public class ScheduleDeleteController implements PageController {
 
     Schedule sch = scheduleDao.findBy(Integer.parseInt(request.getParameter("no")));
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
+
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
 
     try {
       if (sch == null) {
@@ -40,10 +44,10 @@ public class ScheduleDeleteController implements PageController {
 
       scheduleDao.deleteAllScheduleParticipant(sch.getNo());
       scheduleDao.delete(sch);
-      sqlSessionFactory.openSession(false).commit();
+      txManager.commit(status);
       return "redirect:list";
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
+      txManager.rollback(status);
       request.setAttribute("error", e);
       request.setAttribute("message", e.getMessage());
       request.setAttribute("refresh", "2;url=list");

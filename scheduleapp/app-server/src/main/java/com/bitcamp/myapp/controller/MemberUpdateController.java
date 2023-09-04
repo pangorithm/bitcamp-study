@@ -2,26 +2,29 @@ package com.bitcamp.myapp.controller;
 
 import com.bitcamp.myapp.dao.MemberDao;
 import com.bitcamp.myapp.service.NcpObjectStorageService;
+import com.bitcamp.myapp.vo.Member;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.myapp.vo.Member;
 import javax.servlet.http.Part;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Component("/member/update")
 public class MemberUpdateController implements PageController {
 
   MemberDao memberDao;
-  SqlSessionFactory sqlSessionFactory;
+  PlatformTransactionManager txManager;
   NcpObjectStorageService ncpObjectStorageService;
 
   public MemberUpdateController(
       MemberDao memberDao,
-      SqlSessionFactory sqlSessionFactory,
+      PlatformTransactionManager txManager,
       NcpObjectStorageService ncpObjectStorageService) {
     this.memberDao = memberDao;
-    this.sqlSessionFactory = sqlSessionFactory;
+    this.txManager = txManager;
     this.ncpObjectStorageService = ncpObjectStorageService;
   }
 
@@ -52,18 +55,23 @@ public class MemberUpdateController implements PageController {
       m.setPhoto(uploadFileUrl);
     }
 
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
     try {
       if (!m.equals(loginUser)) {
         throw new Exception("로그인한 계정만 수정 가능합니다.");
       } else if (memberDao.update(m) == 0) {
         throw new Exception("회원이 없습니다.");
       } else {
-        sqlSessionFactory.openSession(false).commit();
+        txManager.commit(status);
         return "redirect:list";
       }
 
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
+      txManager.rollback(status);
 
       request.setAttribute("message", e.getMessage());
       request.setAttribute("refresh", "2;url=list");

@@ -1,28 +1,27 @@
 package com.bitcamp.myapp.controller;
 
 import com.bitcamp.myapp.dao.ScheduleDao;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.Schedule;
-import org.apache.ibatis.session.SqlSessionFactory;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Component("/schedule/update")
 public class ScheduleUpdateController implements PageController {
 
   ScheduleDao scheduleDao;
-  SqlSessionFactory sqlSessionFactory;
+  PlatformTransactionManager txManager;
 
-  public ScheduleUpdateController(ScheduleDao scheduleDao, SqlSessionFactory sqlSessionFactory) {
+  public ScheduleUpdateController(ScheduleDao scheduleDao, PlatformTransactionManager txManager) {
     this.scheduleDao = scheduleDao;
-    this.sqlSessionFactory = sqlSessionFactory;
+    this.txManager = txManager;
   }
 
   @Override
@@ -36,15 +35,20 @@ public class ScheduleUpdateController implements PageController {
     sch.setEndTime(Timestamp.valueOf(LocalDateTime.parse(request.getParameter("end-time"))));
     sch.setOwner((Member) request.getSession().getAttribute("loginUser"));
 
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
     try {
       if (scheduleDao.update(sch) == 0) {
         throw new Exception("스케줄이 없거나 변경 권한이 없습니다.");
       } else {
-        sqlSessionFactory.openSession(false).commit();
+        txManager.commit(status);
         return "redirect:list";
       }
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
+      txManager.rollback(status);
       request.setAttribute("message", e.getMessage());
       request.setAttribute("refresh", "2;url=detail?no=" + sch.getNo());
       throw e;

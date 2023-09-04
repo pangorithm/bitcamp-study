@@ -1,25 +1,24 @@
 package com.bitcamp.myapp.controller;
 
 import com.bitcamp.myapp.dao.MemberDao;
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
+import com.bitcamp.myapp.vo.Member;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bitcamp.myapp.vo.Member;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Component("/member/addressDelete")
 public class MemberAddressDeleteController implements PageController {
 
   MemberDao memberDao;
-  SqlSessionFactory sqlSessionFactory;
+  PlatformTransactionManager txManager;
 
-  public MemberAddressDeleteController(MemberDao memberDao, SqlSessionFactory sqlSessionFactory) {
+  public MemberAddressDeleteController(MemberDao memberDao, PlatformTransactionManager txManager) {
     this.memberDao = memberDao;
-    this.sqlSessionFactory = sqlSessionFactory;
+    this.txManager = txManager;
   }
 
   @Override
@@ -29,12 +28,17 @@ public class MemberAddressDeleteController implements PageController {
     int mano = Integer.parseInt((String) request.getParameter("mano"));
     int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
     try {
       memberDao.deleteMemberAddress(loginUser.getNo(), mano);
-      sqlSessionFactory.openSession(false).commit();
+      txManager.commit(status);
       return "redirect:detail?no=" + memberNo;
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
+      txManager.rollback(status);
       request.setAttribute("message", e.getMessage());
       request.setAttribute("refresh", "2;url=/member/detail?no=" + memberNo);
       throw e;

@@ -1,39 +1,44 @@
 package com.bitcamp.myapp.controller;
 
 import com.bitcamp.myapp.dao.MemberDao;
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Component("/member/delete")
 public class MemberDeleteController implements PageController {
 
   MemberDao memberDao;
-  SqlSessionFactory sqlSessionFactory;
+  PlatformTransactionManager txManager;
 
-  public MemberDeleteController(MemberDao memberDao, SqlSessionFactory sqlSessionFactory) {
+  public MemberDeleteController(MemberDao memberDao, PlatformTransactionManager txManager) {
     this.memberDao = memberDao;
-    this.sqlSessionFactory = sqlSessionFactory;
+    this.txManager = txManager;
   }
 
   @Override
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     int no = Integer.parseInt(request.getParameter("no"));
+
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
     try {
       if (memberDao.delete(no) == 0) {
         throw new Exception("해당 번호의 멤버가 없거나 삭제 권한이 없습니다.");
       } else {
-        sqlSessionFactory.openSession(false).commit();
+        txManager.commit(status);
         return "redirect:list";
       }
     } catch (Exception e) {
-      sqlSessionFactory.openSession(false).rollback();
+      txManager.rollback(status);
       request.setAttribute("message", e.getMessage());
       request.setAttribute("refresh", "2;url=list");
       throw e;

@@ -2,45 +2,14 @@ package com.bitcamp.myapp.servlet;
 
 import com.bitcamp.myapp.config.AppConfig;
 import com.bitcamp.myapp.config.NcpConfig;
-import com.bitcamp.myapp.controller.BoardAddController;
-import com.bitcamp.myapp.controller.BoardDeleteController;
-import com.bitcamp.myapp.controller.BoardDetailController;
-import com.bitcamp.myapp.controller.BoardFileDeleteController;
-import com.bitcamp.myapp.controller.BoardListController;
-import com.bitcamp.myapp.controller.BoardUpdateController;
-import com.bitcamp.myapp.controller.HomeController;
-import com.bitcamp.myapp.controller.LoginController;
-import com.bitcamp.myapp.controller.LogoutController;
-import com.bitcamp.myapp.controller.MemberAddController;
-import com.bitcamp.myapp.controller.MemberAddressAddController;
-import com.bitcamp.myapp.controller.MemberAddressDeleteController;
-import com.bitcamp.myapp.controller.MemberDeleteController;
-import com.bitcamp.myapp.controller.MemberDetailController;
-import com.bitcamp.myapp.controller.MemberListController;
-import com.bitcamp.myapp.controller.MemberUpdateController;
 import com.bitcamp.myapp.controller.PageController;
-import com.bitcamp.myapp.controller.ScheduleAddController;
-import com.bitcamp.myapp.controller.ScheduleDeleteController;
-import com.bitcamp.myapp.controller.ScheduleDetailController;
-import com.bitcamp.myapp.controller.ScheduleListController;
-import com.bitcamp.myapp.controller.ScheduleParticipantAdd;
-import com.bitcamp.myapp.controller.ScheduleParticipantDelete;
-import com.bitcamp.myapp.controller.ScheduleSearchController;
-import com.bitcamp.myapp.controller.ScheduleUpdateController;
-import com.bitcamp.myapp.dao.BoardDao;
-import com.bitcamp.myapp.dao.MemberDao;
-import com.bitcamp.myapp.dao.ScheduleDao;
-import com.bitcamp.myapp.service.NcpObjectStorageService;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @WebServlet("/app/*")
@@ -55,16 +24,13 @@ public class DispatcherServlet extends HttpServlet {
   public void init() throws ServletException {
     System.out.println("DispatcherServlet.init() 호출됨!");
     iocContainer = new AnnotationConfigApplicationContext(AppConfig.class, NcpConfig.class);
-
-    SqlSessionFactory sqlSessionFactory = iocContainer.getBean(SqlSessionFactory.class);
-    this.getServletContext().setAttribute("sqlSessionFactory", sqlSessionFactory);
   }
 
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String pageControllerPath = request.getPathInfo();
-    
+
     response.setContentType("text/html;charset=UTF-8");
 
     // 클라이언트가 요청한 페이지 컨트롤러를 찾는다.
