@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface MemberDao {
 
-  void insert(Member member);
+  int insert(Member member);
 
   List<Member> findAll();
 

@@ -1,6 +1,6 @@
 package bitcamp.myapp.controller;
 
-import bitcamp.myapp.dao.BoardDao;
+import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.service.NcpObjectStorageService;
 import bitcamp.myapp.vo.AttachedFile;
 import bitcamp.myapp.vo.Board;
@@ -9,25 +9,16 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-@Component("/board/add")
+@Controller("/board/add")
 public class BoardAddController implements PageController {
 
-  BoardDao boardDao;
-  PlatformTransactionManager txManager;
+  @Autowired
+  BoardService boardService;
+  @Autowired
   NcpObjectStorageService ncpObjectStorageService;
-
-  public BoardAddController(BoardDao boardDao, PlatformTransactionManager txManager,
-      NcpObjectStorageService ncpObjectStorageService) {
-    this.boardDao = boardDao;
-    this.txManager = txManager;
-    this.ncpObjectStorageService = ncpObjectStorageService;
-  }
 
   @Override
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -41,12 +32,6 @@ public class BoardAddController implements PageController {
       request.getParts();
       return "redirect:../auth/login";
     }
-
-    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-    def.setName("tx1");
-    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-
-    TransactionStatus status = txManager.getTransaction(def);
 
     try {
       Board board = new Board();
@@ -67,16 +52,10 @@ public class BoardAddController implements PageController {
       }
       board.setAttachedFiles(attachedFiles);
 
-      boardDao.insert(board);
-      if (attachedFiles.size() > 0) {
-        boardDao.insertFiles(board);
-      }
-
-      txManager.commit(status);
+      boardService.add(board);
       return "redirect:list?category=" + request.getParameter("category");
 
     } catch (Exception e) {
-      txManager.rollback(status);
       request.setAttribute("message", "게시글 등록 오류!");
       request.setAttribute("refresh", "2;url=list?category=" + request.getParameter("category"));
       throw e;

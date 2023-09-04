@@ -3,11 +3,13 @@ package bitcamp.myapp.controller;
 import bitcamp.myapp.dao.BoardDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-@Component("/board/list")
+@Controller("/board/list")
 public class BoardListController implements PageController {
 
+  @Autowired
   BoardDao boardDao;
 
   public BoardListController(BoardDao boardDao) {
