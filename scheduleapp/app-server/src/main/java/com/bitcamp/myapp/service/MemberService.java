@@ -1,6 +1,8 @@
 package com.bitcamp.myapp.service;
 
+import com.bitcamp.myapp.vo.AddressType;
 import com.bitcamp.myapp.vo.Member;
+import com.bitcamp.myapp.vo.MemberAddress;
 import java.util.List;
 
 // 비즈니스 로직을 수행하는 객체의 사용 규칙 정의
@@ -9,6 +11,8 @@ import java.util.List;
 public interface MemberService {
 
   int add(Member member) throws Exception;
+
+  int addAddress(MemberAddress memberAddress) throws Exception;
 
   List<Member> list() throws Exception;
 
@@ -19,4 +23,9 @@ public interface MemberService {
   int update(Member member) throws Exception;
 
   int delete(int memberNo) throws Exception;
+
+  int deleteAddress(int mano) throws Exception;
+
+
+  List<AddressType> getAddressTypeList() throws Exception;
 }

@@ -24,7 +24,7 @@ public interface MemberDao {
 
   List<AddressType> findAllAddressType();
 
-  void insertMemberAddress(MemberAddress memberAddress);
+  int insertMemberAddress(MemberAddress memberAddress);
 
   int deleteMemberAddress(int mano);
 

@@ -6,11 +6,9 @@ import java.util.Objects;
 
 public class Member implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-
   public static final char MALE = 'M';
   public static final char FEMALE = 'W';
-
+  private static final long serialVersionUID = 1L;
   private int no;
   private String name;
   private String email;
@@ -18,8 +16,8 @@ public class Member implements Serializable {
   private String tel;
   private char gender;
   private Date createdAt;
-
   private String photo;
+//  private List<MemberAddress> addressList;
 
   @Override
   public int hashCode() {
@@ -28,12 +26,15 @@ public class Member implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     Member other = (Member) obj;
     return no == other.no;
   }
@@ -101,4 +102,12 @@ public class Member implements Serializable {
   public void setPhoto(String photo) {
     this.photo = photo;
   }
+//
+//  public List<MemberAddress> getAddressList() {
+//    return addressList;
+//  }
+//
+//  public void setAddressList(List<MemberAddress> addressList) {
+//    this.addressList = addressList;
+//  }
 }

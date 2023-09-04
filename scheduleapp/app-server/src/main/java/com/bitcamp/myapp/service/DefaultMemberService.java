@@ -1,26 +1,59 @@
 package com.bitcamp.myapp.service;
 
 import com.bitcamp.myapp.dao.MemberDao;
+import com.bitcamp.myapp.vo.AddressType;
 import com.bitcamp.myapp.vo.Member;
+import com.bitcamp.myapp.vo.MemberAddress;
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-//@Service
+@Service
 public class DefaultMemberService implements MemberService {
 
   MemberDao memberDao;
+  PlatformTransactionManager txManager;
 
-
-  public DefaultMemberService(MemberDao memberDao) {
+  public DefaultMemberService(MemberDao memberDao, PlatformTransactionManager txManager) {
     this.memberDao = memberDao;
+    this.txManager = txManager;
   }
 
-  @Transactional
   @Override
   public int add(Member member) throws Exception {
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
 
-    return memberDao.insert(member);
+    try {
+      int count = memberDao.insert(member);
+      txManager.commit(status);
+      return count;
+    } catch (Exception e) {
+      txManager.rollback(status);
+      throw e;
+    }
+  }
 
+  @Override
+  public int addAddress(MemberAddress memberAddress) throws Exception {
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
+    try {
+      int count = memberDao.insertMemberAddress(memberAddress);
+      txManager.commit(status);
+      return count;
+    } catch (Exception e) {
+      txManager.rollback(status);
+      throw e;
+    }
   }
 
   @Override
@@ -30,7 +63,9 @@ public class DefaultMemberService implements MemberService {
 
   @Override
   public Member get(int memberNo) throws Exception {
-    return memberDao.findBy(memberNo);
+    Member member = memberDao.findBy(memberNo);
+//    member.setAddressList(memberDao.getMembersAddressList(member.getNo()));
+    return member;
   }
 
   @Override
@@ -38,15 +73,59 @@ public class DefaultMemberService implements MemberService {
     return memberDao.findByEmailAndPassword(email, password);
   }
 
-  @Transactional
   @Override
   public int update(Member member) throws Exception {
-    return memberDao.update(member);
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
+    try {
+      int count = memberDao.update(member);
+      txManager.commit(status);
+      return count;
+    } catch (Exception e) {
+      txManager.rollback(status);
+      throw e;
+    }
   }
 
-  @Transactional
   @Override
   public int delete(int memberNo) throws Exception {
-    return memberDao.delete(memberNo);
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
+    try {
+      int count = memberDao.delete(memberNo);
+      txManager.commit(status);
+      return count;
+    } catch (Exception e) {
+      txManager.rollback(status);
+      throw e;
+    }
+  }
+
+  @Override
+  public int deleteAddress(int mano) throws Exception {
+    DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    def.setName("tx1");
+    def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    TransactionStatus status = txManager.getTransaction(def);
+
+    try {
+      int count = memberDao.deleteMemberAddress(mano);
+      txManager.commit(status);
+      return count;
+    } catch (Exception e) {
+      txManager.rollback(status);
+      throw e;
+    }
+  }
+
+  @Override
+  public List<AddressType> getAddressTypeList() throws Exception {
+    return memberDao.findAllAddressType();
   }
 }

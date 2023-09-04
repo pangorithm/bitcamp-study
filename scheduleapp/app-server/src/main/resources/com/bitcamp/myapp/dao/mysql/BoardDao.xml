@@ -72,7 +72,7 @@
     sch_board as b inner join sch_member as m on b.mno=m.mno
     left outer join sch_board_file f on b.bno=f.bno
     where
-    and b.bno=#{boardNo}
+    b.bno=#{boardNo}
 
   </select>
 
@@ -80,7 +80,7 @@
     update sch_board set
     view_count=view_count + 1
     where
-    and bno=#{no}
+    bno=#{no}
   </update>
 
   <update id="update" parameterType="board">
