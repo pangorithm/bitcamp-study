@@ -5,23 +5,28 @@ import bitcamp.myapp.vo.Member;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-@Controller("/auth/login")
-public class LoginController implements PageController {
+@Controller
+public class AuthController {
 
   @Autowired
   MemberService memberService;
 
-  @Override
-  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    if (request.getMethod().equals("GET")) {
-      return "/WEB-INF/jsp/auth/form.jsp";
-    }
+  @RequestMapping("/auth/form")
+  public String form() {
+    return "/WEB-INF/jsp/auth/form.jsp";
+  }
 
-    String email = (request.getParameter("email"));
-    String password = (request.getParameter("password"));
+  @RequestMapping("/auth/login")
+  public String login(
+      @RequestParam("email") String email,
+      @RequestParam("password") String password,
+      HttpSession session,
+      HttpServletRequest request,
+      HttpServletResponse response) throws Exception {
 
     if (request.getParameter("saveEmail") != null) {
       Cookie cookie = new Cookie("email", email);
@@ -34,11 +39,17 @@ public class LoginController implements PageController {
 
     Member loginUser = memberService.get(email, password);
     if (loginUser == null) {
-      request.setAttribute("refresh", "2;url=/app/auth/login");
+      request.setAttribute("refresh", "2;url=form");
       throw new Exception("회원 정보가 일치하지 않습니다.");
     }
 
-    request.getSession().setAttribute("loginUser", loginUser);
+    session.setAttribute("loginUser", loginUser);
+    return "redirect:/";
+  }
+
+  @RequestMapping("/auth/logout")
+  public String logout(HttpSession session) throws Exception {
+    session.invalidate();
     return "redirect:/";
   }
 }
