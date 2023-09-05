@@ -8,24 +8,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-@Controller("/auth/login")
-public class LoginController {
+@Controller
+public class AuthController {
 
   @Autowired
   MemberService memberService;
 
-  @RequestMapping
-  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  @RequestMapping("/auth/login")
+  public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
     if (request.getMethod().equals("GET")) {
       return "/WEB-INF/jsp/auth/form.jsp";
     }
 
-    Member m = new Member();
-    m.setEmail(request.getParameter("email"));
-    m.setPassword(request.getParameter("password"));
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
 
     if (request.getParameter("saveEmail") != null) {
-      Cookie cookie = new Cookie("email", m.getEmail());
+      Cookie cookie = new Cookie("email", email);
       response.addCookie(cookie);
     } else {
       Cookie cookie = new Cookie("email", "no");
@@ -33,7 +32,7 @@ public class LoginController {
       response.addCookie(cookie);
     }
 
-    Member loginUser = memberService.get(m.getEmail(), m.getPassword());
+    Member loginUser = memberService.get(email, password);
     if (loginUser == null) {
       request.setAttribute("refresh", "2;url=/app/auth/login");
       throw new Exception("회원 정보가 일치하지 않습니다.");
@@ -43,5 +42,9 @@ public class LoginController {
     return "redirect:/";
   }
 
-
+  @RequestMapping("/auth/logout")
+  public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    request.getSession().invalidate();
+    return "redirect:/";
+  }
 }
