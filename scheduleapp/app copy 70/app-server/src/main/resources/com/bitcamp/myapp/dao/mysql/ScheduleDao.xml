@@ -110,7 +110,7 @@
     start_time=#{startTime},
     end_time=#{endTime}
     where
-    sno=#{scheduleNo}
+    sno=#{no}
   </update>
 
   <delete id="delete" parameterType="int">
