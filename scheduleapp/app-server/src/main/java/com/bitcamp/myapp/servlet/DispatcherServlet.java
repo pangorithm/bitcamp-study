@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -143,6 +145,10 @@ public class DispatcherServlet extends HttpServlet {
             Integer.parseInt(request.getParameter(p.getAnnotation(RequestParam.class).value())));
       } else if (p.getType() == char.class) {
         arguments.add(request.getParameter(p.getAnnotation(RequestParam.class).value()).charAt(0));
+      } else if (p.getType() == Timestamp.class) {
+        arguments.add(Timestamp.valueOf(
+            LocalDateTime.parse(
+                request.getParameter(p.getAnnotation(RequestParam.class).value()))));
       } else if (p.getType() == Map.class) {
         arguments.add(model);
       } else if (p.getType() == Part.class) {

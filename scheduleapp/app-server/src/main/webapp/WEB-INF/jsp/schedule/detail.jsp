@@ -26,8 +26,8 @@
         <td style='width:300px;'><input type='text' name='no' value='${schedule.getNo()}' readonly='readonly'></td></tr>
         <tr><th>제목</th> <td><input type='text' name='title' value='${schedule.getTitle()}'></td></tr>
         <tr><th>제목</th> <td><input type='text' name='content' value='${schedule.getContent()}'></td></tr>
-        <tr><th>시작</th> <td><input type='datetime-local' name='start-time' value='${schedule.getStartTime()}'></td></tr>
-        <tr><th>종료</th> <td><input type='datetime-local' name='end-time' value='${schedule.getEndTime()}'></td></tr>
+        <tr><th>시작</th> <td><input type='datetime-local' name='startTime' value='${schedule.getStartTime()}'></td></tr>
+        <tr><th>종료</th> <td><input type='datetime-local' name='endTime' value='${schedule.getEndTime()}'></td></tr>
         <tr><th>스캐줄 매니저</th> <td><a href='../member/detail.jsp?no=${schedule.getOwner().getNo()}'>${schedule.getOwner().getName()}</a></td></tr>
       </table>
       <div>
