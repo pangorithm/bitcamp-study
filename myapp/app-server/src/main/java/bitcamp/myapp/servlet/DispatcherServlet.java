@@ -80,9 +80,10 @@ public class DispatcherServlet extends HttpServlet {
       throw new ServletException("요청을 처리할 핸들러가 없습니다.");
     }
 
+    Map<String, Object> model = new HashMap<>();
+
     // request handler 호출하기
     try {
-      Map<String, Object> model = new HashMap<>();
       Object[] arguments = prepareArguments(
           requestHandlerMapping.handler, request, response, model);
 
@@ -103,6 +104,12 @@ public class DispatcherServlet extends HttpServlet {
 
     } catch (Exception e) {
       // 페이지 컨트롤러 실행 중 오류가 발생했다면, 예외를 던진다.
+
+      Set<Map.Entry<String, Object>> entrySet = model.entrySet();
+      for (Map.Entry<String, Object> entry : entrySet) {
+        request.setAttribute(entry.getKey(), entry.getValue());
+      }
+      
       throw new ServletException("요청 처리 중 오류 발생!", e);
     }
 
