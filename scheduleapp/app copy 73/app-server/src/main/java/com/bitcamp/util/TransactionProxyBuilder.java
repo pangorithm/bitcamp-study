@@ -34,7 +34,7 @@ public class TransactionProxyBuilder {
             // 1) 프록시 객체의 메서드와 일치하는 오리지널 작업 객체의 메서드를 가져온다.
             Method originalMethod = getOriginalMethod(originalWorker, method);
 
-            // 2) 오리지널 객체의 메서드에서 @Transaction 애노테이션을 추출한다.
+            // 2) 오리지널 객체의 메서드에서 @Transactional 애노테이션을 추출한다.
             Transactional trasactional = originalMethod.getAnnotation(Transactional.class);
 
             if (trasactional != null) {

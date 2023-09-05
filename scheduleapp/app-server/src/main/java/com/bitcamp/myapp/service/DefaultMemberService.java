@@ -6,9 +6,8 @@ import com.bitcamp.myapp.vo.Member;
 import com.bitcamp.myapp.vo.MemberAddress;
 import com.bitcamp.util.Transactional;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class DefaultMemberService implements MemberService {
 
   MemberDao memberDao;

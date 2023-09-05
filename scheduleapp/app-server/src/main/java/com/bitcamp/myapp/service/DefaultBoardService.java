@@ -5,9 +5,8 @@ import com.bitcamp.myapp.vo.AttachedFile;
 import com.bitcamp.myapp.vo.Board;
 import com.bitcamp.util.Transactional;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class DefaultBoardService implements BoardService {
 
   BoardDao boardDao;

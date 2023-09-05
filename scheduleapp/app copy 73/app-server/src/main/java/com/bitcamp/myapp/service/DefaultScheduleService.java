@@ -7,9 +7,8 @@ import com.bitcamp.util.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class DefaultScheduleService implements ScheduleService {
 
   ScheduleDao scheduleDao;
