@@ -2,8 +2,8 @@ package bitcamp.myapp.controller;
 
 import bitcamp.myapp.service.MemberService;
 import bitcamp.myapp.vo.Member;
+import java.util.Map;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,12 @@ public class AuthController {
   public String login(
       @RequestParam("email") String email,
       @RequestParam("password") String password,
+      @RequestParam("saveEmail") String saveEmail,
       HttpSession session,
-      HttpServletRequest request,
+      Map<String, Object> model,
       HttpServletResponse response) throws Exception {
 
-    if (request.getParameter("saveEmail") != null) {
+    if (saveEmail != null) {
       Cookie cookie = new Cookie("email", email);
       response.addCookie(cookie);
     } else {
@@ -39,7 +40,7 @@ public class AuthController {
 
     Member loginUser = memberService.get(email, password);
     if (loginUser == null) {
-      request.setAttribute("refresh", "2;url=form");
+      model.put("refresh", "2;url=form");
       throw new Exception("회원 정보가 일치하지 않습니다.");
     }
 

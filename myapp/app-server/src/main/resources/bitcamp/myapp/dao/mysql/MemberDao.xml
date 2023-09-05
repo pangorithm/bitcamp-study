@@ -14,10 +14,10 @@
     <result column="photo" property="photo" />
   </resultMap>
 
-  <select id="insert" parameterType="member">
+  <insert id="insert" parameterType="member">
     insert into myapp_member(name, email, password, gender, photo)
     values(#{name}, #{email}, sha1(#{password}), #{gender}, #{photo})
-  </select>
+  </insert>
 
   <select id="findAll" resultMap="memberMap">
     select
@@ -64,7 +64,7 @@
     update myapp_member set
     name=#{name}
     ,email=#{email}
-    <if test="password != null">
+    <if test="password != null and password.length() > 0">
       ,password=sha1(#{password})
     </if>
     ,gender=#{gender}
