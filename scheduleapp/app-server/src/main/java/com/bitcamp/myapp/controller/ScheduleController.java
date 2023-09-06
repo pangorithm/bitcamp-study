@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ScheduleController {
@@ -75,7 +76,7 @@ public class ScheduleController {
 
   @RequestMapping("/schedule/detail")
   public String detail(
-      @RequestParam("no") int no,
+      int no,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
@@ -119,8 +120,8 @@ public class ScheduleController {
 
   @RequestMapping("/schedule/participantAdd")
   public String participantAdd(
-      @RequestParam("no") int scheduleNo,
-      @RequestParam("addParticipantNo") int addParticipantNo,
+      int scheduleNo,
+      int addParticipantNo,
       Map<String, Object> model) throws Exception {
 
     try {
@@ -143,8 +144,8 @@ public class ScheduleController {
 
   @RequestMapping("/schedule/participantDelete")
   public String participantDelete(
-      @RequestParam("no") int scheduleNo,
-      @RequestParam("deleteParticipantNo") int deleteParticipantNo,
+      int scheduleNo,
+      int deleteParticipantNo,
       Map<String, Object> model
   ) throws Exception {
 
@@ -173,9 +174,9 @@ public class ScheduleController {
 
   @RequestMapping("/schedule/search")
   public String search(
-      @RequestParam("title") String searchTitle,
-      @RequestParam("startTime") String startTime,
-      @RequestParam("endTime") String endTime,
+      String title,
+      String startTime,
+      String endTime,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
@@ -188,7 +189,7 @@ public class ScheduleController {
     HashSet<Schedule> set = new HashSet<>(listMap.get("ownedList"));
     set.addAll(listMap.get("participatedList"));
     set.removeIf(sch ->
-        !(searchTitle.length() > 0 && sch.getTitle().matches(String.format(".*%s.*", searchTitle))
+        !(title.length() > 0 && sch.getTitle().matches(String.format(".*%s.*", title))
             || (sch.getEndTime().getTime() > searchRangeStart
             && sch.getStartTime().getTime() < searchRangeEnd))
     );

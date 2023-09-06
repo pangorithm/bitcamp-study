@@ -4,11 +4,11 @@ import com.bitcamp.myapp.service.MemberService;
 import com.bitcamp.myapp.vo.Member;
 import java.util.Map;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class AuthController {
@@ -23,9 +23,9 @@ public class AuthController {
 
   @RequestMapping("/auth/login")
   public String login(
-      @RequestParam("email") String email,
-      @RequestParam("password") String password,
-      @RequestParam("saveEmail") String saveEmail,
+      String email,
+      String password,
+      String saveEmail,
       HttpSession session,
       Map<String, Object> model,
       HttpServletResponse response) throws Exception {
