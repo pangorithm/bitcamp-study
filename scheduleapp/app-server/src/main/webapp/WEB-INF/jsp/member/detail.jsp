@@ -46,7 +46,7 @@ errorPage="../error.jsp"%>
 
     <tr>
       <th>이름</th>
-      <td><input type='text' name='username' value='${m.getName()}'></td>
+      <td><input type='text' name='name' value='${m.getName()}'></td>
     </tr>
 
     <tr>
@@ -97,8 +97,8 @@ errorPage="../error.jsp"%>
         </tr>
         <c:forEach items="${addressList}" var="maddr">
           <form action='addressDelete' method='post'>
-            <input type='hidden' name='memberNo' value='${ m.getNo()}'>
-            <input type='hidden' name='mano' value='${ maddr.getNo()}'>
+            <input type='hidden' name='mno' value='${m.getNo()}'>
+            <input type='hidden' name='no' value='${maddr.getNo()}'>
             <tr>
               <td>${maddr.getAddressType().getType()}</td>
               <td>${maddr.getPostAddress()}</td>
@@ -113,15 +113,15 @@ errorPage="../error.jsp"%>
 
     <c:if test="${loginUser != null && loginUser.equals(m)}">
       <form action='addressAdd' method='post'><br>
-      <input type='hidden' name='memberNo' value='${m.getNo()}'>
+      <input type='hidden' name='mno' value='${m.getNo()}'>
       <select name='addressType'>
         <c:forEach items="${addressTypeList}" var="t">
-          <option value='${t.getNo()}'>${ t.getType()}</option>
+          <option value='${t.getNo()}'>${t.getType()}</option>
         </c:forEach>
       </select><br>
       우편번호 <input type='text' name='postAddress'><br>
-      기본주소 <input type='text' name='basicAddr'><br>
-      상세주소 <input type='text' name='detailAddr'><br>
+      기본주소 <input type='text' name='basicAddress'><br>
+      상세주소 <input type='text' name='detailAddress'><br>
       <button>추가</button><br>
       </form>
     </c:if>

@@ -28,13 +28,13 @@ public class MemberController {
   @RequestMapping("/member/add")
   public String add(
       Member member,
-      @RequestParam("photofile") Part photofile,
+      @RequestParam("photo") Part photoFile,
       Map<String, Object> model) throws Exception {
 
-    if (photofile.getSize() > 0) {
+    if (photoFile.getSize() > 0) {
       String uploadFileUrl =
           ncpObjectStorageService
-              .uploadFile("bitcamp-nc7-bucket-14", "member/", photofile);
+              .uploadFile("bitcamp-nc7-bucket-14", "member/", photoFile);
       member.setPhoto(uploadFileUrl);
     }
 
@@ -95,7 +95,7 @@ public class MemberController {
   @RequestMapping("/member/update")
   public String update(
       Member member,
-      @RequestParam("photofile") Part photofile,
+      @RequestParam("photo") Part photoFile,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
@@ -105,10 +105,10 @@ public class MemberController {
       throw new Exception("해당 번호의 회원이 없거나 권한이 없습니다!");
     }
 
-    if (photofile.getSize() > 0) {
+    if (photoFile.getSize() > 0) {
       String uploadFileUrl =
           ncpObjectStorageService
-              .uploadFile("bitcamp-nc7-bucket-14", "member/", photofile);
+              .uploadFile("bitcamp-nc7-bucket-14", "member/", photoFile);
       m.setPhoto(uploadFileUrl);
     }
 
@@ -128,12 +128,19 @@ public class MemberController {
   @RequestMapping("/member/addressAdd")
   public String addressAdd(
       MemberAddress memberAddress,
-      AddressType addressType,
+      @RequestParam("addressType") int adtno,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
+    List<AddressType> addressTypeList = memberService.getAddressTypeList();
+    AddressType addressType = null;
+    for (AddressType adt : addressTypeList) {
+      if (adt.getNo() == adtno) {
+        addressType = adt;
+      }
+    }
     memberAddress.setAddressType(addressType);
 
     try {
@@ -163,7 +170,7 @@ public class MemberController {
         memberService.deleteAddress(memberAddress.getNo());
         return "redirect:detail?no=" + memberAddress.getMno();
       } else {
-        throw new Exception("로그인한 계정만 주소 추가 가능합니다");
+        throw new Exception("로그인한 계정만 주소 삭제 가능합니다");
       }
     } catch (Exception e) {
       model.put("message", e.getMessage());

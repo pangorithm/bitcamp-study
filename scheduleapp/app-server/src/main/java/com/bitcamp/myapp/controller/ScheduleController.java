@@ -210,11 +210,11 @@ public class ScheduleController {
     }
 
     try {
-      scheduleService.update(sch);
+      scheduleService.update(schedule);
       return "redirect:list";
     } catch (Exception e) {
       model.put("message", e.getMessage());
-      model.put("refresh", "2;url=detail?no=" + sch.getNo());
+      model.put("refresh", "2;url=detail?no=" + schedule.getNo());
       throw e;
     }
   }

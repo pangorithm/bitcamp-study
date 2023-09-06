@@ -145,10 +145,6 @@ public class DispatcherServlet extends HttpServlet {
             Integer.parseInt(request.getParameter(p.getAnnotation(RequestParam.class).value())));
       } else if (p.getType() == char.class) {
         arguments.add(request.getParameter(p.getAnnotation(RequestParam.class).value()).charAt(0));
-      } else if (p.getType() == Timestamp.class) {
-        arguments.add(Timestamp.valueOf(
-            LocalDateTime.parse(
-                request.getParameter(p.getAnnotation(RequestParam.class).value()))));
       } else if (p.getType() == Map.class) {
         arguments.add(model);
       } else if (p.getType() == Part.class) {
@@ -216,6 +212,8 @@ public class DispatcherServlet extends HttpServlet {
       return value.charAt(0);
     } else if (type == boolean.class) {
       return Boolean.valueOf(value);
+    } else if (type == Timestamp.class) {
+      return Timestamp.valueOf(LocalDateTime.parse(value));
     } else {
       return null;
     }

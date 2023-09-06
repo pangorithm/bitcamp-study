@@ -19,7 +19,7 @@
       <result column="name" property="name" />
     </association>
 
-    <collection property="attachedFiles" ofType="member">
+    <collection property="attachedFiles" ofType="attachedFile">
       <id column="bfno" property="no" />
       <result column="filepath" property="filePath" />
     </collection>
