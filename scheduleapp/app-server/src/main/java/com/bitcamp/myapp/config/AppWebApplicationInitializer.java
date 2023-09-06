@@ -1,27 +1,27 @@
 package com.bitcamp.myapp.config;
 
+import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import javax.servlet.ServletRegistration.Dynamic;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class MyWebApplicationInitializer4 extends
+public class AppWebApplicationInitializer extends
     AbstractAnnotationConfigDispatcherServletInitializer {
 
-  @Override
-  public void onStartup(ServletContext sc) throws ServletException {
-    System.out.println("MyWebApplicationInitializer4.onStartup() 호출됨!");
+  public AppWebApplicationInitializer() {
+    System.out.println("AppWebApplicationInitializer 생성됨!");
+  }
 
-    // 수퍼 클래스에 정의된 작업은 그대로 수행하고,
-    // => DispatcherServlet이 사용할 IoC 컨테이너를 준비한다.
-    super.onStartup(sc);
+  @Override
+  protected String getServletName() {
+    return "app";
   }
 
   @Override
   protected Class<?>[] getRootConfigClasses() {
     // ContextLoaderListener의 IoC 컨테이너가 사용할 java config 클래스를 지정한다.
-    return null;
+    return new Class[]{RootConfig.class, DbConfig.class, MybatisConfig.class};
   }
 
   @Override
@@ -37,8 +37,13 @@ public class MyWebApplicationInitializer4 extends
   }
 
   @Override
-  protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+  protected void customizeRegistration(Dynamic registration) {
     registration.setMultipartConfig(
         new MultipartConfigElement(null, 10000000, 15000000, 1000000));
+  }
+
+  @Override
+  protected Filter[] getServletFilters() {
+    return new Filter[]{new CharacterEncodingFilter("UTF-8")};
   }
 }
