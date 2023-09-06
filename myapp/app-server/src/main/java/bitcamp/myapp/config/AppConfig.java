@@ -13,16 +13,21 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 // Application을 실행하는데 필요한 객체를 설정하는 일을 한다.
 //
 @ComponentScan(basePackages = {
+    "bitcamp.myapp.config",
     "bitcamp.myapp.dao",
     "bitcamp.myapp.controller",
     "bitcamp.myapp.service"})
 @PropertySource({"classpath:bitcamp/myapp/config/ncloud/jdbc.properties"})
 @MapperScan("bitcamp.myapp.dao") // Mybatis가 자동으로 생성할 DAO 객체의 인터페이스 패키지 지정
 @EnableTransactionManagement // @Transactional 애노테이션을 처리할 객체 등록
+@EnableWebMvc
 public class AppConfig {
 
   public AppConfig() {
@@ -69,5 +74,10 @@ public class AppConfig {
   @Bean
   public PlatformTransactionManager transactionManager(DataSource dataSource) {
     return new DataSourceTransactionManager(dataSource);
+  }
+
+  @Bean
+  public MultipartResolver multipartResolver() {
+    return new StandardServletMultipartResolver();
   }
 }

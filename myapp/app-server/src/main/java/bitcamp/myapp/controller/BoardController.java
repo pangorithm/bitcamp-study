@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class BoardController {
@@ -28,8 +30,8 @@ public class BoardController {
   @RequestMapping("/board/add")
   public String add(
       Board board,
-      @RequestParam("category") int category,
-      @RequestParam("files") Part[] parts,
+      @RequestParam int category,
+      Part[] files,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
@@ -42,7 +44,7 @@ public class BoardController {
 
     try {
       ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-      for (Part part : parts) {
+      for (Part part : files) {
         if (part.getSize() > 0) {
           String uploadFileUrl = ncpObjectStorageService.uploadFile(
               "bitcamp-nc7-bucket-14", "board/", part);
@@ -131,7 +133,7 @@ public class BoardController {
   @RequestMapping("/board/update")
   public String update(
       Board board,
-      @RequestParam("files") Part[] parts,
+      Part[] files,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
@@ -147,7 +149,7 @@ public class BoardController {
       }
 
       ArrayList<AttachedFile> attachedFiles = new ArrayList<>();
-      for (Part part : parts) {
+      for (Part part : files) {
         if (part.getName().equals("files") && part.getSize() > 0) {
           String uploadFileUrl = ncpObjectStorageService.uploadFile(
               "bitcamp-nc7-bucket-14", "board/", part);
