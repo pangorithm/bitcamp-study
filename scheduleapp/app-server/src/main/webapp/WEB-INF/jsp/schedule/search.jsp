@@ -19,8 +19,8 @@
 
 <h1>스케줄 검색 결과 </h1>
 <div style='margin:5px;'>
-<a href='add'>새 스케줄</a>
-<a href='search'>스케줄 검색</a>
+<a href='form'>새 스케줄</a>
+<a href='searchForm'>스케줄 검색</a>
 </div>
 <table border='1'>
 <thead>

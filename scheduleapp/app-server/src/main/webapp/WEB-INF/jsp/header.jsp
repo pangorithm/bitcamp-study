@@ -14,7 +14,7 @@
   <%
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
       if (loginUser == null) {
-        out.println("<a href='/app/auth/login'>로그인</a>");
+        out.println("<a href='/app/auth/form'>로그인</a>");
       } else {
         if(loginUser.getPhoto() == null){
           out.println("<img style='height:40px' src='http://gjoxpfbmymto19010706.cdn.ntruss.com/icon/avatar.png?type=f&w=30&h=40&faceopt=true&ttype=jpg'>");

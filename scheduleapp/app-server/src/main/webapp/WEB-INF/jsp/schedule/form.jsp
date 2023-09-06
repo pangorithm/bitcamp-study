@@ -22,17 +22,17 @@
   <th>설명</th> <td><input type='text' name='content'></td>
 </tr>
 <tr>
-  <th>시작</th> <td><input type='datetime-local' name='start-time' Id='start-time'></td>
+  <th>시작</th> <td><input type='datetime-local' name='startTime' Id='startTime'></td>
 </tr>
 <tr>
-  <th>종료</th> <td><input type='datetime-local' name='end-time' Id='end-time'></td>
+  <th>종료</th> <td><input type='datetime-local' name='endTime' Id='endTime'></td>
 </tr>
 </table>
 <button>등록</button>
 </form>
 <script>
-  document.getElementById('start-time').value= new Date().toISOString().slice(0, 16);
-  document.getElementById('end-time').value= new Date().toISOString().slice(0, 16);
+  document.getElementById('startTime').value= new Date().toISOString().slice(0, 16);
+  document.getElementById('endTime').value= new Date().toISOString().slice(0, 16);
 </script>
 </body>
 </html>

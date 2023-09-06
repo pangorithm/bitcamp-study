@@ -19,17 +19,17 @@
   <th>검색 제목</th> <td><input type='text' name='title'></td>
 </tr>
 <tr>
-  <th>검색 시작 시간</th> <td><input type='datetime-local' name='start-time' id='start-time'></td>
+  <th>검색 시작 시간</th> <td><input type='datetime-local' name='startTime' id='startTime'></td>
 </tr>
 <tr>
-  <th>검색 종료 시간</th> <td><input type='datetime-local' name='end-time' id='end-time'></td>
+  <th>검색 종료 시간</th> <td><input type='datetime-local' name='endTime' id='endTime'></td>
 </tr>
 </table>
 <button>검색</button>
 </form>
 <script>
-  document.getElementById('start-time').value= new Date().toISOString().slice(0, 16);
-  document.getElementById('end-time').value= new Date().toISOString().slice(0, 16);
+  document.getElementById('startTime').value= new Date().toISOString().slice(0, 16);
+  document.getElementById('endTime').value= new Date().toISOString().slice(0, 16);
 </script>
 
 </body>
