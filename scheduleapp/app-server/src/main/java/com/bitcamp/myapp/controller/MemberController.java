@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MemberController {
@@ -28,13 +29,13 @@ public class MemberController {
   @RequestMapping("/member/add")
   public String add(
       Member member,
-      @RequestParam("photo") Part photoFile,
+      Part photo,
       Map<String, Object> model) throws Exception {
 
-    if (photoFile.getSize() > 0) {
+    if (photo.getSize() > 0) {
       String uploadFileUrl =
           ncpObjectStorageService
-              .uploadFile("bitcamp-nc7-bucket-14", "member/", photoFile);
+              .uploadFile("bitcamp-nc7-bucket-14", "member/", photo);
       member.setPhoto(uploadFileUrl);
     }
 
@@ -51,7 +52,7 @@ public class MemberController {
 
   @RequestMapping("/member/delete")
   public String delete(
-      @RequestParam("no") int no,
+      int no,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
@@ -77,7 +78,7 @@ public class MemberController {
   }
 
   @RequestMapping("/member/detail")
-  public String detail(@RequestParam("no") int no, Map<String, Object> model) throws Exception {
+  public String detail(int no, Map<String, Object> model) throws Exception {
     Member m = memberService.get(no);
     model.put("m", m);
     model.put("addressList", m.getAddressList());
@@ -95,7 +96,7 @@ public class MemberController {
   @RequestMapping("/member/update")
   public String update(
       Member member,
-      @RequestParam("photo") Part photoFile,
+      Part photo,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 
@@ -105,10 +106,10 @@ public class MemberController {
       throw new Exception("해당 번호의 회원이 없거나 권한이 없습니다!");
     }
 
-    if (photoFile.getSize() > 0) {
+    if (photo.getSize() > 0) {
       String uploadFileUrl =
           ncpObjectStorageService
-              .uploadFile("bitcamp-nc7-bucket-14", "member/", photoFile);
+              .uploadFile("bitcamp-nc7-bucket-14", "member/", photo);
       m.setPhoto(uploadFileUrl);
     }
 
@@ -128,7 +129,7 @@ public class MemberController {
   @RequestMapping("/member/addressAdd")
   public String addressAdd(
       MemberAddress memberAddress,
-      @RequestParam("addressType") int adtno,
+      int adtno,
       Map<String, Object> model,
       HttpSession session) throws Exception {
 

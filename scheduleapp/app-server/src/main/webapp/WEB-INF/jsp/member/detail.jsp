@@ -114,7 +114,7 @@ errorPage="../error.jsp"%>
     <c:if test="${loginUser != null && loginUser.equals(m)}">
       <form action='addressAdd' method='post'><br>
       <input type='hidden' name='mno' value='${m.getNo()}'>
-      <select name='addressType'>
+      <select name='adtno'>
         <c:forEach items="${addressTypeList}" var="t">
           <option value='${t.getNo()}'>${t.getType()}</option>
         </c:forEach>

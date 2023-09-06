@@ -1,5 +1,8 @@
 package com.bitcamp.myapp.config;
 
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class NcpConfig {
 
   private String endPoint = "https://kr.object.ncloudstorage.com";
