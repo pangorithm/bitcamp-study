@@ -18,6 +18,10 @@ public class MemberController {
   @Autowired
   NcpObjectStorageService ncpObjectStorageService;
 
+  {
+    System.out.println("MemberController 생성됨!");
+  }
+
   @RequestMapping("/member/form")
   public String add() {
     return "/WEB-INF/jsp/member/form.jsp";

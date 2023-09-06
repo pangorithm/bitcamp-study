@@ -22,6 +22,10 @@ public class BoardController {
   @Autowired
   NcpObjectStorageService ncpObjectStorageService;
 
+  {
+    System.out.println("BoardController 생성됨!");
+  }
+
   @RequestMapping("/board/form")
   public String form() {
     return "/WEB-INF/jsp/board/form.jsp";

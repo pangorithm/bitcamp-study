@@ -17,6 +17,10 @@ public class AuthController {
   @Autowired
   MemberService memberService;
 
+  {
+    System.out.println("AuthController 생성됨!");
+  }
+
   @RequestMapping("/auth/form")
   public String form() {
     return "/WEB-INF/jsp/auth/form.jsp";

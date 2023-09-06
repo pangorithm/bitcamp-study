@@ -10,15 +10,20 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 //
 @ComponentScan(
     basePackages = "bitcamp.myapp.controller",
-    excludeFilters = @ComponentScan.Filter(
-        type = FilterType.REGEX,
-        pattern = "bitcamp.myapp.controller.*MemberController"
-    )
+    excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*BoardController"),
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*HomeController"),
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".*AuthController")
+    }
+//    , includeFilters = @Filter(
+//    type = FilterType.ASPECTJ,
+//    pattern = "bitcamp.myapp.controller.MemberController"
+//)
 )
-public class AppConfig {
+public class AdminConfig {
 
-  public AppConfig() {
-    System.out.println("AppConfig() 호출됨!");
+  public AdminConfig() {
+    System.out.println("AdminConfig() 호출됨!");
   }
 
   @Bean

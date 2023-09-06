@@ -11,6 +11,10 @@ public class DefaultMemberService implements MemberService {
 
   MemberDao memberDao;
 
+  {
+    System.out.println("DefaultMemberService 생성됨");
+  }
+
 
   public DefaultMemberService(MemberDao memberDao) {
     this.memberDao = memberDao;

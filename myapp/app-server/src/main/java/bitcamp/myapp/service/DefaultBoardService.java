@@ -12,6 +12,10 @@ public class DefaultBoardService implements BoardService {
 
   BoardDao boardDao;
 
+  {
+    System.out.println("DefaultBoardService 생성됨");
+  }
+
   public DefaultBoardService(BoardDao boardDao) {
     this.boardDao = boardDao;
   }
