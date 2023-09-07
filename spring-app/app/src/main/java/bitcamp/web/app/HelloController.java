@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HelloController {
-  
+
+  {
+    System.out.println("HelloController 생성됨");
+  }
+
   @RequestMapping("/hello")
   @ResponseBody
   public String hello() throws Exception {

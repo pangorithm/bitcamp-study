@@ -11,10 +11,13 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/board")
 public class BoardController {
 
   @Autowired
@@ -26,12 +29,12 @@ public class BoardController {
     System.out.println("BoardController 생성됨!");
   }
 
-  @RequestMapping("/board/form")
+  @GetMapping("form")
   public String form() {
     return "/WEB-INF/jsp/board/form.jsp";
   }
 
-  @RequestMapping("/board/add")
+  @PostMapping("add")
   public String add(
       Board board,
       @RequestParam int category,
@@ -69,7 +72,7 @@ public class BoardController {
     }
   }
 
-  @RequestMapping("/board/delete")
+  @GetMapping("delete")
   public String delete(
       @RequestParam("no") int no,
       @RequestParam("category") int category,
@@ -98,7 +101,7 @@ public class BoardController {
     }
   }
 
-  @RequestMapping("/board/detail")
+  @GetMapping("detail")
   public String detail(
       @RequestParam("no") int no,
       @RequestParam("category") int category,
@@ -119,7 +122,7 @@ public class BoardController {
     }
   }
 
-  @RequestMapping("/board/list")
+  @GetMapping("list")
   public String list(
       @RequestParam("category") int category, Map<String, Object> model) throws Exception {
     try {
@@ -134,7 +137,7 @@ public class BoardController {
     }
   }
 
-  @RequestMapping("/board/update")
+  @PostMapping("update")
   public String update(
       Board board,
       Part[] files,
@@ -172,7 +175,7 @@ public class BoardController {
     }
   }
 
-  @RequestMapping("/board/fileDelete")
+  @PostMapping("fileDelete")
   public String fileDelete(@RequestParam("no") int no,
       Map<String, Object> model,
       HttpSession session)

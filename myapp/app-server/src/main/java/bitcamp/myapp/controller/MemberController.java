@@ -7,10 +7,13 @@ import java.util.Map;
 import javax.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/member")
 public class MemberController {
 
   @Autowired
@@ -22,12 +25,12 @@ public class MemberController {
     System.out.println("MemberController 생성됨!");
   }
 
-  @RequestMapping("/member/form")
+  @GetMapping("form")
   public String add() {
     return "/WEB-INF/jsp/member/form.jsp";
   }
 
-  @RequestMapping("/member/add")
+  @PostMapping("add")
   public String add(
       Member member,
       @RequestParam("photofile") Part photofile,
@@ -50,7 +53,7 @@ public class MemberController {
     }
   }
 
-  @RequestMapping("/member/delete")
+  @GetMapping("delete")
   public String delete(@RequestParam("no") int no, Map<String, Object> model) throws Exception {
 
     try {
@@ -67,19 +70,19 @@ public class MemberController {
     return "redirect:/";
   }
 
-  @RequestMapping("/member/detail")
+  @GetMapping("detail")
   public String detail(@RequestParam("no") int no, Map<String, Object> model) throws Exception {
     model.put("member", memberService.get(no));
     return "/WEB-INF/jsp/member/detail.jsp";
   }
 
-  @RequestMapping("/member/list")
+  @GetMapping("list")
   public String list(Map<String, Object> model) throws Exception {
     model.put("list", memberService.list());
     return "/WEB-INF/jsp/member/list.jsp";
   }
 
-  @RequestMapping("/member/update")
+  @PostMapping("update")
   public String update(
       Member member,
       @RequestParam("photofile") Part photofile,
