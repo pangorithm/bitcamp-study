@@ -169,7 +169,7 @@ public class BoardController {
 
     } catch (Exception e) {
       model.addAttribute("refresh",
-          "2;url=detail?category=" + board.getCategory() + "&no=" + board.getNo());
+          "2;url=detail/" + board.getCategory() + "/" + board.getNo());
       throw e;
     }
   }
@@ -198,12 +198,12 @@ public class BoardController {
       if (boardService.deleteAttachedFile(no) == 0) {
         throw new Exception("해당 번호의 첨부파일이 없습니다.");
       } else {
-        return "redirect:detail?category=" + board.getCategory() + "&no=" + board.getNo();
+        return "redirect:detail/" + board.getCategory() + "/" + board.getNo();
       }
 
     } catch (Exception e) {
       model.addAttribute("refresh",
-          "2;url=detail?category=" + board.getCategory() + "&no=" + board.getNo());
+          "2;url=detail/" + board.getCategory() + "/" + board.getNo());
       throw e;
     }
   }
