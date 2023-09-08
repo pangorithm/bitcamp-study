@@ -35,8 +35,9 @@
 <c:forEach items="${list}" var="board">
   <tr>
     <td>${board.no}</td>
-    <td><a href='detail?category=${param.category}&no=${board.no}'>
-      ${board.title.length() > 0 ? board.title : "제목없음"}
+    <td>
+      <a href='detail/${param.category}/${board.no}'>
+        ${board.title.length() > 0 ? board.title : "제목없음"}
       </a>
     </td>
     <td>${board.writer.name}</td>
