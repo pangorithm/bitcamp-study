@@ -43,7 +43,11 @@ public class Controller04_8 {
       String name,
       int age,
       Part photo // Servlet API의 객체
-      ) throws Exception {
+  ) throws Exception {
+
+    System.out.println(name);
+    System.out.println(age);
+    System.out.println(photo);
 
     String filename = null;
     if (photo.getSize() > 0) {
@@ -72,7 +76,7 @@ public class Controller04_8 {
       String name, //
       @RequestParam(defaultValue = "0") int age, //
       MultipartFile photo // Spring API의 객체
-      ) throws Exception {
+  ) throws Exception {
 
     String filename = null;
     if (!photo.isEmpty()) {
@@ -99,7 +103,7 @@ public class Controller04_8 {
       int age, //
       // 같은 이름으로 전송된 여러 개의 파일은 배열로 받으면 된다.
       MultipartFile[] photo //
-      ) throws Exception {
+  ) throws Exception {
 
     StringWriter out0 = new StringWriter();
     PrintWriter out = new PrintWriter(out0);
@@ -131,7 +135,7 @@ public class Controller04_8 {
       int age,
       // 같은 이름으로 전송된 여러 개의 파일은 배열로 받으면 된다.
       MultipartFile[] photo
-      ) throws Exception {
+  ) throws Exception {
 
     StringWriter out0 = new StringWriter();
     PrintWriter out = new PrintWriter(out0);

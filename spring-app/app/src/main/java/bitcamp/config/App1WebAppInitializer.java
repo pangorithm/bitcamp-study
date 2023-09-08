@@ -1,8 +1,10 @@
 package bitcamp.config;
 
+import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.annotation.WebListener;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 @WebListener
@@ -31,5 +33,10 @@ public class App1WebAppInitializer extends AbstractAnnotationConfigDispatcherSer
   @Override
   protected String getServletName() {
     return "app1";
+  }
+
+  @Override
+  protected Filter[] getServletFilters() {
+    return new Filter[]{new CharacterEncodingFilter("UTF-8")};
   }
 }
