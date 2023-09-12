@@ -21,7 +21,7 @@ dependencies {
 
     // Spring WebMVC 라이브러리
     implementation 'org.springframework:spring-webmvc:5.3.29'
-    
+
     // JSTL 라이브러리
     implementation 'jstl:jstl:1.2'
 
