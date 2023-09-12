@@ -781,3 +781,4 @@ gradle-app.setting
 node_modules/
 temp/
 jdbc.properties
+application.properties
