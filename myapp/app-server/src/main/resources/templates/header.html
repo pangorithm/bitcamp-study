@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='UTF-8'>
+  <title>비트캠프</title>
+</head>
+<body>
+<div data-th-fragment="header" style='height:50px;background-color:orange;'>
+  <img src='https://www.ncloud.com/public/img/logo-m.png' style='height:40px'>
+  <a href='/member/list'>회원</a>
+  <a href='/board/list?category=1'>게시글</a>
+  <a href='/board/list?category=2'>독서록</a>
+  <a data-th-if="${session.loginUser == null}" href='/auth/form'>로그인</a>
+  <div data-th-if="${session.loginUser != null}" style="display:inline;">
+    <img data-th-if="${session.loginUser.photo == null}"
+         data-th-src='http://gjoxpfbmymto19010706.cdn.ntruss.com/icon/avatar.png?type=f&w=30&h=40&faceopt=true&ttype=jpg'
+         style='height:40px'>
+    <img data-th-if="${session.loginUser.photo != null}"
+         data-th-src="${'http://gjoxpfbmymto19010706.cdn.ntruss.com/member/' + session.loginUser.photo + '?type=f&w=30&h=40&faceopt=true&ttype=jpg'}"
+         style='height:40px'>
+    <span data-th-text="${session.loginUser.name}"></span>
+    <a href='/auth/logout'>로그아웃</a>
+  </div>
+</div>
+</body>
+</html>
