@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='UTF-8'>
+  <title>비트캠프</title>
+</head>
+<body>
+
+<div data-th-replace="header :: header"></div>
+
+<h1>회원</h1>
+<form action='add' enctype='multipart/form-data' method='post'>
+  <table border='1'>
+    <tr>
+      <th>이름</th>
+      <td style='width:200px;'><input name='name' type='text'></td>
+    </tr>
+    <tr>
+      <th>이메일</th>
+      <td><input name='email' type='email'></td>
+    </tr>
+    <tr>
+      <th>암호</th>
+      <td><input name='password' type='password'></td>
+    </tr>
+    <tr>
+      <th>성별</th>
+      <td>
+        <select name='gender'>
+          <option value='M'>남자</option>
+          <option value='W'>여자</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>사진</th>
+      <td><input name='photofile' type='file'></td>
+    </tr>
+  </table>
+  <button>등록</button>
+</form>
+
+<div data-th-replace="footer :: footer"></div>
+
+</body>
+</html>

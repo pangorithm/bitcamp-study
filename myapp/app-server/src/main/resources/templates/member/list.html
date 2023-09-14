@@ -27,8 +27,8 @@
       <img data-th-if="${member.photo == null}"
            src="http://gjoxpfbmymto19010706.cdn.ntruss.com/icon/avatar.png?type=f&w=30&h=40&faceopt=true&ttype=jpg">
       <img data-th-if="${member.photo}"
-           data-th-src="${'http://gjoxpfbmymto19010706.cdn.ntruss.com/member/'+member.photo+'?type=f&w=30&h=40&faceopt=true&ttype=jpg'}">
-      <a data-th-text="${member.name}" href='${member.no}'>{이름}</a></td>
+           data-th-src="@{'http://gjoxpfbmymto19010706.cdn.ntruss.com/member/'+${member.photo}(type=f,w=30,h=40,faceopt=true,ttype=jpg)}">
+      <a data-th-href='${member.no}' data-th-text="${member.name}">{이름}</a></td>
     <td data-th-text="${member.email}">{이메일}</td>
   </tr>
   </tbody>

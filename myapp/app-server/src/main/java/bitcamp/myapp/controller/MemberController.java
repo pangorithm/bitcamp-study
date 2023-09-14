@@ -36,38 +36,25 @@ public class MemberController {
       @RequestParam("photofile") MultipartFile photofile,
       Model model) throws Exception {
 
-    try {
-      System.out.println(member);
-      if (photofile.getSize() > 0) {
-        String uploadFileUrl = ncpObjectStorageService.uploadFile(
-            "bitcamp-nc7-bucket-14", "member/", photofile);
-        member.setPhoto(uploadFileUrl);
-      }
-      memberService.add(member);
-      return "redirect:list";
-
-    } catch (Exception e) {
-      model.addAttribute("message", "회원 등록 오류!");
-      model.addAttribute("refresh", "2;url=list");
-      throw e;
+    System.out.println(member);
+    if (photofile.getSize() > 0) {
+      String uploadFileUrl = ncpObjectStorageService.uploadFile(
+          "bitcamp-nc7-bucket-14", "member/", photofile);
+      member.setPhoto(uploadFileUrl);
     }
+    memberService.add(member);
+    return "redirect:list";
+
   }
 
   @GetMapping("delete")
-  public String delete(@RequestParam("no") int no, Model model) throws Exception {
+  public String delete(@RequestParam("no") int no) throws Exception {
 
-    try {
-      if (memberService.delete(no) == 0) {
-        throw new Exception("해당 번호의 회원이 없습니다.");
-      } else {
-        return "redirect:list";
-      }
-
-    } catch (Exception e) {
-      model.addAttribute("refresh", "2;url=list");
-      model.addAttribute("exception", e);
+    if (memberService.delete(no) == 0) {
+      throw new Exception("해당 번호의 회원이 없습니다.");
+    } else {
+      return "redirect:list";
     }
-    return "redirect:/";
   }
 
   @GetMapping("{no}")
@@ -84,26 +71,19 @@ public class MemberController {
   @PostMapping("update")
   public String update(
       Member member,
-      @RequestParam("photofile") MultipartFile photofile,
-      Model model) throws Exception {
+      @RequestParam("photofile") MultipartFile photofile) throws Exception {
 
-    try {
-      if (photofile.getSize() > 0) {
-        String uploadFileUrl = ncpObjectStorageService.uploadFile(
-            "bitcamp-nc7-bucket-14", "member/", photofile);
-        member.setPhoto(uploadFileUrl);
-      }
-
-      if (memberService.update(member) == 0) {
-        throw new Exception("회원이 없습니다.");
-      } else {
-        return "redirect:list";
-      }
-
-    } catch (Exception e) {
-      model.addAttribute("refresh", "2;url=list");
-      model.addAttribute("exception", e);
+    if (photofile.getSize() > 0) {
+      String uploadFileUrl = ncpObjectStorageService.uploadFile(
+          "bitcamp-nc7-bucket-14", "member/", photofile);
+      member.setPhoto(uploadFileUrl);
     }
-    return "redirect:/";
+
+    if (memberService.update(member) == 0) {
+      throw new Exception("회원이 없습니다.");
+    } else {
+      return "redirect:list";
+    }
+
   }
 }
